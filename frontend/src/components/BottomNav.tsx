@@ -1,4 +1,4 @@
-import { Home, ImagePlus, ShoppingBag, User, Users } from 'lucide-react';
+import { Home, ImagePlus, MessageSquare, ShoppingBag, User } from 'lucide-react';
 
 export type PageId = 'dashboard' | 'marketplace' | 'create' | 'community' | 'profile';
 
@@ -6,7 +6,7 @@ const ITEMS: { id: PageId; icon: typeof Home; label: string }[] = [
   { id: 'dashboard', icon: Home, label: 'Home' },
   { id: 'marketplace', icon: ShoppingBag, label: 'Market' },
   { id: 'create', icon: ImagePlus, label: 'Create' },
-  { id: 'community', icon: Users, label: 'Community' },
+  { id: 'community', icon: MessageSquare, label: 'Chats' },
   { id: 'profile', icon: User, label: 'Profile' },
 ];
 

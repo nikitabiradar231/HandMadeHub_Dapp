@@ -25,9 +25,11 @@ export default function App() {
     busyAction,
     connect,
     disconnect,
+    reauthenticate,
     refresh,
     listProduct,
     mintNft,
+    mintNFTProduct,
     verifyNft,
     purchase,
     withdrawProduct,
@@ -62,6 +64,7 @@ export default function App() {
               busy={busyAction !== null}
               onConnect={connect}
               onDisconnect={disconnect}
+              onReauth={reauthenticate}
             />
           </div>
         </header>
@@ -82,7 +85,6 @@ export default function App() {
                 nfts={nfts}
                 address={address}
                 networkId={networkId}
-                balance={balance}
                 busyAction={busyAction}
                 onWithdraw={withdrawProduct}
                 onVerify={verifyNft}
@@ -100,7 +102,12 @@ export default function App() {
               />
             )}
             {currentPage === 'create' && (
-              <CreatePage busyAction={busyAction} onList={listProduct} onMint={mintNft} />
+              <CreatePage
+                busyAction={busyAction}
+                onList={listProduct}
+                onMint={mintNft}
+                onMintNFTProduct={mintNFTProduct}
+              />
             )}
             {currentPage === 'community' && (
               <CommunityPage products={products} nfts={nfts} onRefresh={refresh} />
@@ -109,11 +116,11 @@ export default function App() {
               <ProfilePage
                 address={address}
                 networkId={networkId}
-                balance={balance}
                 products={products}
                 nfts={nfts}
                 busyAction={busyAction}
                 hasSecret={hasSecret}
+                onWithdraw={withdrawProduct}
                 onVerify={verifyNft}
                 onDisconnect={disconnect}
               />

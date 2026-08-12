@@ -12,13 +12,13 @@ import type { NftView, ProductView } from '../midnight/useMarketplace';
 import { PRODUCT_STATUS_LABELS } from '../midnight/useMarketplace';
 import { loadSecret } from '../midnight/secrets';
 import { sellerHexShort, sameSeller } from '../utils/seller';
+import { getProductImage } from '../utils/imageStore';
 
 interface DashboardPageProps {
   products: ProductView[];
   nfts: NftView[];
   address: string;
   networkId: string;
-  balance: { tNight: bigint; dust: bigint } | null;
   busyAction: string | null;
   onWithdraw: (productId: string) => void;
   onVerify: (tokenIdRaw: string, secretHex?: string) => void;
@@ -30,7 +30,6 @@ export function DashboardPage({
   nfts,
   address,
   networkId,
-  balance,
   busyAction,
   onWithdraw,
   onVerify,
@@ -58,7 +57,7 @@ export function DashboardPage({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 gap-4 mb-6">
         <div className="rounded-2xl p-4 bg-purple-50 border border-purple-100">
           <p className="text-sm text-gray-600 mb-1">My Listings</p>
           <p className="text-3xl font-bold text-purple-700">{myListings.length}</p>
@@ -66,18 +65,6 @@ export function DashboardPage({
         <div className="rounded-2xl p-4 bg-blue-50 border border-blue-100">
           <p className="text-sm text-gray-600 mb-1">NFTs Minted</p>
           <p className="text-3xl font-bold text-blue-700">{myNfts.length}</p>
-        </div>
-        <div className="rounded-2xl p-4 bg-rose-50 border border-rose-100">
-          <p className="text-sm text-gray-600 mb-1">tNIGHT</p>
-          <p className="text-2xl font-bold text-rose-600">
-            {balance ? balance.tNight.toLocaleString() : '—'}
-          </p>
-        </div>
-        <div className="rounded-2xl p-4 bg-amber-50 border border-amber-100">
-          <p className="text-sm text-gray-600 mb-1">DUST</p>
-          <p className="text-2xl font-bold text-amber-600">
-            {balance ? balance.dust.toLocaleString() : '—'}
-          </p>
         </div>
       </div>
 
@@ -90,32 +77,46 @@ export function DashboardPage({
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {myListings.map((p) => (
-              <div key={p.id.toString()} className="bg-white rounded-xl shadow-md p-5">
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-semibold text-gray-800">{p.title}</h3>
-                  <span className="bg-emerald-100 text-emerald-700 text-xs px-2 py-0.5 rounded-full font-medium">
-                    {PRODUCT_STATUS_LABELS[p.status]}
-                  </span>
+            {myListings.map((p) => {
+              const pImg = getProductImage(
+                p.id,
+                p.nftTokenId.is_some ? p.nftTokenId.value : null,
+                p.title,
+              );
+              return (
+                <div key={p.id.toString()} className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col border border-gray-100">
+                  {pImg && (
+                    <div className="w-full h-36 bg-gray-100 overflow-hidden">
+                      <img src={pImg} alt={p.title} className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  <div className="p-5 flex-1 flex flex-col">
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="font-semibold text-gray-800">{p.title}</h3>
+                      <span className="bg-emerald-100 text-emerald-700 text-xs px-2 py-0.5 rounded-full font-medium">
+                        {PRODUCT_STATUS_LABELS[p.status]}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500 mb-1">
+                      #{p.id.toString()} · {p.category}
+                    </p>
+                    <p className="text-purple-600 font-bold mb-3">{p.price.toLocaleString()} tNIGHT</p>
+                    {p.nftTokenId.is_some && (
+                      <span className="inline-block text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full mb-3 font-semibold">
+                        NFT #{p.nftTokenId.value.toString()} backed
+                      </span>
+                    )}
+                    <button
+                      onClick={() => onWithdraw(p.id.toString())}
+                      disabled={busy}
+                      className="mt-auto w-full text-sm font-medium text-gray-600 border border-gray-200 rounded-lg py-2 hover:bg-gray-100 transition-colors disabled:opacity-50"
+                    >
+                      {busyAction === 'withdraw' ? 'Withdrawing…' : 'Withdraw listing'}
+                    </button>
+                  </div>
                 </div>
-                <p className="text-xs text-gray-500 mb-1">
-                  #{p.id.toString()} · {p.category}
-                </p>
-                <p className="text-purple-600 font-bold mb-3">{p.price.toLocaleString()} tNIGHT</p>
-                {p.nftTokenId.is_some && (
-                  <span className="inline-block text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full mb-3">
-                    NFT#{p.nftTokenId.value.toString()} backed
-                  </span>
-                )}
-                <button
-                  onClick={() => onWithdraw(p.id.toString())}
-                  disabled={busy}
-                  className="w-full text-sm font-medium text-gray-600 border border-gray-200 rounded-lg py-2 hover:bg-gray-100 transition-colors disabled:opacity-50"
-                >
-                  {busyAction === 'withdraw' ? 'Withdrawing…' : 'Withdraw listing'}
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
@@ -132,44 +133,52 @@ export function DashboardPage({
             {myNfts.map((nft) => {
               const stored = loadSecret(nft.tokenId);
               const key = nft.tokenId.toString();
+              const nftImg = getProductImage(nft.productId, nft.tokenId);
               return (
-                <div key={key} className="bg-white rounded-xl shadow-md p-5">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold text-gray-800">NFT #{nft.tokenId.toString()}</h3>
-                    {nft.verified ? (
-                      <span className="bg-emerald-100 text-emerald-700 text-xs px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
-                        <CheckCircle2 size={12} /> verified
-                      </span>
-                    ) : (
-                      <span className="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full font-medium">
-                        unverified
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-xs text-gray-500 mb-1">for product #{nft.productId.toString()}</p>
-                  <p className="text-xs text-gray-400 font-mono mb-2">
-                    commitment {sellerHexShort(nft.commitment)}
-                  </p>
-                  <p className="text-sm text-gray-700 italic mb-3">“{nft.certificate}”</p>
-                  <div className="space-y-2">
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 outline-none"
-                      placeholder={stored ? 'Secret stored in this browser' : 'Secret (hex)'}
-                      value={verifySecrets[key] ?? (stored ? toHex(stored) : '')}
-                      onChange={(e) => setVerifySecrets((s) => ({ ...s, [key]: e.target.value }))}
-                      readOnly={!!stored && !verifySecrets[key]}
-                    />
-                    <button
-                      onClick={() =>
-                        onVerify(key, verifySecrets[key]?.trim() || undefined)
-                      }
-                      disabled={busy}
-                      className="w-full flex items-center justify-center gap-2 text-sm font-semibold text-purple-700 bg-purple-100 hover:bg-purple-200 rounded-lg py-2 transition-colors disabled:opacity-50"
-                    >
-                      <ShieldCheck size={16} />
-                      {busyAction === 'verifyNft' ? 'Verifying…' : 'Verify authenticity'}
-                    </button>
+                <div key={key} className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col border border-gray-100">
+                  {nftImg && (
+                    <div className="w-full h-36 bg-gray-100 overflow-hidden">
+                      <img src={nftImg} alt={`NFT #${key}`} className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  <div className="p-5 flex-1 flex flex-col">
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="font-semibold text-gray-800">NFT #{nft.tokenId.toString()}</h3>
+                      {nft.verified ? (
+                        <span className="bg-emerald-100 text-emerald-700 text-xs px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+                          <CheckCircle2 size={12} /> verified
+                        </span>
+                      ) : (
+                        <span className="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full font-medium">
+                          unverified
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-500 mb-1">for product #{nft.productId.toString()}</p>
+                    <p className="text-xs text-gray-400 font-mono mb-2">
+                      commitment {sellerHexShort(nft.commitment)}
+                    </p>
+                    <p className="text-sm text-gray-700 italic mb-3">“{nft.certificate}”</p>
+                    <div className="space-y-2 mt-auto">
+                      <input
+                        type="text"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 outline-none"
+                        placeholder={stored ? 'Secret stored in this browser' : 'Secret (hex)'}
+                        value={verifySecrets[key] ?? (stored ? toHex(stored) : '')}
+                        onChange={(e) => setVerifySecrets((s) => ({ ...s, [key]: e.target.value }))}
+                        readOnly={!!stored && !verifySecrets[key]}
+                      />
+                      <button
+                        onClick={() =>
+                          onVerify(key, verifySecrets[key]?.trim() || undefined)
+                        }
+                        disabled={busy}
+                        className="w-full flex items-center justify-center gap-2 text-sm font-semibold text-purple-700 bg-purple-100 hover:bg-purple-200 rounded-lg py-2 transition-colors disabled:opacity-50"
+                      >
+                        <ShieldCheck size={16} />
+                        {busyAction === 'verifyNft' ? 'Verifying…' : 'Verify authenticity'}
+                      </button>
+                    </div>
                   </div>
                 </div>
               );

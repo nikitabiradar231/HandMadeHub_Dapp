@@ -4,6 +4,7 @@ import { RefreshCw, ShoppingBag, X, ImagePlus } from 'lucide-react';
 import type { ProductView } from '../midnight/useMarketplace';
 import { PRODUCT_STATUS_LABELS } from '../midnight/useMarketplace';
 import { sameSeller, sellerHexShort } from '../utils/seller';
+import { getProductImage } from '../utils/imageStore';
 
 const CATEGORIES = [
   'All',
@@ -113,81 +114,111 @@ export function MarketplacePage({
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filtered.map((product) => (
-            <div
-              key={productKey(product)}
-              onClick={() => {
-                setPastedSecret('');
-                setSelected(product);
-              }}
-              className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition-shadow flex flex-col"
-            >
-              <div className="w-full h-40 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                <div className="w-20 h-20 rounded-full bg-white shadow flex items-center justify-center">
-                  <ShoppingBag className="text-purple-400" size={36} />
-                </div>
-              </div>
-              <div className="p-4 flex flex-col flex-1">
-                <p className="font-semibold text-gray-800 mb-1 truncate">{product.title}</p>
-                <p className="text-xs text-gray-500 mb-2 truncate">
-                  by {sellerHexShort(product.seller)}
-                </p>
-                <div className="mt-auto flex justify-between items-center">
-                  <p className="text-purple-600 font-bold">
-                    {product.price.toLocaleString()}
-                    <span className="text-xs"> tNIGHT</span>
-                  </p>
-                  {!isOwn(product.seller) ? (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setPastedSecret('');
-                        setSelected(product);
-                      }}
-                      className="text-white px-3 py-1 rounded-lg text-xs font-semibold"
-                      style={{ background: 'linear-gradient(to right, rgb(147, 51, 234), rgb(236, 72, 153))' }}
-                    >
-                      Buy
-                    </button>
+          {filtered.map((product) => {
+            const productImg = getProductImage(
+              product.id,
+              product.nftTokenId.is_some ? product.nftTokenId.value : null,
+              product.title,
+            );
+            return (
+              <div
+                key={productKey(product)}
+                onClick={() => {
+                  setPastedSecret('');
+                  setSelected(product);
+                }}
+                className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition-shadow flex flex-col group border border-gray-100"
+              >
+                <div className="w-full h-44 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center overflow-hidden relative">
+                  {productImg ? (
+                    <img
+                      src={productImg}
+                      alt={product.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
                   ) : (
-                    <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
-                      Yours
+                    <div className="w-20 h-20 rounded-full bg-white shadow flex items-center justify-center">
+                      <ShoppingBag className="text-purple-400" size={36} />
+                    </div>
+                  )}
+                  {product.nftTokenId.is_some && (
+                    <span className="absolute top-2 right-2 bg-purple-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                      NFT
                     </span>
                   )}
                 </div>
+                <div className="p-4 flex flex-col flex-1">
+                  <p className="font-semibold text-gray-800 mb-1 truncate">{product.title}</p>
+                  <p className="text-xs text-gray-500 mb-2 truncate">
+                    by {sellerHexShort(product.seller)}
+                  </p>
+                  <div className="mt-auto flex justify-between items-center">
+                    <p className="text-purple-600 font-bold">
+                      {product.price.toLocaleString()}
+                      <span className="text-xs"> tNIGHT</span>
+                    </p>
+                    {!isOwn(product.seller) ? (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setPastedSecret('');
+                          setSelected(product);
+                        }}
+                        className="text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold hover:shadow-md transition-shadow"
+                        style={{ background: 'linear-gradient(to right, rgb(147, 51, 234), rgb(236, 72, 153))' }}
+                      >
+                        Buy
+                      </button>
+                    ) : (
+                      <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
+                        Yours
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
-      {selected && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50"
-          onClick={() => {
-            setSelected(null);
-            setPastedSecret('');
-          }}
-        >
-          <div className="bg-white rounded-2xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="text-xl font-bold text-gray-800">{selected.title}</h3>
-              <button
-                onClick={() => {
-                  setSelected(null);
-                  setPastedSecret('');
-                }}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            <div className="w-full h-48 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl mb-4 flex items-center justify-center">
-              <div className="w-24 h-24 rounded-full bg-white shadow flex items-center justify-center">
-                <ImagePlus className="text-purple-300" size={48} />
+      {selected && (() => {
+        const selectedImg = getProductImage(
+          selected.id,
+          selected.nftTokenId.is_some ? selected.nftTokenId.value : null,
+          selected.title,
+        );
+        return (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50"
+            onClick={() => {
+              setSelected(null);
+              setPastedSecret('');
+            }}
+          >
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <div className="flex justify-between items-start mb-4">
+                <h3 className="text-xl font-bold text-gray-800">{selected.title}</h3>
+                <button
+                  onClick={() => {
+                    setSelected(null);
+                    setPastedSecret('');
+                  }}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X size={24} />
+                </button>
               </div>
-            </div>
+
+              <div className="w-full h-56 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+                {selectedImg ? (
+                  <img src={selectedImg} alt={selected.title} className="w-full h-full object-cover rounded-xl" />
+                ) : (
+                  <div className="w-24 h-24 rounded-full bg-white shadow flex items-center justify-center">
+                    <ImagePlus className="text-purple-300" size={48} />
+                  </div>
+                )}
+              </div>
 
             <div className="flex items-center gap-2 mb-2 flex-wrap">
               <span className="bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded-full font-medium">
@@ -252,7 +283,8 @@ export function MarketplacePage({
             )}
           </div>
         </div>
-      )}
+        );
+      })()}
     </div>
   );
 }
