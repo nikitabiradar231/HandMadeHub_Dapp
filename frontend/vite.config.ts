@@ -13,14 +13,14 @@ export default defineConfig({
     // Node-polyfill deps (@subsquid/* -> assert -> util) touch `process.env`
     // at module scope. There is no `process` global in the browser, so pin it
     // to an empty object instead of letting the bundle crash at eval time.
-    // `{}` (not `({})`) keeps esbuild's production build happy while still
-    // collapsing `process.env` to an empty object in both dev and build.
     'process.env': '{}',
+    global: 'globalThis',
   },
   resolve: {
     alias: {
       assert: 'assert',
       events: 'events',
+      buffer: 'buffer',
     },
   },
   server: {
@@ -34,5 +34,6 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['@midnight-ntwrk/onchain-runtime-v3'],
+    include: ['buffer'],
   },
 });
