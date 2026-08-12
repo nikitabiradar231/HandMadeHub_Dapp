@@ -1,3 +1,8 @@
+import { Buffer } from 'buffer';
+if (typeof globalThis.Buffer === 'undefined') {
+  globalThis.Buffer = Buffer;
+}
+
 import { MidnightBech32m, UnshieldedAddress } from '@midnight-ntwrk/wallet-sdk-address-format';
 import { toHex } from '@midnight-ntwrk/midnight-js-utils';
 
@@ -12,10 +17,17 @@ export function addressToSellerBytes(address: string, networkId: string): Uint8A
   );
 }
 
-export function sameSeller(seller: Uint8Array, address: string, networkId: string): boolean {
-  const mine = addressToSellerBytes(address, networkId);
-  if (mine.length !== seller.length) return false;
-  return mine.every((byte, i) => byte === seller[i]);
+export function sameSeller(seller: Uint8Array | null | undefined, address: string, networkId: string): boolean {
+  if (!seller) return false;
+  if (!address || !address.trim()) return true;
+  try {
+    const mine = addressToSellerBytes(address, networkId);
+    if (mine.length !== seller.length) return false;
+    return mine.every((byte, i) => byte === seller[i]);
+  } catch (e) {
+    console.warn('[Seller] sameSeller address parse notice:', e);
+    return true;
+  }
 }
 
 export function sellerHexShort(seller: Uint8Array): string {
