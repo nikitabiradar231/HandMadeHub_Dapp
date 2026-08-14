@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 270" width="850" height="270">
+  <rect width="100%" height="100%" fill="#0d0d0d" rx="6"/>
+  <style>
+    .t { font-family: Consolas, 'Cascadia Code', 'Fira Code', 'Courier New', monospace; font-size: 16px; font-weight: normal; }
+    .bold { font-weight: bold; }
+    .white { fill: #dedede; }
+    .orange { fill: #e58e26; font-weight: bold; }
+    .green { fill: #48bb78; }
+  </style>
+  
+  <!-- Line 1 -->
+  <text x="25" y="42" class="t white">It worked! The contract deployed to preview successfully.</text>
+  
+  <!-- Line 3 -->
+  <text x="25" y="88" class="t orange">Deployment successful:</text>
+  
+  <!-- Line 5 -->
+  <text x="25" y="130" class="t white">- <tspan class="orange">Network:</tspan> preview</text>
+  
+  <!-- Line 6 -->
+  <text x="25" y="158" class="t white">- <tspan class="orange">Contract Address:</tspan> <tspan class="green">11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf</tspan></text>
+  
+  <!-- Line 7 -->
+  <text x="25" y="186" class="t white">- <tspan class="green">Wallet funded with 5B tNIGHT, DUST ready, saved to .midnight-state.json</tspan></text>
+  
+  <!-- Line 9 -->
+  <text x="25" y="232" class="t white">Next step when you're ready: <tspan class="green">npm run cli</tspan></text>
+</svg>

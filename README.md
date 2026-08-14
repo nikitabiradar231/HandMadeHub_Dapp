@@ -683,8 +683,12 @@ The HandMadeHub Compact smart contract compiles successfully and generates the m
 The HandMadeHub smart contract has been deployed to the Midnight Preview Testnet.
 
 ```text
-Contract Address: 11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf
+Contract Address:
+
+11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf
 ```
+
+![Midnight Preview Deployment Screenshot](./assets/deployment-preview.png)
 
 ---
 
