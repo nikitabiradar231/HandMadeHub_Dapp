@@ -686,6 +686,10 @@ The HandMadeHub smart contract has been deployed to the Midnight Preview Testnet
 Contract Address:
 
 11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf
+
+
+<img width="820" height="313" alt="Screenshot 2026-08-09 135720" src="https://github.com/user-attachments/assets/a6b5bd06-9f8f-4b3e-9594-93ee146d92a4" />
+
 ```
 
 ---
