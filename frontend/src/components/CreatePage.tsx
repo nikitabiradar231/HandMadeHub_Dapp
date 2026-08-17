@@ -83,7 +83,7 @@ export function CreatePage({ busyAction, onList, onMintNFTProduct }: CreatePageP
         </h1>
         <p className="text-gray-600 mt-2 max-w-xl mx-auto">
           Upload your product image, set details, and click <span className="font-semibold text-purple-700">Mint NFT</span>.
-          Your 1AM / Lace Midnight wallet will open to generate a zero-knowledge proof &amp; sign permission on-chain.
+          Your Lace Midnight wallet will open to generate a zero-knowledge proof &amp; sign permission on-chain.
         </p>
       </div>
 
@@ -218,7 +218,7 @@ export function CreatePage({ busyAction, onList, onMintNFTProduct }: CreatePageP
                 What happens when you click &quot;Mint NFT&quot;:
               </p>
               <ol className="list-decimal list-inside space-y-1 pl-1 text-purple-700">
-                <li>Your 1AM / Lace Midnight wallet opens for permission &amp; signing</li>
+                <li>Your Lace Midnight wallet opens for permission &amp; signing</li>
                 <li>Generates zero-knowledge proof for product title, price, category &amp; seller</li>
                 <li>Mints a ZK authenticity NFT with a private 32-byte secret stored in your browser</li>
                 <li>Your NFT displays on the Marketplace and Dashboard for buyers to purchase with tNIGHT</li>
@@ -234,7 +234,7 @@ export function CreatePage({ busyAction, onList, onMintNFTProduct }: CreatePageP
               {busyAction === 'mintNFTProduct' || busyAction === 'listProduct' ? (
                 <>
                   <RefreshCw size={22} className="mr-2 animate-spin" />
-                  Connecting 1AM Wallet &amp; Minting NFT…
+                  Connecting Lace Wallet &amp; Minting NFT…
                 </>
               ) : (
                 'Mint NFT'

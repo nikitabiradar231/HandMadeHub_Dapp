@@ -36,7 +36,7 @@ export function WalletBar({
           className="text-white font-semibold rounded-lg px-4 py-2 text-sm flex items-center gap-2 disabled:opacity-50 transition-all hover:shadow-lg"
           style={{ background: 'linear-gradient(to right, rgb(79, 70, 229), rgb(147, 51, 234))' }}
         >
-          {busy ? 'Connecting…' : 'Connect 1AM Wallet'}
+          {busy ? 'Connecting…' : 'Connect Lace Wallet'}
         </button>
       </div>
     );
