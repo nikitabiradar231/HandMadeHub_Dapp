@@ -93,12 +93,12 @@ export async function buildProviders(connectedApi: ConnectedAPI): Promise<Browse
     fetch.bind(window),
   );
 
-  // Proving is delegated to the connected wallet via its `getProvingProvider`
-  // (connector v4 API); the wallet performs any required IAM/gateway proving
-  // itself. An HTTP proof server is only used when the developer explicitly
-  // configures one (VITE_PROOF_SERVER_URL) — never the wallet's reported
-  // proverServerUri, which may require credentials this DApp owns.
-  const proofServerUrl = import.meta.env.VITE_PROOF_SERVER_URL?.trim() || undefined;
+  // Proving uses, in order:
+  //   1. explicit frontend override (VITE_PROOF_SERVER_URL)
+  //   2. the wallet extension's reported proverServerUri (if provided in wallet configuration)
+  //   3. fallback to the wallet extension's getProvingProvider (dApp Connector v4 API)
+  const proofServerUrl =
+    import.meta.env.VITE_PROOF_SERVER_URL?.trim() || config.proverServerUri?.trim() || undefined;
   const proofProvider = proofServerUrl
     ? httpClientProofProvider(proofServerUrl, zkConfigProvider)
     : await dappConnectorProofProvider(connectedApi, zkConfigProvider, CostModel.initialCostModel());
@@ -128,21 +128,24 @@ export async function buildProviders(connectedApi: ConnectedAPI): Promise<Browse
           );
         } catch (error: any) {
           console.error('[Midnight Provider] Error balancing transaction:', error);
-          if (error.message?.includes('DUST') || error.message?.includes('ready')) {
+          const msg = error?.message || (typeof error === 'string' ? error : 'Wallet failed to balance transaction');
+          if (msg.includes('DUST') || msg.includes('ready')) {
             throw new Error('Wallet DUST state is not ready. Wait for sync/state refresh or generate more DUST, then retry.');
           }
-          throw error;
+          throw new Error(`Transaction balancing failed: ${msg}`);
         }
       },
     },
     midnightProvider: {
       async submitTx(tx: FinalizedTransaction): Promise<TransactionId> {
         try {
-          await connectedApi.submitTransaction(toHex(tx.serialize()));
+          const hexTx = toHex(tx.serialize());
+          await connectedApi.submitTransaction(hexTx);
           return tx.identifiers()[0];
         } catch (error: any) {
           console.error('[Midnight Provider] Error submitting transaction:', error);
-          throw error;
+          const msg = error?.message || (typeof error === 'string' ? error : 'Wallet failed to submit transaction');
+          throw new Error(`Transaction submission failed: ${msg}`);
         }
       },
     },
