@@ -130,7 +130,7 @@ The frontend supports:
 - Transaction approval
 - tNIGHT balance
 - DUST balance
-- Midnight Preprod network interaction
+- Midnight Preview network interaction
 - Zero-Knowledge transaction signing
 
 The Level 2 demo specifically demonstrates connecting and disconnecting the Lace wallet from the frontend.
@@ -143,45 +143,45 @@ Midnight provides a privacy architecture where public ledger information can be 
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────┐
-│                        USER / BROWSER                                │
-│                                                                      │
-│   ┌────────────────────────┐       ┌─────────────────────────────┐  │
-│   │   PRIVATE WITNESS      │       │       LACE WALLET           │  │
-│   │                        │       │                             │  │
-│   │ • makerSecret          │       │ • Wallet Address            │  │
-│   │ • candidateSecret      │       │ • DUST Balance              │  │
-│   │ • buyerSecret          │       │ • Transaction Authorization │  │
-│   └────────────┬───────────┘       └──────────────┬──────────────┘  │
-│                │                                  │                 │
+│                        USER / BROWSER                                │
+│                                                                      │
+│   ┌────────────────────────┐       ┌─────────────────────────────┐  │
+│   │   PRIVATE WITNESS      │       │       LACE WALLET           │  │
+│   │                        │       │                             │  │
+│   │ • makerSecret          │       │ • Wallet Address            │  │
+│   │ • candidateSecret      │       │ • DUST Balance              │  │
+│   │ • buyerSecret          │       │ • Transaction Authorization │  │
+│   └────────────┬───────────┘       └──────────────┬──────────────┘  │
+│                │                                  │                 │
 └────────────────┼──────────────────────────────────┼─────────────────┘
-                 │                                  │
-                 ▼                                  ▼
-        ┌──────────────────┐              ┌──────────────────────┐
-        │  ZERO-KNOWLEDGE  │              │  WALLET AUTHENTIC-   │
-        │      PROOF       │              │      ATION            │
-        │                  │              │                      │
-        │ Private witness  │              │ Transaction signing  │
-        └─────────┬────────┘              └──────────┬───────────┘
-                  │                                  │
-                  └────────────────┬─────────────────┘
-                                   │
-                                   ▼
+                 │                                  │
+                 ▼                                  ▼
+        ┌──────────────────┐              ┌──────────────────────┐
+        │  ZERO-KNOWLEDGE  │              │  WALLET AUTHENTIC-   │
+        │      PROOF       │              │      ATION            │
+        │                  │              │                      │
+        │ Private witness  │              │ Transaction signing  │
+        └─────────┬────────┘              └──────────┬───────────┘
+                  │                                  │
+                  └────────────────┬─────────────────┘
+                                   │
+                                   ▼
 ┌──────────────────────────────────────────────────────────────────────┐
-│                    MIDNIGHT PREPROD NETWORK                         │
-│                                                                      │
-│  PUBLIC LEDGER STATE                                                 │
-│                                                                      │
-│  • productsMap                                                       │
-│  • nftsMap                                                           │
-│  • Product ID                                                         │
-│  • Product title                                                      │
-│  • Category                                                           │
-│  • Price                                                              │
-│  • Seller                                                             │
-│  • NFT token ID                                                       │
-│  • Authenticity commitment                                           │
-│  • Product status                                                     │
-│                                                                      │
+│                    MIDNIGHT PREVIEW NETWORK                         │
+│                                                                      │
+│  PUBLIC LEDGER STATE                                                 │
+│                                                                      │
+│  • productsMap                                                       │
+│  • nftsMap                                                           │
+│  • Product ID                                                         │
+│  • Product title                                                      │
+│  • Category                                                           │
+│  • Price                                                              │
+│  • Seller                                                             │
+│  • NFT token ID                                                       │
+│  • Authenticity commitment                                           │
+│  • Product status                                                     │
+│                                                                      │
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -199,14 +199,14 @@ The privacy flow is:
 
 ```text
 Private Maker Secret
-        │
-        ▼
+        │
+        ▼
 Zero-Knowledge Circuit
-        │
-        ▼
+        │
+        ▼
 Cryptographic Commitment
-        │
-        ▼
+        │
+        ▼
 Verification Result
 ```
 
@@ -250,9 +250,9 @@ Creates a marketplace product listing.
 
 ```text
 listProduct(
-    title,
-    category,
-    price
+    title,
+    category,
+    price
 )
 ```
 
@@ -266,8 +266,8 @@ Creates an authenticity NFT for a listed product.
 
 ```text
 mintAuthenticityNft(
-    productId,
-    certificateText
+    productId,
+    certificateText
 )
 ```
 
@@ -281,8 +281,8 @@ Verifies that a candidate secret matches the authenticity commitment.
 
 ```text
 verifyAuthenticity(
-    tokenId,
-    candidateSecret
+    tokenId,
+    candidateSecret
 )
 ```
 
@@ -318,19 +318,13 @@ The HandMadeHub Compact smart contract is deployed to the **Midnight Preview net
 |---|---|
 | **Network** | Midnight Preview |
 | **Network ID** | `preview` |
-| **Contract Address** | `11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf` |
-| **Verification** | `https://indexer.preview.midnight.network/api/v4/graphql` |
+| **Contract Address** | `11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf` ||
 
 ### Contract Address
 
 ```text
 11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf
 ```
-
-> Contract deployed and verified on the Midnight Preview network.
-
-The contract address must be verifiable on-chain before submitting the project.
-
 ---
 
 # 🌐 Live Demo
@@ -341,10 +335,7 @@ The Level 2 frontend is deployed using Vercel.
 
 ```text
 https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/
-```
-
-The deployed application should be tested using Lace before submission.
-
+``
 ---
 
 # 🎥 Demo Video
@@ -364,11 +355,8 @@ The Level 2 demo video demonstrates:
 ### Demo Video
 
 ```text
-YOUR_DEMO_VIDEO_LINK
+Demo Video :-(https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view)
 ```
-
-> Replace the placeholder with the final uploaded demo video link.
-
 ---
 
 # 📋 Level 2 Submission Checklist
@@ -410,21 +398,21 @@ The compiled contract includes the marketplace and authenticity circuits.
 ```text
 contracts/managed/handmade-marketplace/
 ├── contract/
-│   ├── index.js
-│   ├── index.d.ts
-│   └── index.cjs
+│   ├── index.js
+│   ├── index.d.ts
+│   └── index.cjs
 │
 └── zkConfig/
-    ├── listProduct.pk
-    ├── listProduct.vk
-    ├── mintAuthenticityNft.pk
-    ├── mintAuthenticityNft.vk
-    ├── verifyAuthenticity.pk
-    ├── verifyAuthenticity.vk
-    ├── purchaseProduct.pk
-    ├── purchaseProduct.vk
-    ├── withdrawProduct.pk
-    └── withdrawProduct.vk
+    ├── listProduct.pk
+    ├── listProduct.vk
+    ├── mintAuthenticityNft.pk
+    ├── mintAuthenticityNft.vk
+    ├── verifyAuthenticity.pk
+    ├── verifyAuthenticity.vk
+    ├── purchaseProduct.pk
+    ├── purchaseProduct.vk
+    ├── withdrawProduct.pk
+    └── withdrawProduct.vk
 ```
 
 ---
@@ -452,40 +440,40 @@ The test suite covers functionality such as:
 # 🏗️ Architecture
 
 ```text
-                    ┌──────────────────────┐
-                    │     HandMadeHub      │
-                    │    React Frontend    │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │     Lace Wallet      │
-                    │   Connect / Sign     │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │     Midnight.js      │
-                    │        SDK           │
-                    └──────────┬───────────┘
-                               │
-                    ┌──────────┴──────────┐
-                    │                     │
-                    ▼                     ▼
-          ┌───────────────────┐   ┌──────────────────┐
-          │  Compact Contract │   │  Proof Server    │
-          │                   │   │                  │
-          │ Marketplace       │   │ ZK Proofs        │
-          │ Authenticity NFT  │   │                  │
-          │ Verification      │   │                  │
-          └─────────┬─────────┘   └──────────────────┘
-                    │
-                    ▼
-          ┌───────────────────────────┐
-          │ Midnight Preview Network  │
-          │                           │
-          │ Public Ledger State       │
-          └───────────────────────────┘
+                    ┌──────────────────────┐
+                    │     HandMadeHub      │
+                    │    React Frontend    │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │     Lace Wallet      │
+                    │   Connect / Sign     │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │     Midnight.js      │
+                    │        SDK           │
+                    └──────────┬───────────┘
+                               │
+                    ┌──────────┴──────────┐
+                    │                     │
+                    ▼                     ▼
+          ┌───────────────────┐   ┌──────────────────┐
+          │  Compact Contract │   │  Proof Server    │
+          │                   │   │                  │
+          │ Marketplace       │   │ ZK Proofs        │
+          │ Authenticity NFT  │   │                  │
+          │ Verification      │   │                  │
+          └─────────┬─────────┘   └──────────────────┘
+                    │
+                    ▼
+          ┌───────────────────────────┐
+          │ Midnight Preview Network │
+          │                           │
+          │ Public Ledger State       │
+          └───────────────────────────┘
 ```
 
 ---
@@ -516,27 +504,27 @@ The test suite covers functionality such as:
 HandMade/
 │
 ├── contracts/
-│   ├── handmade-marketplace.compact
-│   │
-│   └── managed/
-│       └── handmade-marketplace/
-│           ├── contract/
-│           └── zkConfig/
+│   ├── handmade-marketplace.compact
+│   │
+│   └── managed/
+│       └── handmade-marketplace/
+│           ├── contract/
+│           └── zkConfig/
 │
 ├── frontend/
-│   └── src/
-│       ├── components/
-│       ├── pages/
-│       ├── App.tsx
-│       └── ...
+│   └── src/
+│       ├── components/
+│       ├── pages/
+│       ├── App.tsx
+│       └── ...
 │
 ├── src/
-│   ├── midnight/
-│   ├── components/
-│   └── ...
+│   ├── midnight/
+│   ├── components/
+│   └── ...
 │
 ├── tests/
-│   └── handmade-marketplace.test.ts
+│   └── handmade-marketplace.test.ts
 │
 ├── compose.yml
 ├── package.json
@@ -558,7 +546,7 @@ Before running HandMadeHub, install:
 - **WSL2** on Windows
 - **Compact Compiler**
 - **Lace Wallet browser extension**
-- **Midnight Preprod network configured in Lace**
+- **Midnight Preview network configured in Lace**
 - Sufficient **tNIGHT and DUST** for transactions
 
 ---
@@ -566,8 +554,8 @@ Before running HandMadeHub, install:
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/nikitabiradar231/HandMade.git
-cd HandMade
+git clone https://github.com/nikitabiradar231/HandMadeHub_Dapp.git
+cd HandMadeHub_Dapp
 ```
 
 ---
@@ -620,50 +608,50 @@ Open the local development URL shown by Vite.
 
 ```text
 ┌────────────────────┐
-│    Open DApp       │
+│    Open DApp       │
 └─────────┬──────────┘
-          │
-          ▼
+          │
+          ▼
 ┌────────────────────┐
-│   Connect Lace     │
+│   Connect Lace     │
 └─────────┬──────────┘
-          │
-          ▼
+          │
+          ▼
 ┌────────────────────┐
-│ Wallet Connected   │
+│ Wallet Connected   │
 └─────────┬──────────┘
-          │
-          ▼
+          │
+          ▼
 ┌────────────────────┐
 │ Perform DApp Action│
 └─────────┬──────────┘
-          │
-          ▼
+          │
+          ▼
 ┌────────────────────┐
-│ Frontend Calls     │
-│ Compact Circuit    │
+│ Frontend Calls     │
+│ Compact Circuit    │
 └─────────┬──────────┘
-          │
-          ▼
+          │
+          ▼
 ┌────────────────────┐
-│ Lace Transaction   │
-│ Approval           │
+│ Lace Transaction   │
+│ Approval           │
 └─────────┬──────────┘
-          │
-          ▼
+          │
+          ▼
 ┌────────────────────┐
 │ ZK Proof Generated │
 └─────────┬──────────┘
-          │
-          ▼
+          │
+          ▼
 ┌────────────────────┐
 │ Circuit Successful │
 └─────────┬──────────┘
-          │
-          ▼
+          │
+          ▼
 ┌────────────────────┐
-│ Privacy Behavior   │
-│ Observable         │
+│ Privacy Behavior   │
+│ Observable         │
 └────────────────────┘
 ```
 
@@ -693,32 +681,13 @@ The authenticity verification is based on proving knowledge of the correct secre
 
 ---
 
-# 🔒 Security Considerations
-
-Never commit sensitive information to GitHub.
-
-Do **not** commit:
-
-```text
-.env
-private keys
-wallet seeds
-mnemonic phrases
-private-state passwords
-secret credentials
-```
-
-Use environment variables and local configuration for sensitive information.
-
----
-
 # 📊 Level 2 Deployment Status
 
 | Component | Status |
 |---|---|
 | Compact Smart Contract | ✅ Deployed |
-| Midnight Preprod Testnet | ✅ |
-| Preprod Contract Address | ✅ |
+| Midnight Preview Testnet | ✅ |
+| Preview Contract Address | ✅ |
 | Authenticity NFT | ✅ |
 | ZK Authenticity Verification | ✅ |
 | Product Listing | ✅ |
@@ -744,11 +713,11 @@ The demo shows:
 
 ```text
 Connect Wallet
-      ↓
+      ↓
 Lace Wallet
-      ↓
+      ↓
 Approve Connection
-      ↓
+      ↓
 Wallet Connected
 ```
 
@@ -766,13 +735,13 @@ The Level 2 demo demonstrates a Compact circuit being called from the frontend a
 
 ```text
 Frontend Action
-      ↓
+      ↓
 Compact Circuit
-      ↓
+      ↓
 Lace Approval
-      ↓
+      ↓
 ZK Proof Generation
-      ↓
+      ↓
 Successful Transaction
 ```
 
@@ -786,17 +755,14 @@ The verification result is observable, while the private maker secret used as th
 
 ---
 
-## 5. Preprod Contract
+## 5. Preview Contract
 
 ```text
-Network:
-Midnight Preprod
+Network: Midnight Preview
 
 Contract Address:
-YOUR_PREPROD_CONTRACT_ADDRESS
+11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf
 ```
-
-The deployed contract address should be verified on the Midnight Preprod network.
 
 ---
 
@@ -811,7 +777,7 @@ https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/
 ## 7. Demo Video
 
 ```text
-YOUR_DEMO_VIDEO_LINK
+Demo Video :- (https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view)
 ```
 
 The demo video shows:
@@ -822,25 +788,6 @@ The demo video shows:
 - Transaction approval
 - Successful circuit result
 - Observable privacy behavior
-
----
-
-# 📝 Level 2 Git History
-
-Level 2 development contains a minimum of **8 meaningful commits**.
-
-| # | Commit | Description |
-|---|---|---|
-| 1 | `COMMIT_HASH_1` | Level 2 initial implementation |
-| 2 | `COMMIT_HASH_2` | Lace wallet integration |
-| 3 | `COMMIT_HASH_3` | Wallet disconnect functionality |
-| 4 | `COMMIT_HASH_4` | Frontend circuit integration |
-| 5 | `COMMIT_HASH_5` | Privacy behavior implementation |
-| 6 | `COMMIT_HASH_6` | Preprod deployment configuration |
-| 7 | `COMMIT_HASH_7` | Vercel deployment configuration |
-| 8 | `COMMIT_HASH_8` | Level 2 README and submission documentation |
-
-> Replace the placeholders with the actual commit hashes/messages from the `level2` branch.
 
 ---
 
@@ -866,33 +813,9 @@ Users can verify authenticity without exposing the original secret.
 
 Level 2 integrates Lace for wallet connection, disconnection, transaction authorization, and blockchain interaction.
 
-### Preprod Deployment
+### Preview Deployment
 
-The Compact smart contract is deployed to the Midnight Preprod network for verifiable blockchain interaction.
-
----
-
-# 👩💻 Author
-
-**Nikita Biradar**
-
-GitHub:
-
-```text
-https://github.com/nikitabiradar231
-```
-
-Project Repository:
-
-```text
-https://github.com/nikitabiradar231/HandMadeHub_Dapp
-```
-
----
-
-# 📄 License
-
-This project is open source and available under the **MIT License**.
+The Compact smart contract is deployed to the Midnight Preview network for verifiable blockchain interaction.
 
 ---
 
