@@ -36,7 +36,7 @@ The Level 2 implementation satisfies the following requirements:
 | Frontend circuit execution | ✅ | Compact circuit successfully called from frontend |
 | Observable privacy behavior | ✅ | Authenticity verification without revealing private secret |
 | Preview contract deployment | ✅ | Contract deployed to Midnight Preview |
-| Verifiable Preview address | ✅ | Contract address documented below |
+| Verifiable Preview address | ✅ | 11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf|
 | Public GitHub repository | ✅ | Repository available publicly |
 | Live demo | ✅ | Vercel deployment https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/  |
 | Demo video | ✅ | Wallet connection + successful circuit call https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view |
@@ -368,7 +368,7 @@ Demo Video :-(https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/
 | Circuit called successfully from frontend | ✅ | Successful circuit execution |
 | Observable privacy behavior | ✅ | Private secret remains undisclosed |
 | Contract deployed to Preview | ✅ | Preview deployment |
-| Verifiable Preview contract address | ✅ | Address listed above |
+| Verifiable Preview contract address | ✅ | 11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf |
 | Public GitHub repository | ✅ | Public repository |
 | Live demo | ✅ | Vercel deployment https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/|
 | Demo video | ✅ | Wallet + successful circuit demonstration [HandMadeHub Level 2 Demo Video](https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view) |
