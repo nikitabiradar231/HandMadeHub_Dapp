@@ -38,8 +38,8 @@ The Level 2 implementation satisfies the following requirements:
 | Preview contract deployment | ✅ | Contract deployed to Midnight Preview |
 | Verifiable Preview address | ✅ | Contract address documented below |
 | Public GitHub repository | ✅ | Repository available publicly |
-| Live demo | ✅ | Vercel deployment |
-| Demo video | ✅ | Wallet connection + successful circuit call |
+| Live demo | ✅ | Vercel deploymenthttps://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/  |
+| Demo video | ✅ | Wallet connection + successful circuit call https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view |
 | Privacy claim documented | ✅ | Privacy model documented below |
 | Minimum 8 meaningful commits | ✅ | Level 2 development history |
 
@@ -371,7 +371,7 @@ Demo Video :-(https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/
 | Verifiable Preview contract address | ✅ | Address listed above |
 | Public GitHub repository | ✅ | Public repository |
 | Live demo | ✅ | Vercel deployment https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/|
-| Demo video | ✅ | Wallet + successful circuit demonstration HandMadeHub Level 2 Demo Video |
+| Demo video | ✅ | Wallet + successful circuit demonstration [HandMadeHub Level 2 Demo Video](https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view) |
 | README privacy claim | ✅ | Privacy Model section |
 | Minimum 8 meaningful commits | ✅ | Level 2 Git history |
 
