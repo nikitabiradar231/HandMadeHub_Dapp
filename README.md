@@ -370,8 +370,8 @@ Demo Video :-(https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/
 | Contract deployed to Preview | ✅ | Preview deployment |
 | Verifiable Preview contract address | ✅ | Address listed above |
 | Public GitHub repository | ✅ | Public repository |
-| Live demo | ✅ | Vercel deployment |
-| Demo video | ✅ | Wallet + successful circuit demonstration |
+| Live demo | ✅ | Vercel deployment https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/|
+| Demo video | ✅ | Wallet + successful circuit demonstration HandMadeHub Level 2 Demo Video |
 | README privacy claim | ✅ | Privacy Model section |
 | Minimum 8 meaningful commits | ✅ | Level 2 Git history |
 
