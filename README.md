@@ -774,6 +774,10 @@ The Level 2 frontend is deployed using Vercel.
 
 The Level 2 frontend is deployed using Vercel.
 
+# 🌐 Live Demo
+
+The Level 2 frontend is deployed using Vercel.
+
 ### Live Demo
 
 [Open HandMadeHub Live Demo](https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/)
@@ -797,8 +801,6 @@ The Level 2 demo video demonstrates:
 ### Demo Video
 
 [Watch the HandMadeHub Level 2 Demo](https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view)
-
-
 
 # 🌟 Project Highlights
 
