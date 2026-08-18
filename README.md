@@ -766,30 +766,34 @@ Contract Address:
 
 ---
 
-## 6. Live Demo
+# 🌐 Live Demo
 
-```text
-https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/
-```
+The Level 2 frontend is deployed using Vercel.
 
----
+### Live Demo
 
-## 7. Demo Video
-
-```text
-Demo Video :- (https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view)
-```
-
-The demo video shows:
-
-- Lace wallet connection
-- Lace wallet disconnection
-- Successful frontend circuit call
-- Transaction approval
-- Successful circuit result
-- Observable privacy behavior
+[Open HandMadeHub Live Demo](https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/)
 
 ---
+
+# 🎥 Demo Video
+
+The Level 2 demo video demonstrates:
+
+1. Opening the deployed HandMadeHub application
+2. Connecting the Lace wallet
+3. Showing the connected wallet state
+4. Disconnecting the Lace wallet
+5. Connecting the wallet again
+6. Performing a frontend action that calls the Compact circuit
+7. Approving the transaction in Lace
+8. Showing the successful circuit result
+9. Demonstrating the observable privacy behavior
+
+### Demo Video
+
+[Watch the HandMadeHub Level 2 Demo](https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view)
+
 
 # 🌟 Project Highlights
 
