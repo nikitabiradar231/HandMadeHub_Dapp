@@ -355,7 +355,7 @@ The Level 2 demo video demonstrates:
 ### Demo Video
 
 ```text
-Demo Video :-(https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view)
+Demo Video :- https://drive.google.com/file/d/1SkY23pjEQ13Xrle5Pn_PEVrrljtgp6uU/view?usp=drivesdk
 ```
 ---
 
@@ -765,14 +765,6 @@ Contract Address:
 ```
 
 ---
-
-# 🌐 Live Demo
-
-The Level 2 frontend is deployed using Vercel.
-
-# 🌐 Live Demo
-
-The Level 2 frontend is deployed using Vercel.
 
 # 🌐 Live Demo
 
