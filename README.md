@@ -38,7 +38,7 @@ The Level 2 implementation satisfies the following requirements:
 | Preview contract deployment | ✅ | Contract deployed to Midnight Preview |
 | Verifiable Preview address | ✅ | Contract address documented below |
 | Public GitHub repository | ✅ | Repository available publicly |
-| Live demo | ✅ | Vercel deploymenthttps://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/  |
+| Live demo | ✅ | Vercel deployment https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/  |
 | Demo video | ✅ | Wallet connection + successful circuit call https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view |
 | Privacy claim documented | ✅ | Privacy model documented below |
 | Minimum 8 meaningful commits | ✅ | Level 2 development history |
