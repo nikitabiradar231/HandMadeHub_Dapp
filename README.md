@@ -39,7 +39,7 @@ The Level 2 implementation satisfies the following requirements:
 | Verifiable Preview address | ✅ | 11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf|
 | Public GitHub repository | ✅ | Repository available publicly |
 | Live demo | ✅ | Vercel deployment https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/  |
-| Demo video | ✅ | Wallet connection + successful circuit call https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view?usp=drivesdk |
+| Demo video | ✅ | Wallet connection + successful circuit call https://drive.google.com/file/d/1SkY23pjEQ13Xrle5Pn_PEVrrljtgp6uU/view?usp=drivesdk |
 | Privacy claim documented | ✅ | Privacy model documented below |
 | Minimum 8 meaningful commits | ✅ | Level 2 development history |
 
@@ -371,7 +371,7 @@ Demo Video :-(https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/
 | Verifiable Preview contract address | ✅ | 11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf |
 | Public GitHub repository | ✅ | Public repository |
 | Live demo | ✅ | Vercel deployment https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/|
-| Demo video | ✅ | Wallet + successful circuit demonstration https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view?usp=drivesdk |
+| Demo video | ✅ | Wallet + successful circuit demonstration https://drive.google.com/file/d/1SkY23pjEQ13Xrle5Pn_PEVrrljtgp6uU/view?usp=drivesdk |
 | README privacy claim | ✅ | Privacy Model section |
 | Minimum 8 meaningful commits | ✅ | Level 2 Git history |
 
@@ -800,7 +800,7 @@ The Level 2 demo video demonstrates:
 
 ### Demo Video
 
- Demo Video :- https://drive.google.com/file/d/1b1bdMnKJJvE8wFurTMJOZ7B94w8ftTBM/view?usp=drivesdk
+ Demo Video :- https://drive.google.com/file/d/1SkY23pjEQ13Xrle5Pn_PEVrrljtgp6uU/view?usp=drivesdk
 # 🌟 Project Highlights
 
 ### Privacy First
