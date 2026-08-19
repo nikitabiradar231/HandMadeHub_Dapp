@@ -31,5 +31,30 @@ jobs:
       - name: Build frontend
         run: npm run frontend:build
 
+      - name: Setup Midnight State for CI
+        run: |
+          cat << 'EOF' > .midnight-state.json
+          {
+            "version": 1,
+            "activeNetwork": "preview",
+            "wallets": {
+              "preview": {
+                "seed": "9a5cac70e3727eb6fbd9d72e7176c976aa02c5ae44a2eb4c33ccb1b17014b4a3",
+                "createdAt": "2026-08-08T16:40:47.731Z"
+              }
+            },
+            "deployments": {
+              "preview": {
+                "address": "11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf",
+                "deployer": "mn_addr_preview14kv9tx5parnhq8hyjvds3dg6y2r0h9fs06zec8ml6tra0n5c90nswrj53s",
+                "deployedAt": "2026-08-09T08:19:49.693Z"
+              }
+            }
+          }
+          EOF
+
+      - name: Start Proof Server
+        run: docker compose up -d proof-server
+
       - name: Run tests
-        run: npm test
+        run: npm test -- --network preview
