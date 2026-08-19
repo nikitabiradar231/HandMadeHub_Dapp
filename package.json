@@ -22,6 +22,8 @@
     "frontend:build": "npm --prefix frontend run build"
   },
   "dependencies": {
+    "@emnapi/core": "^1.11.3",
+    "@emnapi/runtime": "^1.11.3",
     "@midnight-ntwrk/compact-runtime": "0.16.0",
     "@midnight-ntwrk/midnight-js-contracts": "4.1.1",
     "@midnight-ntwrk/midnight-js-http-client-proof-provider": "4.1.1",
@@ -33,7 +35,9 @@
     "@midnight-ntwrk/midnight-js-types": "4.1.1",
     "@midnight-ntwrk/midnight-js-utils": "4.1.1",
     "@midnight-ntwrk/wallet-sdk": "1.2.0",
+    "@polkadot-api/substrate-client": "^0.1.4",
     "rxjs": "^7.8.2",
+    "smoldot": "^2.0.26",
     "ws": "^8.21.1"
   },
   "devDependencies": {
