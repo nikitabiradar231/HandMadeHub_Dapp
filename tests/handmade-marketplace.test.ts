@@ -90,7 +90,7 @@ describe('HandMadeHub contract on devnet', () => {
       privateStateId: PRIVATE_STATE_ID,
       initialPrivateState: {},
     });
-  }, 120_000);
+  }, 300_000);
 
   afterAll(async () => {
     await walletCtx.wallet.stop();
