@@ -57,4 +57,4 @@ jobs:
         run: docker compose up -d proof-server
 
       - name: Run tests
-        run: npm test -- --network preview
+        run: npm test
