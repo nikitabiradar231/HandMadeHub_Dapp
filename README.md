@@ -435,6 +435,26 @@ The test suite covers functionality such as:
 - Authenticity verification
 - Invalid-secret rejection
 
+### Test Execution Output
+
+```text
+✓ tests/handmade-marketplace.test.ts (9 tests) 211959ms
+  ✓ HandMadeHub contract on devnet > lists a product with no NFT (circuit logic + ledger write) 26522ms
+  ✓ HandMadeHub contract on devnet > rejects a non-positive price 807ms
+  ✓ HandMadeHub contract on devnet > mints an authenticity NFT, storing only a one-way commitment 46401ms
+  ✓ HandMadeHub contract on devnet > verifies authenticity with the correct secret 23116ms
+  ✓ HandMadeHub contract on devnet > rejects verification with a wrong secret (nothing revealed) 707ms
+  ✓ HandMadeHub contract on devnet > sells a non-NFT product without any secret 23785ms
+  ✓ HandMadeHub contract on devnet > rejects buying an NFT-backed product without the secret 587ms
+  ✓ HandMadeHub contract on devnet > sells an NFT-backed product with the correct secret 25103ms
+  ✓ HandMadeHub contract on devnet > never leaks the authenticity secret into public state or public tx data 58488ms
+
+Test Files  1 passed (1)
+     Tests  9 passed (9)
+  Start at  20:39:24
+  Duration  219.02s (transform 243ms, setup 0ms, collect 6.56s, tests 211.96s, environment 0ms, prepare 156ms)
+```
+
 ---
 
 # 🏗️ Architecture
