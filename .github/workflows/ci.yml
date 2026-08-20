@@ -37,7 +37,7 @@ jobs:
           sleep 15
 
       - name: Deploy Contract to Local Devnet
-        run: npm run deploy
+        run: npm run deploy -- --network undeployed
 
       - name: Run Integration Tests
-        run: npm test
+        run: npm test -- --network undeployed
