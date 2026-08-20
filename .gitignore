@@ -16,7 +16,8 @@ build/
 .env.production.local
 
 # Contract artifacts
-contracts/managed/
+# contracts/managed/ (uncomment if contract artifacts should be ignored, but required for CI deployment without compact compiler)
+
 
 # Deployment info
 deployment.json
