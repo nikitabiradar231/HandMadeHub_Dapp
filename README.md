@@ -4,44 +4,44 @@
 
 ---
 
-# 📌 Level 2 Overview
+# 📌 Level 3 Overview
 
 HandMadeHub is a privacy-first decentralized marketplace for handmade products built on the **Midnight Network**.
 
-Level 2 extends the project with **Lace wallet integration**, frontend circuit execution, Zero-Knowledge privacy behavior, and deployment to the **Midnight Preview network**.
+Level 3 extends the project with **automated CI/CD validation**, **frontend circuit execution**, **Zero-Knowledge privacy behavior**, **automated Vitest test suite**, and deployment to the **Midnight Preview network**.
 
 The platform allows independent makers and creators to:
 
 - 🛍️ List handmade products
 - 🎨 Create authenticity NFTs for their products
 - 🔐 Protect sensitive maker secrets using Zero-Knowledge Proofs
-- ✅ Verify the authenticity of handmade products
+- ✅ Verify the authenticity of handmade products without revealing private secrets
 - 💰 Purchase products through privacy-preserving blockchain transactions
 - 🌐 Interact with the Midnight Preview network
 - 👛 Connect and disconnect using the Lace wallet
 - ⚡ Execute Compact circuits directly from the frontend
+- 🧪 Validate the codebase with automated integration tests
+- 🔄 Validate builds and integration flows through GitHub Actions CI/CD
 
 HandMadeHub combines a decentralized marketplace with blockchain-based authenticity verification while keeping sensitive information private.
 
 ---
 
-# 🎯 Level 2 Requirements
+# 🎯 Level 3 Requirements
 
-The Level 2 implementation satisfies the following requirements:
+The Level 3 implementation satisfies the following requirements:
 
 | Requirement | Status | Evidence |
 |---|---|---|
-| Lace wallet connect | ✅ | Lace wallet connection from frontend |
-| Lace wallet disconnect | ✅ | Disconnect functionality implemented |
-| Frontend circuit execution | ✅ | Compact circuit successfully called from frontend |
-| Observable privacy behavior | ✅ | Authenticity verification without revealing private secret |
-| Preview contract deployment | ✅ | Contract deployed to Midnight Preview |
-| Verifiable Preview address | ✅ | 11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf|
-| Public GitHub repository | ✅ | Repository available publicly |
-| Live demo | ✅ | Vercel deployment https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/  |
-| Demo video | ✅ | Wallet connection + successful circuit call https://drive.google.com/file/d/1SkY23pjEQ13Xrle5Pn_PEVrrljtgp6uU/view?usp=drivesdk |
-| Privacy claim documented | ✅ | Privacy model documented below |
-| Minimum 8 meaningful commits | ✅ | Level 2 development history |
+| Fully functional privacy dApp | ✅ | HandMadeHub marketplace + Midnight Compact privacy functionality |
+| Minimum 3 tests passing | ✅ | Vitest test suite (9 tests passing) |
+| CI/CD workflow | ✅ | `.github/workflows/ci.yml` running on GitHub Actions |
+| Approved project idea | ✅ | HandMadeHub privacy-preserving marketplace proposal |
+| Minimum 10 meaningful commits | ✅ | Level 3 development history (10+ commits) |
+| Public GitHub repository | ✅ | Public repository |
+| Live demo | ✅ | Vercel deployment |
+| Demo video | ✅ | Wallet connection + successful circuit call demonstration |
+| Privacy model documented | ✅ | Detailed privacy model & observer access rules below |
 
 ---
 
@@ -120,7 +120,7 @@ Sellers can withdraw eligible products through the smart contract.
 
 # 👛 Lace Wallet Integration
 
-Level 2 uses the **Lace wallet** for blockchain interaction.
+Level 3 supports the **Lace wallet** for blockchain interaction.
 
 The frontend supports:
 
@@ -133,8 +133,6 @@ The frontend supports:
 - Midnight Preview network interaction
 - Zero-Knowledge transaction signing
 
-The Level 2 demo specifically demonstrates connecting and disconnecting the Lace wallet from the frontend.
-
 ---
 
 # 🔐 Privacy Model
@@ -143,84 +141,70 @@ Midnight provides a privacy architecture where public ledger information can be 
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────┐
-│                        USER / BROWSER                                │
-│                                                                      │
-│   ┌────────────────────────┐       ┌─────────────────────────────┐  │
-│   │   PRIVATE WITNESS      │       │       LACE WALLET           │  │
-│   │                        │       │                             │  │
-│   │ • makerSecret          │       │ • Wallet Address            │  │
-│   │ • candidateSecret      │       │ • DUST Balance              │  │
-│   │ • buyerSecret          │       │ • Transaction Authorization │  │
-│   └────────────┬───────────┘       └──────────────┬──────────────┘  │
-│                │                                  │                 │
-└────────────────┼──────────────────────────────────┼─────────────────┘
-                 │                                  │
-                 ▼                                  ▼
-        ┌──────────────────┐              ┌──────────────────────┐
-        │  ZERO-KNOWLEDGE  │              │  WALLET AUTHENTIC-   │
-        │      PROOF       │              │      ATION            │
-        │                  │              │                      │
-        │ Private witness  │              │ Transaction signing  │
-        └─────────┬────────┘              └──────────┬───────────┘
-                  │                                  │
-                  └────────────────┬─────────────────┘
-                                   │
-                                   ▼
+│                        USER / BROWSER                                │
+│                                                                      │
+│   ┌────────────────────────┐      ┌─────────────────────────────┐   │
+│   │   PRIVATE WITNESS      │      │       LACE WALLET           │   │
+│   │                        │      │                             │   │
+│   │ • makerSecret          │      │ • Wallet Address            │   │
+│   │ • candidateSecret      │      │ • DUST Balance              │   │
+│   │ • buyerSecret          │      │ • Transaction Authorization │   │
+│   └────────────┬───────────┘      └──────────────┬──────────────┘   │
+│                │                                 │                  │
+└────────────────┼─────────────────────────────────┼──────────────────┘
+                 │                                 │
+                 ▼                                 ▼
+        ┌──────────────────┐              ┌──────────────────────┐
+        │  ZERO-KNOWLEDGE  │              │  WALLET AUTHENTIC-   │
+        │      PROOF       │              │       ATION          │
+        │                  │              │                      │
+        │ Private witness  │              │ Transaction signing  │
+        └─────────┬────────┘              └──────────┬───────────┘
+                  │                                  │
+                  └────────────────┬─────────────────┘
+                                   │
+                                   ▼
 ┌──────────────────────────────────────────────────────────────────────┐
-│                    MIDNIGHT PREVIEW NETWORK                         │
-│                                                                      │
-│  PUBLIC LEDGER STATE                                                 │
-│                                                                      │
-│  • productsMap                                                       │
-│  • nftsMap                                                           │
-│  • Product ID                                                         │
-│  • Product title                                                      │
-│  • Category                                                           │
-│  • Price                                                              │
-│  • Seller                                                             │
-│  • NFT token ID                                                       │
-│  • Authenticity commitment                                           │
-│  • Product status                                                     │
-│                                                                      │
+│                    MIDNIGHT PREVIEW NETWORK                          │
+│                                                                      │
+│  PUBLIC LEDGER STATE                                                 │
+│                                                                      │
+│  • productsMap                                                       │
+│  • nftsMap                                                           │
+│  • Product ID                                                        │
+│  • Product title                                                     │
+│  • Category                                                          │
+│  • Price                                                             │
+│  • Seller                                                            │
+│  • NFT token ID                                                      │
+│  • Authenticity commitment                                           │
+│  • Product status                                                    │
+│                                                                      │
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
----
+### What an Observer Can / Cannot Learn
 
-# 🔍 Observable Privacy Behavior
+#### What an observer CAN learn:
+- A product exists on-chain with title, category, price, and seller account.
+- An authenticity NFT commitment hash exists for a given product.
+- Product status updates (Listed vs. Sold).
+- That a verification or transaction execution occurred.
 
-The main privacy behavior demonstrated by HandMadeHub is **authenticity verification without revealing the private maker secret**.
-
-The application uses the private secret as a witness for the Zero-Knowledge circuit.
-
-The user can observe a successful verification result, while the actual private secret is not displayed or published as part of the verification result.
-
-The privacy flow is:
-
-```text
-Private Maker Secret
-        │
-        ▼
-Zero-Knowledge Circuit
-        │
-        ▼
-Cryptographic Commitment
-        │
-        ▼
-Verification Result
-```
+#### What an observer CANNOT learn:
+- The private maker secret.
+- The candidate secret passed by the verifier.
+- Sensitive witness values used during ZK proof generation.
 
 The important privacy claim is:
 
 > **The application can prove knowledge of the correct authenticity secret without publicly revealing the secret itself.**
 
-The private witness is therefore separated from the public verification result.
-
 ---
 
 # 🧱 Smart Contract
 
-The main Compact smart contract is:
+The main Compact smart contract is located at:
 
 ```text
 contracts/handmade-marketplace.compact
@@ -235,145 +219,10 @@ mintAuthenticityNft(productId, certificateText)
 
 verifyAuthenticity(tokenId, candidateSecret)
 
-purchaseProduct(productId)
+purchaseProduct(productId, price)
 
 withdrawProduct(productId)
 ```
-
----
-
-# ⚙️ Smart Contract Circuits
-
-## 1. `listProduct`
-
-Creates a marketplace product listing.
-
-```text
-listProduct(
-    title,
-    category,
-    price
-)
-```
-
-The product is recorded in the marketplace state.
-
----
-
-## 2. `mintAuthenticityNft`
-
-Creates an authenticity NFT for a listed product.
-
-```text
-mintAuthenticityNft(
-    productId,
-    certificateText
-)
-```
-
-The NFT is associated with the product and contains an authenticity commitment.
-
----
-
-## 3. `verifyAuthenticity`
-
-Verifies that a candidate secret matches the authenticity commitment.
-
-```text
-verifyAuthenticity(
-    tokenId,
-    candidateSecret
-)
-```
-
-The Zero-Knowledge circuit verifies the secret without exposing the private maker secret.
-
----
-
-## 4. `purchaseProduct`
-
-Allows a user to purchase a listed product.
-
-```text
-purchaseProduct(productId)
-```
-
----
-
-## 5. `withdrawProduct`
-
-Allows the seller to withdraw an eligible product from the marketplace.
-
-```text
-withdrawProduct(productId)
-```
-
----
-
-# 🌐 Preview Deployment
-
-The HandMadeHub Compact smart contract is deployed to the **Midnight Preview network**.
-
-| Information | Value |
-|---|---|
-| **Network** | Midnight Preview |
-| **Network ID** | `preview` |
-| **Contract Address** | `11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf` ||
-
-### Contract Address
-
-```text
-11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf
-```
----
-
-# 🌐 Live Demo
-
-The Level 2 frontend is deployed using Vercel.
-
-### Live Demo
-
-```text
-https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/
-``
----
-
-# 🎥 Demo Video
-
-The Level 2 demo video demonstrates:
-
-1. Opening the deployed HandMadeHub application
-2. Connecting the Lace wallet
-3. Showing the connected wallet state
-4. Disconnecting the Lace wallet
-5. Connecting the wallet again
-6. Performing a frontend action that calls the Compact circuit
-7. Approving the transaction in Lace
-8. Showing the successful circuit result
-9. Demonstrating the observable privacy behavior
-
-### Demo Video
-
-```text
-Demo Video :- https://drive.google.com/file/d/1SkY23pjEQ13Xrle5Pn_PEVrrljtgp6uU/view?usp=drivesdk
-```
----
-
-# 📋 Level 2 Submission Checklist
-
-| Requirement | Status | Evidence |
-|---|---|---|
-| Lace wallet connect | ✅ | Frontend wallet connection |
-| Lace wallet disconnect | ✅ | Frontend disconnect functionality |
-| Circuit called successfully from frontend | ✅ | Successful circuit execution |
-| Observable privacy behavior | ✅ | Private secret remains undisclosed |
-| Contract deployed to Preview | ✅ | Preview deployment |
-| Verifiable Preview contract address | ✅ | 11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf |
-| Public GitHub repository | ✅ | Public repository |
-| Live demo | ✅ | Vercel deployment https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/|
-| Demo video | ✅ | Wallet + successful circuit demonstration https://drive.google.com/file/d/1SkY23pjEQ13Xrle5Pn_PEVrrljtgp6uU/view?usp=drivesdk |
-| README privacy claim | ✅ | Privacy Model section |
-| Minimum 8 meaningful commits | ✅ | Level 2 Git history |
 
 ---
 
@@ -391,28 +240,27 @@ The project generates managed contract artifacts under:
 contracts/managed/handmade-marketplace/
 ```
 
-The compiled contract includes the marketplace and authenticity circuits.
-
 ### Generated Structure
 
 ```text
 contracts/managed/handmade-marketplace/
+├── compiler/
+│   └── contract-info.json
 ├── contract/
-│   ├── index.js
-│   ├── index.d.ts
-│   └── index.cjs
-│
-└── zkConfig/
-    ├── listProduct.pk
-    ├── listProduct.vk
-    ├── mintAuthenticityNft.pk
-    ├── mintAuthenticityNft.vk
-    ├── verifyAuthenticity.pk
-    ├── verifyAuthenticity.vk
-    ├── purchaseProduct.pk
-    ├── purchaseProduct.vk
-    ├── withdrawProduct.pk
-    └── withdrawProduct.vk
+│   ├── index.js
+│   ├── index.d.ts
+│   └── index.cjs
+└── keys/
+    ├── listProduct.prover
+    ├── listProduct.verifier
+    ├── mintAuthenticityNft.prover
+    ├── mintAuthenticityNft.verifier
+    ├── verifyAuthenticity.prover
+    ├── verifyAuthenticity.verifier
+    ├── purchaseProduct.prover
+    ├── purchaseProduct.verifier
+    ├── withdrawProduct.prover
+    └── withdrawProduct.verifier
 ```
 
 ---
@@ -426,14 +274,6 @@ Run:
 ```bash
 npm run test
 ```
-
-The test suite covers functionality such as:
-
-- Product listing
-- Authenticity NFT minting
-- Authenticity commitment generation
-- Authenticity verification
-- Invalid-secret rejection
 
 ### Test Execution Output
 
@@ -457,100 +297,96 @@ Test Files  1 passed (1)
 
 ---
 
-# 🏗️ Architecture
+# 🔄 CI/CD Pipeline
 
+The project includes an automated GitHub Actions CI pipeline configured in [`.github/workflows/ci.yml`](file:///.github/workflows/ci.yml).
+
+### CI Validation Flow:
 ```text
-                    ┌──────────────────────┐
-                    │     HandMadeHub      │
-                    │    React Frontend    │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │     Lace Wallet      │
-                    │   Connect / Sign     │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │     Midnight.js      │
-                    │        SDK           │
-                    └──────────┬───────────┘
-                               │
-                    ┌──────────┴──────────┐
-                    │                     │
-                    ▼                     ▼
-          ┌───────────────────┐   ┌──────────────────┐
-          │  Compact Contract │   │  Proof Server    │
-          │                   │   │                  │
-          │ Marketplace       │   │ ZK Proofs        │
-          │ Authenticity NFT  │   │                  │
-          │ Verification      │   │                  │
-          └─────────┬─────────┘   └──────────────────┘
-                    │
-                    ▼
-          ┌───────────────────────────┐
-          │ Midnight Preview Network │
-          │                           │
-          │ Public Ledger State       │
-          └───────────────────────────┘
+Push / PR to level3
+       │
+       ▼
+Checkout Repository
+       │
+       ▼
+Setup Node.js 22 & Install Dependencies
+       │
+       ▼
+Build TypeScript & Frontend
+       │
+       ▼
+Start Local Midnight Devnet (Docker Compose)
+       │
+       ▼
+Deploy Contract to Local Devnet (`npm run deploy -- --network undeployed`)
+       │
+       ▼
+Run Integration Tests (`npm test -- --network undeployed`)
+       │
+       ▼
+CI Pipeline Green ✅
 ```
 
 ---
 
-# 🛠️ Technology Stack
+# 🌐 Preview Deployment
 
-| Layer | Technology |
+The HandMadeHub Compact smart contract is deployed to the **Midnight Preview network**.
+
+| Information | Value |
 |---|---|
-| **Frontend** | React |
-| **Language** | TypeScript / JavaScript |
-| **Build Tool** | Vite |
-| **Styling** | Tailwind CSS |
-| **Smart Contract** | Compact |
-| **Blockchain** | Midnight Network |
-| **Network** | Midnight Preview Testnet |
-| **Wallet** | Lace Wallet |
-| **Blockchain SDK** | Midnight.js |
-| **Proof Generation** | Midnight Proof Server |
-| **Infrastructure** | Docker |
-| **Testing** | Vitest |
-| **Indexer** | Midnight GraphQL Indexer |
+| **Network** | Midnight Preview |
+| **Network ID** | `preview` |
+| **Contract Address** | `11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf` |
 
 ---
 
-# 📂 Project Structure
+# 🌐 Live Demo
 
-```text
-HandMade/
-│
-├── contracts/
-│   ├── handmade-marketplace.compact
-│   │
-│   └── managed/
-│       └── handmade-marketplace/
-│           ├── contract/
-│           └── zkConfig/
-│
-├── frontend/
-│   └── src/
-│       ├── components/
-│       ├── pages/
-│       ├── App.tsx
-│       └── ...
-│
-├── src/
-│   ├── midnight/
-│   ├── components/
-│   └── ...
-│
-├── tests/
-│   └── handmade-marketplace.test.ts
-│
-├── compose.yml
-├── package.json
-├── vite.config.ts
-└── README.md
-```
+The Level 3 frontend is deployed using Vercel.
+
+### Live Demo
+
+[Open HandMadeHub Live Demo](https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/)
+
+---
+
+# 🎥 Demo Video
+
+The Level 3 demo video demonstrates:
+
+1. Opening the deployed HandMadeHub application
+2. Connecting the Lace wallet
+3. Showing the connected wallet state
+4. Disconnecting the Lace wallet
+5. Connecting the wallet again
+6. Performing a frontend action that calls the Compact circuit
+7. Approving the transaction in Lace
+8. Showing the successful circuit result
+9. Demonstrating the observable privacy behavior
+
+### Demo Video
+
+[Watch HandMadeHub Demo Video](https://drive.google.com/file/d/1SkY23pjEQ13Xrle5Pn_PEVrrljtgp6uU/view?usp=drivesdk)
+
+---
+
+# 📋 Level 3 Submission Checklist
+
+| Requirement | Status | Evidence |
+|---|---|---|
+| Fully functional dApp | ✅ | Marketplace + Midnight Compact privacy circuits |
+| Lace wallet connect/disconnect | ✅ | Lace wallet integration in frontend |
+| Circuit called successfully from frontend | ✅ | Successful circuit execution |
+| Observable privacy behavior | ✅ | Private secret remains undisclosed |
+| Contract deployed to Preview | ✅ | Preview deployment (`11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf`) |
+| Public GitHub repository | ✅ | Public repository |
+| Live demo | ✅ | [Vercel Deployment](https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/) |
+| Demo video | ✅ | [Demo Video](https://drive.google.com/file/d/1SkY23pjEQ13Xrle5Pn_PEVrrljtgp6uU/view?usp=drivesdk) |
+| Privacy model & Observer rules | ✅ | Documented in Privacy Model section |
+| Minimum 3 tests passing | ✅ | Vitest test suite (9 tests passing) |
+| CI/CD Pipeline | ✅ | GitHub Actions workflow `.github/workflows/ci.yml` |
+| Minimum 10 meaningful commits | ✅ | Level 3 Git history |
 
 ---
 
@@ -567,7 +403,6 @@ Before running HandMadeHub, install:
 - **Compact Compiler**
 - **Lace Wallet browser extension**
 - **Midnight Preview network configured in Lace**
-- Sufficient **tNIGHT and DUST** for transactions
 
 ---
 
@@ -594,8 +429,6 @@ npm install
 docker compose up -d
 ```
 
-This starts the required local infrastructure, including the Midnight proof server.
-
 ---
 
 ## 4. Compile the Smart Contract
@@ -620,224 +453,24 @@ npm run test
 npm run frontend:dev
 ```
 
-Open the local development URL shown by Vite.
-
 ---
 
-# 🔄 Level 2 User Flow
-
-```text
-┌────────────────────┐
-│    Open DApp       │
-└─────────┬──────────┘
-          │
-          ▼
-┌────────────────────┐
-│   Connect Lace     │
-└─────────┬──────────┘
-          │
-          ▼
-┌────────────────────┐
-│ Wallet Connected   │
-└─────────┬──────────┘
-          │
-          ▼
-┌────────────────────┐
-│ Perform DApp Action│
-└─────────┬──────────┘
-          │
-          ▼
-┌────────────────────┐
-│ Frontend Calls     │
-│ Compact Circuit    │
-└─────────┬──────────┘
-          │
-          ▼
-┌────────────────────┐
-│ Lace Transaction   │
-│ Approval           │
-└─────────┬──────────┘
-          │
-          ▼
-┌────────────────────┐
-│ ZK Proof Generated │
-└─────────┬──────────┘
-          │
-          ▼
-┌────────────────────┐
-│ Circuit Successful │
-└─────────┬──────────┘
-          │
-          ▼
-┌────────────────────┐
-│ Privacy Behavior   │
-│ Observable         │
-└────────────────────┘
-```
-
----
-
-# 🔐 Why Zero-Knowledge Proofs?
-
-Traditional product-authenticity systems may require users to reveal sensitive information or rely completely on centralized databases.
-
-HandMadeHub uses Zero-Knowledge Proofs to provide a different approach.
-
-### The blockchain can verify:
-
-- A product exists
-- An authenticity NFT exists
-- An authenticity commitment exists
-- A verification transaction occurred
-- Marketplace state
-
-### The blockchain does not need to receive:
-
-- The original maker secret
-- The private authenticity witness
-- Sensitive information used to generate the commitment
-
-The authenticity verification is based on proving knowledge of the correct secret rather than publicly revealing the secret.
-
----
-
-# 📊 Level 2 Deployment Status
-
-| Component | Status |
-|---|---|
-| Compact Smart Contract | ✅ Deployed |
-| Midnight Preview Testnet | ✅ |
-| Preview Contract Address | ✅ |
-| Authenticity NFT | ✅ |
-| ZK Authenticity Verification | ✅ |
-| Product Listing | ✅ |
-| Product Purchase | ✅ |
-| Product Withdrawal | ✅ |
-| Lace Wallet Integration | ✅ |
-| Lace Connect | ✅ |
-| Lace Disconnect | ✅ |
-| Frontend Circuit Call | ✅ |
-| Observable Privacy Behavior | ✅ |
-| React Frontend | ✅ |
-| Vercel Deployment | ✅ |
-
----
-
-# 📸 Level 2 Evidence
-
-## 1. Lace Wallet Connection
-
-The deployed HandMadeHub frontend connects to the Lace wallet.
-
-The demo shows:
-
-```text
-Connect Wallet
-      ↓
-Lace Wallet
-      ↓
-Approve Connection
-      ↓
-Wallet Connected
-```
-
----
-
-## 2. Lace Wallet Disconnect
-
-The frontend provides a disconnect action that removes the active wallet connection.
-
----
-
-## 3. Successful Circuit Call
-
-The Level 2 demo demonstrates a Compact circuit being called from the frontend and successfully completing through Lace wallet authorization.
-
-```text
-Frontend Action
-      ↓
-Compact Circuit
-      ↓
-Lace Approval
-      ↓
-ZK Proof Generation
-      ↓
-Successful Transaction
-```
-
----
-
-## 4. Privacy Behavior
-
-The authenticity verification demonstrates the privacy model.
-
-The verification result is observable, while the private maker secret used as the witness is not publicly revealed.
-
----
-
-## 5. Preview Contract
-
-```text
-Network: Midnight Preview
-
-Contract Address:
-11f29a415f12812531d87e7c642215ae6d132e10810471d54a0b1025dbfa67bf
-```
-
----
-
-# 🌐 Live Demo
-
-The Level 2 frontend is deployed using Vercel.
-
-### Live Demo
-
-[Open HandMadeHub Live Demo](https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/)
-
----
-
-# 🎥 Demo Video
-
-The Level 2 demo video demonstrates:
-
-1. Opening the deployed HandMadeHub application
-2. Connecting the Lace wallet
-3. Showing the connected wallet state
-4. Disconnecting the Lace wallet
-5. Connecting the wallet again
-6. Performing a frontend action that calls the Compact circuit
-7. Approving the transaction in Lace
-8. Showing the successful circuit result
-9. Demonstrating the observable privacy behavior
-
-### Demo Video
-
- Demo Video :- https://drive.google.com/file/d/1SkY23pjEQ13Xrle5Pn_PEVrrljtgp6uU/view?usp=drivesdk
 # 🌟 Project Highlights
 
 ### Privacy First
-
 HandMadeHub uses Midnight's privacy architecture to keep sensitive witness values private.
 
 ### Blockchain Authenticity
-
 Each authenticity NFT provides a cryptographic authenticity layer for handmade products.
 
 ### Decentralized Marketplace
-
 The platform connects makers and buyers through blockchain-based marketplace functionality.
 
 ### Zero-Knowledge Verification
-
 Users can verify authenticity without exposing the original secret.
 
-### Lace Wallet Integration
-
-Level 2 integrates Lace for wallet connection, disconnection, transaction authorization, and blockchain interaction.
-
-### Preview Deployment
-
-The Compact smart contract is deployed to the Midnight Preview network for verifiable blockchain interaction.
+### Automated CI/CD
+Level 3 incorporates full GitHub Actions CI pipeline validation for contract deployment and tests.
 
 ---
 
