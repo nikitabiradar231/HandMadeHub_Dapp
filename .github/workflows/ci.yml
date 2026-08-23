@@ -1,3 +1,4 @@
+
 name: CI Pipeline
 
 on:
@@ -32,12 +33,10 @@ jobs:
         run: npm run frontend:build
 
       - name: Start Local Devnet
-        run: |
-          docker compose up -d
-          sleep 15
+        run: docker compose up -d --wait
 
       - name: Deploy Contract to Local Devnet
         run: npm run deploy -- --network undeployed
 
       - name: Run Integration Tests
-        run: npm test -- --network undeployed
+        run: npm test
