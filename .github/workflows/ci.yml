@@ -25,9 +25,11 @@ jobs:
       - name: Install Compact CLI
         run: |
           curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
-          source $HOME/.local/bin/env
-          compact update 0.31.1
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.local/bin:$PATH"
+          compact --version
+          compact update 0.31.1
+          compact --version
 
       - name: Install dependencies
         run: npm ci
