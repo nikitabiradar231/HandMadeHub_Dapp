@@ -303,6 +303,9 @@ Test Files  1 passed (1)
 
 The project includes an automated GitHub Actions CI/CD pipeline configured in [`.github/workflows/ci.yml`](file:///.github/workflows/ci.yml).
 
+### GitHub Actions Run Evidence:
+![HandMadeHub GitHub Actions CI/CD Pipeline Run](docs/images/cicd_pipeline_success.png)
+
 ### Workflow Architecture:
 ```text
                   ┌───────────────────────┐          ┌───────────────────────┐
