@@ -301,33 +301,88 @@ Test Files  1 passed (1)
 
 # 🔄 CI/CD Pipeline
 
-The project includes an automated GitHub Actions CI pipeline configured in [`.github/workflows/ci.yml`](file:///.github/workflows/ci.yml).
+The project includes an automated GitHub Actions CI/CD pipeline configured in [`.github/workflows/ci.yml`](file:///.github/workflows/ci.yml).
 
-### CI Validation Flow:
+### Workflow Architecture:
 ```text
-Push / PR to level3
-       │
-       ▼
-Checkout Repository
-       │
-       ▼
-Setup Node.js 22 & Install Dependencies
-       │
-       ▼
-Build TypeScript & Frontend
-       │
-       ▼
-Start Local Midnight Devnet (Docker Compose)
-       │
-       ▼
-Deploy Contract to Local Devnet (`npm run deploy -- --network undeployed`)
-       │
-       ▼
-Run Integration Tests (`npm test -- --network undeployed`)
-       │
-       ▼
-CI Pipeline Green ✅
+                  ┌───────────────────────┐          ┌───────────────────────┐
+                  │   smart-contract-ci   │          │      frontend-ci      │
+                  │                       │          │                       │
+                  │ • Node.js 22          │          │ • Node.js 22          │
+                  │ • Compact CLI 0.31.1  │          │ • npm ci (frontend)   │
+                  │ • Local Midnight      │          │ • Vite Build          │
+                  │ • Contract deploy     │          │                       │
+                  │ • Vitest Integration  │          │                       │
+                  └───────────┬───────────┘          └───────────┬───────────┘
+                              │                                  │
+                              │ (needs)                          │ (needs)
+                              ▼                                  ▼
+                  ┌───────────────────────┐          ┌───────────────────────┐
+                  │   smart-contract-cd   │          │      frontend-cd      │
+                  │                       │          │                       │
+                  │ • Midnight Preview    │          │ • Vercel Production   │
+                  │ • Requires:           │          │ • Requires:           │
+                  │   MIDNIGHT_WALLET_SEED│          │   VERCEL_TOKEN, etc.  │
+                  └───────────────────────┘          └───────────────────────┘
 ```
+
+### 1. Smart Contract CI (`smart-contract-ci`)
+- **Triggers**: Push or Pull Request on `main`, `level2`, `level3`.
+- **Environment**: Node.js 22, Compact CLI 0.31.1.
+- **Process**:
+  1. Installs Node.js 22 and Compact CLI compiler.
+  2. Runs `npm ci` for workspace dependencies.
+  3. Executes `npm run setup` to start local Midnight services (node, indexer, proof-server) via Docker Compose, compiles the Compact contract, and deploys to the local undeployed network.
+  4. Executes the automated Vitest test suite (`npm test`).
+
+### 2. Smart Contract CD (`smart-contract-cd`)
+- **Triggers**: Push to `main` or manual `workflow_dispatch`.
+- **Dependency**: Executes only after `smart-contract-ci` passes.
+- **Process**:
+  1. Starts local proof server container (`docker compose up -d proof-server`).
+  2. Compiles Compact smart contract (`npm run compile`).
+  3. Deploys smart contract to **Midnight Preview network** (`npm run deploy -- --network preview`) using `src/deploy.ts` and `src/network.ts`.
+- **Secret Required**: `MIDNIGHT_WALLET_SEED`.
+
+### 3. Frontend CI (`frontend-ci`)
+- **Triggers**: Push or Pull Request on `main`, `level2`, `level3`.
+- **Environment**: Node.js 22.
+- **Process**:
+  1. Installs frontend dependencies via `npm ci` in `frontend/`.
+  2. Builds the Vite production bundle (`npm run build`).
+
+### 4. Frontend CD (`frontend-cd`)
+- **Triggers**: Push to `main` or manual `workflow_dispatch`.
+- **Dependency**: Executes only after `frontend-ci` passes.
+- **Process**:
+  1. Installs dependencies and invokes Vercel CLI deployment (`npx vercel --prod`).
+  2. Deploys prebuilt static site to Vercel production hosting.
+- **Secrets Required**: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`.
+
+---
+
+### Required GitHub Secrets
+
+To enable CD deployments, set up the following repository secrets in GitHub (`Settings` -> `Secrets and variables` -> `Actions`):
+
+| Secret Name | Description | Required For |
+|---|---|---|
+| `MIDNIGHT_WALLET_SEED` | Seedphrase / hex seed for Midnight deployer wallet | Smart Contract CD |
+| `VERCEL_TOKEN` | Vercel Personal Access Token | Frontend CD |
+| `VERCEL_ORG_ID` | Vercel Organization ID | Frontend CD |
+| `VERCEL_PROJECT_ID` | Vercel Project ID | Frontend CD |
+
+> **Note**: If secrets are not provided, CI jobs will continue to run and pass successfully, while CD jobs will terminate safely with a clear warning log without exposing any missing credentials.
+
+---
+
+### Manual Deployment Execution (`workflow_dispatch`)
+
+You can manually trigger the entire CI/CD pipeline from the GitHub web UI:
+1. Navigate to the **Actions** tab of your repository.
+2. Select **CI/CD Pipeline** from the left workflow sidebar.
+3. Click the **Run workflow** dropdown button.
+4. Select the target branch (e.g. `level3`) and click **Run workflow**.
 
 ---
 

@@ -1,13 +1,15 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
     branches: [main, level2, level3]
   pull_request:
     branches: [main, level2, level3]
+  workflow_dispatch:
 
 jobs:
-  smart-contract:
+  # ─── 1. SMART CONTRACT CI ───────────────────────────────────────────────────
+  smart-contract-ci:
     name: Smart Contract CI
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -40,9 +42,11 @@ jobs:
       - name: Run smart contract tests
         run: npm test
 
-  frontend:
+  # ─── 2. FRONTEND CI ─────────────────────────────────────────────────────────
+  frontend-ci:
     name: Frontend CI
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout repository
@@ -60,3 +64,83 @@ jobs:
       - name: Build frontend
         working-directory: frontend
         run: npm run build
+
+  # ─── 3. SMART CONTRACT CD ───────────────────────────────────────────────────
+  smart-contract-cd:
+    name: Smart Contract CD
+    needs: smart-contract-ci
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install Compact CLI
+        run: |
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.local/bin:$PATH"
+          compact --version
+          compact update 0.31.1
+          compact --version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start Proof Server
+        run: docker compose up -d proof-server
+
+      - name: Compile Compact Contract
+        run: npm run compile
+
+      - name: Deploy Smart Contract to Midnight Network
+        env:
+          MIDNIGHT_WALLET_SEED: ${{ secrets.MIDNIGHT_WALLET_SEED }}
+        run: |
+          if [ -z "$MIDNIGHT_WALLET_SEED" ]; then
+            echo "❌ MIDNIGHT_WALLET_SEED secret is not configured in GitHub Repository Secrets."
+            echo "Please configure MIDNIGHT_WALLET_SEED in Repository Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+          npm run deploy -- --network preview
+
+  # ─── 4. FRONTEND CD ─────────────────────────────────────────────────────────
+  frontend-cd:
+    name: Frontend CD
+    needs: frontend-ci
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Deploy Frontend to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "❌ VERCEL_TOKEN secret is not configured in GitHub Repository Secrets."
+            echo "Please configure VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID in Repository Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+          npx vercel --prod --token=$VERCEL_TOKEN --yes
