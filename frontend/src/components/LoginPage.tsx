@@ -39,7 +39,7 @@ export function LoginPage({ networkId, busy, onConnect }: LoginPageProps) {
             ) : (
               <>
                 <Wallet size={20} className="mr-2" />
-                Connect 1AM Wallet to Continue
+                Connect Lace Wallet to Continue
               </>
             )}
           </button>
@@ -48,7 +48,7 @@ export function LoginPage({ networkId, busy, onConnect }: LoginPageProps) {
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
           <p className="font-semibold mb-2">📌 Requirements:</p>
           <ol className="list-decimal list-inside space-y-1 text-xs">
-            <li>Install the Midnight browser extension (1AM Wallet)</li>
+            <li>Install the Midnight browser extension (Lace Wallet)</li>
             <li>Connect it to the <code>{networkId}</code> network</li>
             <li>Ensure the wallet has some tNIGHT for transactions</li>
             <li>Connect your wallet above</li>

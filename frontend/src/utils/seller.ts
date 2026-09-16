@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
-if (typeof globalThis.Buffer === 'undefined') {
-  globalThis.Buffer = Buffer;
+if (typeof (globalThis as any).Buffer === 'undefined') {
+  (globalThis as any).Buffer = Buffer;
 }
 
 import { MidnightBech32m, UnshieldedAddress } from '@midnight-ntwrk/wallet-sdk-address-format';

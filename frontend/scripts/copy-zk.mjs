@@ -10,19 +10,26 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const source = path.join(root, 'contracts', 'managed', 'handmade-marketplace');
-const target = path.join(root, 'frontend', 'public', 'zkConfig');
+const scriptsDir = path.dirname(fileURLToPath(import.meta.url));
+const frontendDir = path.resolve(scriptsDir, '..');
+const rootDir = path.resolve(frontendDir, '..');
 
-if (!fs.existsSync(path.join(source, 'zkir'))) {
-  console.error(
-    `[copy-zk] Missing ${source}/zkir — run \`npm run compile\` at the repo root first.`,
-  );
-  process.exit(1);
+const source = path.join(rootDir, 'contracts', 'managed', 'handmade-marketplace');
+const targetConfig = path.join(frontendDir, 'public', 'zkConfig');
+const targetSrcManaged = path.join(frontendDir, 'src', 'managed', 'handmade-marketplace');
+
+if (fs.existsSync(path.join(source, 'zkir'))) {
+  fs.rmSync(targetConfig, { recursive: true, force: true });
+  fs.cpSync(path.join(source, 'zkir'), path.join(targetConfig, 'zkir'), { recursive: true });
+  fs.cpSync(path.join(source, 'keys'), path.join(targetConfig, 'keys'), { recursive: true });
+
+  fs.rmSync(targetSrcManaged, { recursive: true, force: true });
+  fs.cpSync(path.join(source, 'contract'), path.join(targetSrcManaged, 'contract'), { recursive: true });
+  console.log(`[copy-zk] Copied ZK assets & contract module -> frontend`);
+} else if (fs.existsSync(path.join(targetConfig, 'zkir'))) {
+  console.log(`[copy-zk] ZK assets already present at ${targetConfig}`);
+} else {
+  console.warn(`[copy-zk] Notice: source ${source} not found, ensuring ${targetConfig} directory exists.`);
+  fs.mkdirSync(path.join(targetConfig, 'zkir'), { recursive: true });
+  fs.mkdirSync(path.join(targetConfig, 'keys'), { recursive: true });
 }
-
-fs.rmSync(target, { recursive: true, force: true });
-fs.cpSync(path.join(source, 'zkir'), path.join(target, 'zkir'), { recursive: true });
-fs.cpSync(path.join(source, 'keys'), path.join(target, 'keys'), { recursive: true });
-
-console.log(`[copy-zk] Copied ZK assets -> ${path.relative(root, target)}`);

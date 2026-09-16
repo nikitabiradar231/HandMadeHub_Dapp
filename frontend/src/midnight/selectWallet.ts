@@ -2,7 +2,7 @@ import type { ConnectedAPI, InitialAPI } from '@midnight-ntwrk/dapp-connector-ap
 import { setNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 
 /** Environment defaults (overridable via `frontend/.env`). */
-export const NETWORK_ID: string = import.meta.env.VITE_NETWORK_ID ?? 'preview';
+export const NETWORK_ID: string = import.meta.env.VITE_NETWORK_ID ?? 'preprod';
 
 // The Midnight.js runtime and contract layers call getNetworkId() for every
 // wallet, provider, contract and transaction operation. Configure it up front —
@@ -38,7 +38,7 @@ declare global {
 }
 
 /**
- * Discover all injected Midnight and 1AM wallet instances from global window object.
+ * Discover all injected Midnight and Lace wallet instances from global window object.
  */
 export function findWallets(): InitialAPI[] {
   if (typeof window === 'undefined') return [];
@@ -55,19 +55,21 @@ export function findWallets(): InitialAPI[] {
     }
   }
 
-  // 2. Direct window.oneam or window['1am']
-  const directOneAM = window.oneam || window['1am'] || window.oneamWallet;
-  if (directOneAM && typeof directOneAM === 'object') {
-    if ('apiVersion' in directOneAM) {
-      found.push(directOneAM as InitialAPI);
-    } else if (directOneAM.api && typeof directOneAM.api === 'object' && 'apiVersion' in directOneAM.api) {
-      found.push(directOneAM.api as InitialAPI);
+  // 2. Direct window.mnLace or window.lace or window.oneam
+  const directLace = window.mnLace || window.lace || window.oneam || window['1am'] || window.oneamWallet;
+  if (directLace && typeof directLace === 'object') {
+    if ('apiVersion' in directLace) {
+      found.push(directLace as InitialAPI);
+    } else if (directLace.api && typeof directLace.api === 'object' && 'apiVersion' in directLace.api) {
+      found.push(directLace.api as InitialAPI);
     }
   }
 
-  // 3. Inspect window.cardano.midnight
+  // 3. Inspect window.cardano.midnight or window.cardano.lace
   if (window.cardano?.midnight && typeof window.cardano.midnight === 'object' && 'apiVersion' in window.cardano.midnight) {
     found.push(window.cardano.midnight as InitialAPI);
+  } else if (window.cardano?.lace && typeof window.cardano.lace === 'object' && 'apiVersion' in window.cardano.lace) {
+    found.push(window.cardano.lace as InitialAPI);
   }
 
   return found;
@@ -76,10 +78,15 @@ export function findWallets(): InitialAPI[] {
 export function findCompatibleWallet(): InitialAPI | undefined {
   const wallets = findWallets();
 
-  // Prioritize 1AM or Midnight v4 connector
-  const oneAM = wallets.find((w) => w.name?.toLowerCase().includes('1am') || w.rdns?.toLowerCase().includes('1am'));
-  if (oneAM && oneAM.apiVersion?.startsWith(COMPATIBLE_CONNECTOR_API_VERSION)) {
-    return oneAM;
+  // Prioritize Lace or Midnight v4 connector
+  const lace = wallets.find(
+    (w) =>
+      w.name?.toLowerCase().includes('lace') ||
+      w.rdns?.toLowerCase().includes('lace') ||
+      w.rdns?.toLowerCase().includes('mnlace'),
+  );
+  if (lace && lace.apiVersion?.startsWith(COMPATIBLE_CONNECTOR_API_VERSION)) {
+    return lace;
   }
 
   return wallets.find((w) => w.apiVersion?.startsWith(COMPATIBLE_CONNECTOR_API_VERSION)) || wallets[0];
@@ -88,14 +95,14 @@ export function findCompatibleWallet(): InitialAPI | undefined {
 /** All `InitialAPI`s, used to render a wallet picker. */
 export function listWalletDescriptors(): { rdns: string; name: string; icon: string }[] {
   return findWallets().map(({ rdns, name, icon }) => ({
-    rdns: rdns || '1am.midnight.wallet',
-    name: name || 'Midnight 1AM Wallet',
+    rdns: rdns || 'lace.midnight.wallet',
+    name: name || 'Lace Wallet',
     icon: icon || '',
   }));
 }
 
 /**
- * Connect to the Midnight / 1AM wallet on the requested network.
+ * Connect to the Lace Midnight wallet on the requested network.
  *
  * @throws if no compatible wallet extension is installed, the user rejects the
  * connection, or the wallet is already connected to a different network.
@@ -114,11 +121,11 @@ export async function connectWallet(networkId: string = NETWORK_ID): Promise<Con
 
   if (!wallet) {
     throw new Error(
-      'No compatible Midnight / 1AM wallet found. Install the 1AM Midnight browser extension (connector API v4.x) and reload this page.',
+      'No compatible Lace wallet found. Install the Lace Midnight browser extension (connector API v4.x) and reload this page.',
     );
   }
 
-  console.log(`[Midnight DApp] Connecting to wallet "${wallet.name || 'Midnight Wallet'}" on network ${networkId}…`);
+  console.log(`[Midnight DApp] Connecting to wallet "${wallet.name || 'Lace Wallet'}" on network ${networkId}…`);
 
   const connectedApi = await wallet.connect(networkId);
   const status = await connectedApi.getConnectionStatus();

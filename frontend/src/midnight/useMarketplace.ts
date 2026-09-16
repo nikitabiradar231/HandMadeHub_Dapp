@@ -17,7 +17,6 @@ import {
 import { loadSecret, parseSecretHex, randomSecret, saveSecret } from './secrets';
 import { saveProductImage } from '../utils/imageStore';
 
-import { authenticateWith1AMGateway } from './gateway';
 import { parseMidnightError } from './errors';
 import {
   mergeProducts,
@@ -129,14 +128,11 @@ export function useMarketplace() {
   }, [wallet]);
 
   const connect = useCallback(async () => {
-    setStatus({ kind: 'connecting', title: 'Connecting to Midnight wallet…' });
+    setStatus({ kind: 'connecting', title: 'Connecting to Lace wallet…' });
     try {
       const connectedApi = await connectWallet(NETWORK_ID);
       const config = await connectedApi.getConfiguration();
       const { unshieldedAddress } = await connectedApi.getUnshieldedAddress();
-
-      setStatus({ kind: 'connecting', title: 'Authenticating with 1AM Gateway…' });
-      await authenticateWith1AMGateway(unshieldedAddress, connectedApi);
 
       const providers = await buildProviders(connectedApi);
       const contractModule = await loadContractModule();
@@ -339,7 +335,7 @@ export function useMarketplace() {
         // Step 2: Mint authenticity NFT with block-sync retries
         setStatus({
           kind: 'proving',
-          title: 'Product listed! Minting authenticity NFT with 1AM Wallet…',
+          title: 'Product listed! Minting authenticity NFT with Lace Wallet…',
           detail: 'Waiting for Midnight preview testnet block confirmation & indexer sync…',
         });
 

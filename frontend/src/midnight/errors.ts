@@ -28,13 +28,23 @@ export function parseMidnightErrorDetails(error: unknown): ParsedError {
   const rawMessage = error instanceof Error ? error.message : String(error);
   const code = (error as { code?: string | number })?.code ? String((error as { code?: string | number }).code) : undefined;
 
-  console.debug('[Midnight/1AM Error Trace]:', error);
+  let currentErr: any = error;
+  const causes: string[] = [];
+  while (currentErr && typeof currentErr === 'object') {
+    if (currentErr.message && typeof currentErr.message === 'string') {
+      causes.push(currentErr.message);
+    }
+    currentErr = currentErr.cause;
+  }
+  const fullErrorString = [rawMessage, ...causes, String(error)].join(' ');
+
+  console.debug('[Midnight/Lace Error Trace]:', error);
 
   // 1. User rejection
   if (
     code === '4001' ||
-    rawMessage.includes('4001') ||
-    /rejected|denied|cancelled|canceled|declined/i.test(rawMessage)
+    code === '4001' ||
+    /4001|rejected|denied|cancelled|canceled|declined/i.test(fullErrorString)
   ) {
     return {
       title: 'Action Cancelled',
@@ -47,7 +57,7 @@ export function parseMidnightErrorDetails(error: unknown): ParsedError {
   // 2. DUST State / Synchronization errors
   if (
     /DUST state is not ready|sync\/state refresh|wallet state is not ready|synchronizing/i.test(
-      rawMessage,
+      fullErrorString,
     )
   ) {
     return {
@@ -59,7 +69,7 @@ export function parseMidnightErrorDetails(error: unknown): ParsedError {
   }
 
   // 3. Balance / DUST Insufficient
-  if (/insufficient.*dust|insufficient.*tnight|balance too low|not enough funds/i.test(rawMessage)) {
+  if (/insufficient.*dust|insufficient.*tnight|balance too low|not enough funds/i.test(fullErrorString)) {
     return {
       title: 'Insufficient Balance',
       detail: 'Your Midnight wallet does not have enough DUST or tNIGHT for transaction fees. Please fund your wallet using the faucet.',
@@ -70,30 +80,20 @@ export function parseMidnightErrorDetails(error: unknown): ParsedError {
 
   // 4. Wallet Provider Not Found
   if (
-    /no compatible midnight wallet|wallet extension not found|provider not detected|install the 1am/i.test(
-      rawMessage,
+    /no compatible midnight wallet|no compatible lace wallet|wallet extension not found|provider not detected|install the lace|install the 1am/i.test(
+      fullErrorString,
     )
   ) {
     return {
       title: 'Wallet Extension Missing',
-      detail: 'No compatible Midnight / 1AM wallet extension was found. Please ensure your browser extension is unlocked and refreshed.',
+      detail: 'No compatible Lace Midnight wallet extension was found. Please ensure your Lace browser extension is unlocked and refreshed.',
       isRecoverable: false,
       code: 'WALLET_NOT_FOUND',
     };
   }
 
-  // 5. 1AM Gateway Challenge / Authentication Errors
-  if (/challenge request failed|404|401|unauthorized|authentication required|sign in to the 1am/i.test(rawMessage)) {
-    return {
-      title: '1AM Gateway Authentication Failed',
-      detail: 'Could not complete 1AM Gateway authentication challenge. Please re-authenticate your wallet.',
-      isRecoverable: true,
-      code: '1AM_AUTH_FAILED',
-    };
-  }
-
-  // 6. Network ID Mismatch
-  if (/wrong.*network|network mismatch|connected to.*requires/i.test(rawMessage)) {
+  // 5. Network ID Mismatch
+  if (/wrong.*network|network mismatch|connected to.*requires/i.test(fullErrorString)) {
     return {
       title: 'Network Mismatch',
       detail: 'Your wallet is on a different Midnight network. Please switch to the Preview testnet.',
@@ -102,18 +102,38 @@ export function parseMidnightErrorDetails(error: unknown): ParsedError {
     };
   }
 
-  // 7. ZK Proof Generation Failure
-  if (/proof.*failed|proving failed|zk.*error|failed to build proof/i.test(rawMessage)) {
+  // 6. ZK Proof Generation & Header Tag Mismatch Failure
+  if (/expected header tag|midnight:proof-versioned|midnight:vec/i.test(fullErrorString)) {
+    return {
+      title: 'Proof Version Mismatch',
+      detail:
+        'The connected wallet extension generated an unversioned proof format (midnight:vec). Please run a local Midnight Proof Server (`docker compose up -d proof-server`) and set `VITE_PROOF_SERVER_URL=http://127.0.0.1:6300` in frontend/.env.',
+      isRecoverable: true,
+      code: 'PROOF_HEADER_MISMATCH',
+    };
+  }
+
+  if (/temporarily banned|transaction.*banned/i.test(fullErrorString)) {
+    return {
+      title: 'Transaction Temporarily Banned',
+      detail:
+        'The node mempool temporarily rate-limited this transaction because a previous submission failed or used overlapping inputs. Please wait 30–60 seconds, reconnect your wallet, and try again.',
+      isRecoverable: true,
+      code: 'TRANSACTION_BANNED',
+    };
+  }
+
+  if (/proof.*failed|proving failed|zk.*error|failed to build proof/i.test(fullErrorString)) {
     return {
       title: 'Proof Generation Failed',
-      detail: 'Zero-knowledge proof calculation encountered an issue. Ensure your local proof server or extension is running.',
+      detail: 'Zero-knowledge proof calculation encountered an issue. Ensure your Lace wallet or local proof server is ready.',
       isRecoverable: true,
       code: 'PROOF_FAILED',
     };
   }
 
-  // 8. Indexer or Network Fetch Errors
-  if (/failed to fetch|networkerror|econnrefused|indexer query/i.test(rawMessage)) {
+  // 7. Indexer or Network Fetch Errors
+  if (/failed to fetch|networkerror|econnrefused|indexer query/i.test(fullErrorString)) {
     return {
       title: 'Network Connection Issue',
       detail: 'Unable to reach the Midnight indexer or RPC gateway. Check your internet connection and try again.',
@@ -122,11 +142,39 @@ export function parseMidnightErrorDetails(error: unknown): ParsedError {
     };
   }
 
+  // 8. Scoped Transaction Error handling
+  if (/submitting scoped transaction|balancing scoped transaction/i.test(rawMessage)) {
+    let clean = rawMessage
+      .replace(/^Unexpected error (submitting|balancing) scoped transaction '[^']*':\s*/i, '')
+      .replace(/^Error:\s*/i, '')
+      .trim();
+
+    if (!clean || clean === 'Error') {
+      clean = 'Wallet declined or failed to submit the transaction to Midnight Network.';
+    }
+
+    return {
+      title: 'Transaction Submission Failed',
+      detail: `${clean} Ensure your Lace Wallet is unlocked, connected to Preview Testnet, and has tNIGHT and DUST balance.`,
+      isRecoverable: true,
+      code: 'SCOPED_TX_FAILED',
+    };
+  }
+
   // Clean raw message fallback
-  const cleanMessage = rawMessage.replace(/^Error:\s*/, '').trim();
+  let cleanMessage = rawMessage
+    .replace(/^Error:\s*/i, '')
+    .replace(/^Unexpected error (submitting|balancing) scoped transaction '[^']*':\s*/i, '')
+    .replace(/^Error:\s*/i, '')
+    .trim();
+
+  if (!cleanMessage || cleanMessage === 'Error') {
+    cleanMessage = 'Transaction failed. Please check Lace Wallet connection and try again.';
+  }
+
   return {
     title: 'Operation Failed',
-    detail: cleanMessage.length > 140 ? `${cleanMessage.slice(0, 140)}…` : cleanMessage,
+    detail: cleanMessage.length > 180 ? `${cleanMessage.slice(0, 180)}…` : cleanMessage,
     isRecoverable: true,
   };
 }

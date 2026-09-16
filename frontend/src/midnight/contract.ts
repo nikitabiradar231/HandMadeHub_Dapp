@@ -33,7 +33,7 @@ export const emptyWitnessValues = (): WitnessValues => ({
  * `npm run compile`).
  */
 export async function loadContractModule(): Promise<any> {
-  return import('../../../contracts/managed/handmade-marketplace/contract/index.js');
+  return import('../managed/handmade-marketplace/contract/index.js');
 }
 
 /**
