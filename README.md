@@ -4,6 +4,10 @@
 
 > **A Privacy-Preserving Decentralized Handmade Marketplace & Authenticity NFT Protocol built on the Midnight Network.**
 
+### 🔗 Quick Links
+- 🌐 **Live Demo**: [Open HandMadeHub Application](https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/)
+- 🎥 **Demo Video**: [Watch HandMadeHub Demo Video](https://drive.google.com/file/d/1SkY23pjEQ13Xrle5Pn_PEVrrljtgp6uU/view?usp=drivesdk)
+
 ---
 
 # 📌 Level 3 Overview
