@@ -1,4 +1,4 @@
-[![CI Pipeline](https://github.com/nikitabiradar231/HandMadeHub_Dapp/actions/workflows/ci.yml/badge.svg?branch=level3)](https://github.com/nikitabiradar231/HandMadeHub_Dapp/actions/workflows/ci.yml)
+[![CI Pipeline](https://github.com/nikitabiradar231/HandMadeHub_Dapp/actions/workflows/ci.yml/badge.svg)](https://github.com/nikitabiradar231/HandMadeHub_Dapp/actions/workflows/ci.yml)
 
 # HandMadeHub 🎨
 
