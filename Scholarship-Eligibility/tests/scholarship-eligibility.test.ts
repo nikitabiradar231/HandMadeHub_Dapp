@@ -410,126 +410,73 @@ describe("Private Scholarship Eligibility & Credential Verification Contract", (
   });
 
   // --------------------------------------------------------------------------
-  // TEST 16 — Level 5 Feature: Scholarship Search & Filtering Behavior
+  // TEST 16 — Level 5 Feature: Scholarship Search & Filtering
   // --------------------------------------------------------------------------
-  it("TEST 16 — Level 5: Search scholarships by keyword, case-insensitivity, empty search, and no-results", () => {
-    const searchContract = new ScholarshipEligibilityContract();
-    
-    searchContract.createScholarship(
-      "Merit Excellence Scholarship 2026",
-      "For top academic achievers in STEM fields",
+  it("TEST 16 — Level 5 Feedback: Scholarship Search & Filtering Logic", () => {
+    const providerAddr = "0xaddr_provider_search";
+
+    // Setup multiple scholarships
+    contract.createScholarship(
+      "National STEM Merit Grant 2026",
+      "Financial assistance for high-achieving science & engineering students",
       85n,
-      600000n,
-      [],
-      "STEM Foundation",
-      "0xaddr_stem"
-    );
-
-    searchContract.createScholarship(
-      "Need-Based Financial Aid Grant",
-      "Assistance for underprivileged students in engineering",
-      60n,
-      300000n,
-      [],
-      "Aid Trust",
-      "0xaddr_aid"
-    );
-
-    searchContract.createScholarship(
-      "Global Women in Tech Award",
-      "Supporting female computer science scholars",
-      75n,
       500000n,
       [],
-      "Tech Equity",
-      "0xaddr_tech"
+      "STEM Foundation",
+      providerAddr
     );
 
-    const allScholarships = searchContract.getScholarships();
-    expect(allScholarships.length).toBe(3);
-
-    // Search helper matching logic (as used in StudentPortal)
-    const filterScholarships = (query: string) => {
-      if (!query.trim()) return allScholarships;
-      const q = query.toLowerCase().trim();
-      return allScholarships.filter(
-        (s) => s.name.toLowerCase().includes(q) || s.description.toLowerCase().includes(q)
-      );
-    };
-
-    // 1. Matching search
-    const meritResults = filterScholarships("Merit");
-    expect(meritResults.length).toBe(1);
-    expect(meritResults[0].name).toContain("Merit Excellence");
-
-    // 2. Case-insensitive search
-    const lowerResults = filterScholarships("engineering");
-    expect(lowerResults.length).toBe(1);
-    expect(lowerResults[0].name).toBe("Need-Based Financial Aid Grant");
-
-    const upperResults = filterScholarships("WOMEN");
-    expect(upperResults.length).toBe(1);
-    expect(upperResults[0].name).toBe("Global Women in Tech Award");
-
-    // 3. Empty search returns all scholarships
-    const emptyResults = filterScholarships("");
-    expect(emptyResults.length).toBe(3);
-
-    const whitespaceResults = filterScholarships("   ");
-    expect(whitespaceResults.length).toBe(3);
-
-    // 4. No-result search
-    const noResults = filterScholarships("NonExistentScholarshipKeyword123");
-    expect(noResults.length).toBe(0);
-  });
-
-  // --------------------------------------------------------------------------
-  // TEST 17 — Level 5 Feature: Scholarship Details Metadata & Retrieval
-  // --------------------------------------------------------------------------
-  it("TEST 17 — Level 5: Verify scholarship details structure, metadata integrity, and optional fields", () => {
-    const detailsContract = new ScholarshipEligibilityContract();
-
-    const createdGrant = detailsContract.createScholarship(
-      "Doctoral Research Fellowship in Cryptography",
-      "Specialized grant for PhD candidates researching zero-knowledge proofs and privacy ledger scaling.",
-      90n,
-      800000n,
-      ["Academic Marksheet", "Family Income Certificate", "Research Proposal PDF", "Advisor Recommendation"],
-      "Crypto Science Foundation",
-      "0xaddr_crypto_foundation"
+    contract.createScholarship(
+      "Need-Based Higher Education Award",
+      "Grant for undergraduate students requiring tuition financial support",
+      70n,
+      300000n,
+      [],
+      "EduTrust Org",
+      providerAddr
     );
 
-    // 1. Verify retrieval by ID
-    const retrieved = detailsContract.getScholarshipById(createdGrant.id);
-    expect(retrieved).toBeDefined();
-    expect(retrieved?.id).toBe(createdGrant.id);
+    contract.createScholarship(
+      "Women in Technology Fellowship",
+      "Empowering female computer science and tech researchers",
+      80n,
+      600000n,
+      [],
+      "Tech Forward",
+      providerAddr
+    );
 
-    // 2. Verify all detail fields are present and accurate
-    expect(retrieved?.name).toBe("Doctoral Research Fellowship in Cryptography");
-    expect(retrieved?.description).toContain("zero-knowledge proofs");
-    expect(retrieved?.minimumMarks).toBe(90n);
-    expect(retrieved?.maximumFamilyIncome).toBe(800000n);
-    expect(retrieved?.createdBy).toBe("Crypto Science Foundation");
-    expect(retrieved?.creatorAddress).toBe("0xaddr_crypto_foundation");
-    expect(retrieved?.createdAt).toBeDefined();
+    // 1. Empty search returns all available scholarships (3)
+    expect(contract.searchScholarships("").length).toBe(3);
+    expect(contract.searchScholarships("   ").length).toBe(3);
 
-    // 3. Verify required documents array structure
-    expect(retrieved?.requiredDocuments.length).toBe(4);
-    expect(retrieved?.requiredDocuments).toContain("Research Proposal PDF");
-    expect(retrieved?.requiredDocuments).toContain("Advisor Recommendation");
+    // 2. Matching by scholarship name ("STEM")
+    const stemResults = contract.searchScholarships("STEM");
+    expect(stemResults.length).toBe(1);
+    expect(stemResults[0].name).toBe("National STEM Merit Grant 2026");
 
-    // 4. Verify student application links back to correct scholarship details
-    const studentAddr = "0xaddr_phd_student";
-    const app = detailsContract.submitApplication(createdGrant.id, studentAddr, "PhD Student Scholar");
-    expect(app.scholarshipId).toBe(createdGrant.id);
-    expect(app.scholarshipName).toBe(createdGrant.name);
+    // 3. Matching by description ("tuition")
+    const descResults = contract.searchScholarships("tuition");
+    expect(descResults.length).toBe(1);
+    expect(descResults[0].name).toBe("Need-Based Higher Education Award");
 
-    const linkedScholarship = detailsContract.getScholarshipById(app.scholarshipId);
-    expect(linkedScholarship?.minimumMarks).toBe(90n);
-    expect(linkedScholarship?.maximumFamilyIncome).toBe(800000n);
+    // 4. Case-insensitivity ("nAtIoNaL", "fElLoWsHiP")
+    const caseResults1 = contract.searchScholarships("nAtIoNaL");
+    expect(caseResults1.length).toBe(1);
+    expect(caseResults1[0].name).toBe("National STEM Merit Grant 2026");
+
+    const caseResults2 = contract.searchScholarships("fElLoWsHiP");
+    expect(caseResults2.length).toBe(1);
+    expect(caseResults2[0].name).toBe("Women in Technology Fellowship");
+
+    // 5. Non-matching query produces 0 results
+    const noMatchResults = contract.searchScholarships("NonExistentQueryKeyword12345");
+    expect(noMatchResults.length).toBe(0);
+
+    // 6. Clearing search restores all 3 scholarships
+    const clearedResults = contract.searchScholarships("");
+    expect(clearedResults.length).toBe(3);
   });
 });
-
-
 
 

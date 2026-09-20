@@ -167,6 +167,14 @@ export class ScholarshipEligibilityContract {
     return this.scholarships.find((s) => s.id === id);
   }
 
+  public searchScholarships(query: string): ScholarshipItem[] {
+    const q = query.trim().toLowerCase();
+    if (!q) return this.getScholarships();
+    return this.scholarships.filter(
+      (s) => s.name.toLowerCase().includes(q) || s.description.toLowerCase().includes(q)
+    );
+  }
+
   public getApplicationsForStudent(studentId?: string): StudentApplication[] {
     if (!studentId) return [...this.applications];
     return this.applications.filter((a) => a.studentId === studentId);
