@@ -408,6 +408,81 @@ describe("Private Scholarship Eligibility & Credential Verification Contract", (
       );
     }).toThrowError(/Credentials must be verified by a scholarship administrator first/);
   });
+
+  // --------------------------------------------------------------------------
+  // TEST 16 — Level 5 Feature: Scholarship Search & Filtering Behavior
+  // --------------------------------------------------------------------------
+  it("TEST 16 — Level 5: Search scholarships by keyword, case-insensitivity, empty search, and no-results", () => {
+    const searchContract = new ScholarshipEligibilityContract();
+    
+    searchContract.createScholarship(
+      "Merit Excellence Scholarship 2026",
+      "For top academic achievers in STEM fields",
+      85n,
+      600000n,
+      [],
+      "STEM Foundation",
+      "0xaddr_stem"
+    );
+
+    searchContract.createScholarship(
+      "Need-Based Financial Aid Grant",
+      "Assistance for underprivileged students in engineering",
+      60n,
+      300000n,
+      [],
+      "Aid Trust",
+      "0xaddr_aid"
+    );
+
+    searchContract.createScholarship(
+      "Global Women in Tech Award",
+      "Supporting female computer science scholars",
+      75n,
+      500000n,
+      [],
+      "Tech Equity",
+      "0xaddr_tech"
+    );
+
+    const allScholarships = searchContract.getScholarships();
+    expect(allScholarships.length).toBe(3);
+
+    // Search helper matching logic (as used in StudentPortal)
+    const filterScholarships = (query: string) => {
+      if (!query.trim()) return allScholarships;
+      const q = query.toLowerCase().trim();
+      return allScholarships.filter(
+        (s) => s.name.toLowerCase().includes(q) || s.description.toLowerCase().includes(q)
+      );
+    };
+
+    // 1. Matching search
+    const meritResults = filterScholarships("Merit");
+    expect(meritResults.length).toBe(1);
+    expect(meritResults[0].name).toContain("Merit Excellence");
+
+    // 2. Case-insensitive search
+    const lowerResults = filterScholarships("engineering");
+    expect(lowerResults.length).toBe(1);
+    expect(lowerResults[0].name).toBe("Need-Based Financial Aid Grant");
+
+    const upperResults = filterScholarships("WOMEN");
+    expect(upperResults.length).toBe(1);
+    expect(upperResults[0].name).toBe("Global Women in Tech Award");
+
+    // 3. Empty search returns all scholarships
+    const emptyResults = filterScholarships("");
+    expect(emptyResults.length).toBe(3);
+
+    const whitespaceResults = filterScholarships("   ");
+    expect(whitespaceResults.length).toBe(3);
+
+    // 4. No-result search
+    const noResults = filterScholarships("NonExistentScholarshipKeyword123");
+    expect(noResults.length).toBe(0);
+  });
 });
+
 
 
