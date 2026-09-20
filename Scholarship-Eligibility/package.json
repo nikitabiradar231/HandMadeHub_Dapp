@@ -1,0 +1,52 @@
+{
+  "name": "private-scholarship-eligibility",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Privacy-preserving scholarship eligibility verification using Midnight Network ZK smart contracts",
+  "main": "dist/contract.js",
+  "scripts": {
+    "compile": "npx -y @midnight-ntwrk/compactc contracts/scholarship-eligibility.compact contracts/managed/scholarship-eligibility",
+    "build:contract": "tsc",
+    "build": "npm run build:contract",
+    "deploy": "npx tsx src/deploy.ts",
+    "test": "vitest run tests/scholarship-eligibility.test.ts",
+    "test:watch": "vitest",
+    "test:integration": "vitest run tests/preview-integration.test.ts",
+    "frontend:dev": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build"
+  },
+  "keywords": [
+    "midnight-network",
+    "zero-knowledge",
+    "compact",
+    "privacy",
+    "scholarship",
+    "blockchain"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "0.16.0",
+    "@midnight-ntwrk/dapp-connector-api": "4.0.1",
+    "@midnight-ntwrk/midnight-js-contracts": "4.1.1",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "4.1.1",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "4.1.1",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "4.1.1",
+    "@midnight-ntwrk/midnight-js-network-id": "4.1.1",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "4.1.1",
+    "@midnight-ntwrk/midnight-js-protocol": "4.1.1",
+    "@midnight-ntwrk/midnight-js-types": "4.1.1",
+    "@midnight-ntwrk/midnight-js-utils": "4.1.1",
+    "@midnight-ntwrk/wallet-sdk": "1.2.0",
+    "@scure/bip39": "2.2.0",
+    "rxjs": "^7.8.2",
+    "ws": "^8.21.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@types/ws": "^8.18.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

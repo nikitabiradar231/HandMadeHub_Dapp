@@ -1,0 +1,113 @@
+// ============================================================================
+// MIDNIGHT COMPACT SMART CONTRACT: Scholarship Eligibility Verification
+// ============================================================================
+// Language: Compact (Midnight Network ZK Programming Language)
+// Description: Privacy-preserving verification of student scholarship eligibility
+//              with role-based identity gating, creator ownership checks, and
+//              credential verification circuit execution without exposing sensitive
+//              academic marks or family income.
+// ============================================================================
+
+pragma language_version >= 0.20;
+
+import CompactStandardLibrary;
+
+// ----------------------------------------------------------------------------
+// 1. PUBLIC LEDGER STATE (On-Chain Public Data)
+// ----------------------------------------------------------------------------
+
+// Public scholarship eligibility requirements
+export ledger scholarshipName: String<64>;
+export ledger minimumMarks: Uint;
+export ledger maximumFamilyIncome: Uint;
+export ledger creatorAddress: String<64>;
+
+// Credential Verification Status ("Documents Submitted", "Verified", "Rejected")
+export ledger credentialVerificationStatus: String<32>;
+
+// Track public verification metrics & latest verified outcome
+export ledger verificationsCount: Counter;
+export ledger latestVerificationResult: Boolean;
+export ledger isInitialized: Boolean;
+
+// ----------------------------------------------------------------------------
+// 2. PRIVATE WITNESS DECLARATIONS (Off-Chain Private Local Inputs)
+// ----------------------------------------------------------------------------
+// These functions execute exclusively on the client's local device inside ZK circuit context.
+// Private values NEVER leave the client or touch the public blockchain.
+
+witness studentMarks(): Uint;
+witness studentIncome(): Uint;
+witness isCredentialVerified(): Boolean;
+witness callerAddress(): String<64>;
+witness callerRole(): String<32>;
+
+// ----------------------------------------------------------------------------
+// 3. CONSTRUCTOR / INITIALIZATION
+// ----------------------------------------------------------------------------
+
+constructor(name: String<64>, minMarks: Uint, maxIncome: Uint, owner: String<64>) {
+    scholarshipName = name;
+    minimumMarks = minMarks;
+    maximumFamilyIncome = maxIncome;
+    creatorAddress = owner;
+    credentialVerificationStatus = "Pending Review";
+    latestVerificationResult = false;
+    isInitialized = true;
+}
+
+// ----------------------------------------------------------------------------
+// 4. ZERO-KNOWLEDGE VERIFICATION CIRCUITS & AUTHORIZATION
+// ----------------------------------------------------------------------------
+
+/**
+ * @notice Executes local zero-knowledge proof circuit to verify eligibility.
+ * Gated by credential verification status witness and Student role authorization.
+ */
+export circuit verifyEligibility(): Boolean {
+    // 1. Enforce Student role gating in ZK circuit
+    let role: String<32> = callerRole();
+    assert role == "student" "Error: Only registered Student accounts can execute eligibility verification.";
+
+    // 2. Verify credential authenticity witness
+    let isVerified: Boolean = isCredentialVerified();
+    assert isVerified "Error: Credentials must be verified by scholarship admin before generating eligibility proof.";
+
+    // 3. Read private inputs from local witness context
+    let marks: Uint = studentMarks();
+    let income: Uint = studentIncome();
+
+    // 4. Compute private eligibility logic inside ZK circuit
+    let meetsMarksRequirement: Boolean = marks >= minimumMarks;
+    let meetsIncomeRequirement: Boolean = income <= maximumFamilyIncome;
+    let isEligible: Boolean = meetsMarksRequirement && meetsIncomeRequirement;
+
+    // 5. Update public ledger state safely using disclose()
+    verificationsCount.increment(1);
+    latestVerificationResult = disclose(isEligible);
+
+    // 6. Return boolean eligibility status
+    return disclose(isEligible);
+}
+
+/**
+ * @notice Allows scholarship administrator/creator to review and update credential status.
+ * Enforces creator ownership check directly inside circuit.
+ */
+export circuit updateCredentialStatus(newStatus: String<32>): [] {
+    let caller: String<64> = callerAddress();
+    assert caller == creatorAddress "Error: Only the scholarship creator can update credential verification status.";
+    credentialVerificationStatus = newStatus;
+}
+
+/**
+ * @notice Allows scholarship administrator/creator to update public eligibility criteria.
+ * Enforces creator ownership check directly inside circuit.
+ */
+export circuit updateScholarshipCriteria(newName: String<64>, newMinMarks: Uint, newMaxIncome: Uint): [] {
+    let caller: String<64> = callerAddress();
+    assert caller == creatorAddress "Error: Only the scholarship creator can edit scholarship criteria.";
+    scholarshipName = newName;
+    minimumMarks = newMinMarks;
+    maximumFamilyIncome = newMaxIncome;
+}

@@ -1,0 +1,71 @@
+name: Local CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master, dev ]
+  pull_request:
+    branches: [ main, master, dev ]
+
+jobs:
+  build-and-test:
+    name: Build & Verify Compact Smart Contract & Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Root Backend Dependencies
+        run: npm install
+
+      - name: Compile TypeScript Smart Contract Layer
+        run: npm run build:contract
+
+      - name: Run Privacy-Preserving Contract Unit Tests
+        run: npm test
+
+      - name: Install Frontend Dependencies
+        run: npm --prefix frontend install
+
+      - name: Build React + Vite Production Bundle
+        run: npm --prefix frontend run build
+
+  deploy-preview:
+    name: Deploy to Midnight Preview Testnet & Vercel
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Root Dependencies
+        run: npm install
+
+      - name: Check Midnight Wallet Seed & Execute Deployment
+        env:
+          MIDNIGHT_WALLET_SEED: ${{ secrets.MIDNIGHT_WALLET_SEED }}
+          MIDNIGHT_NETWORK: ${{ secrets.MIDNIGHT_NETWORK || 'preview' }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          if [ -z "$MIDNIGHT_WALLET_SEED" ] || [ "$MIDNIGHT_WALLET_SEED" = "0000000000000000000000000000000000000000000000000000000000000000" ]; then
+            echo "⚠️ [CI Deployment Skipped] 'MIDNIGHT_WALLET_SEED' secret is not configured in GitHub Secrets."
+            echo "Contract deployment was NOT executed. Configure MIDNIGHT_WALLET_SEED in GitHub Repository Secrets to automate testnet deployment."
+          else
+            echo "🚀 [CI Deployment] MIDNIGHT_WALLET_SEED secret detected. Executing Midnight Preview deployment..."
+            npm run deploy
+          fi
+
