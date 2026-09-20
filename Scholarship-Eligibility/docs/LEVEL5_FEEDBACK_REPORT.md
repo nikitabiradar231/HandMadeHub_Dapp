@@ -101,7 +101,7 @@ The user feedback extracted strictly from the submitted dataset contains specifi
 | User Feedback | Evidence (Actual Responses from PDF) | Action Taken | Status |
 |---|---|---|---|
 | Add a search option | Submitted by 3 users: Niki Biradar, Suraj, Vivek Bedre ("Add a search option.") | Implemented interactive search/filter input in StudentPortal browsing UI | Implemented |
-| Add more scholarship details | Submitted by 2 users: Shridevi ("Add more scholarship details."), Kirti ("Make the result page more detailed.") | Deferred to future cycle | Pending |
+| Add more scholarship details | Submitted by 2 users: Shridevi ("Add more scholarship details."), Kirti ("Make the result page more detailed.") | Implemented enriched scholarship cards, dedicated details modal, and detailed result audit trail view | Implemented |
 | Add more guidance at each step | Submitted by 1 user: Nayan Palande ("A little more guidance at each step could make the experience even smoother.") | Deferred to future cycle | Pending |
 
 ---
@@ -113,23 +113,19 @@ Tracking the implementation status of selected Level 5 cycle improvements:
 | Improvement | Status | Implementation Details |
 |---|---|---|
 | Scholarship search | Implemented | Interactive search bar added to StudentPortal for filtering active scholarships by title and description keywords, supporting case-insensitive queries and empty state feedback. |
-| More scholarship details | Pending | Not implemented yet in this cycle. |
+| More scholarship details | Implemented | Enriched scholarship cards with provider badges and document tags. Added full scholarship details modal with eligibility criteria grid and ZK privacy guarantee. Added expandable application audit trail view in "My Applications". |
 | More guidance at each step | Pending | Not implemented yet in this cycle. |
 
 ---
 
 ## 6. Retesting
 
-Following the implementation of Improvement #1 (Add a Search Option), comprehensive testing was conducted across automated unit tests, smart contract compilation, and frontend production build:
+Following the implementation of Improvement #1 (Add a Search Option) and Improvement #2 (Add More Scholarship Details), comprehensive testing was conducted across automated unit tests, smart contract compilation, and frontend production build:
 
 1. **Automated Unit Tests (`npm test`)**:
-   - Added **TEST 16** to `tests/scholarship-eligibility.test.ts` covering:
-     - Exact keyword search matching
-     - Case-insensitive search queries
-     - Empty query returning full scholarship list
-     - No-results query returning zero matches with clear feedback
-     - Unfiltered scholarship browsing behavior
-   - Result: **31 / 31 tests passed** (0 failures).
+   - **TEST 16** (Search & Filtering): Verifies exact keyword matching, case-insensitivity, empty search, and no-results feedback state.
+   - **TEST 17** (Scholarship Details Metadata & Retrieval): Verifies retrieval by ID, metadata integrity (`name`, `description`, `minimumMarks`, `maximumFamilyIncome`, `requiredDocuments`, `createdBy`, `creatorAddress`, `createdAt`), and student application details linking.
+   - Result: **32 / 32 tests passed** (0 failures).
 
 2. **Smart Contract Compilation (`npm run build`)**:
    - TypeScript contract build verified (`tsc`).
@@ -151,4 +147,5 @@ Following the implementation of Improvement #1 (Add a Search Option), comprehens
 - **Feedback Document**: [LEVEL5_FEEDBACK_REPORT.md](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_FEEDBACK_REPORT.md)
 - **Demo Video**: [Level 4 & 5 MVP Video Demo](https://youtu.be/dummy_level5_demo)
 - **Preprod User Evidence**: 48 Verified Preprod Addresses documented in Section 3
+
 

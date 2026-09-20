@@ -482,7 +482,54 @@ describe("Private Scholarship Eligibility & Credential Verification Contract", (
     const noResults = filterScholarships("NonExistentScholarshipKeyword123");
     expect(noResults.length).toBe(0);
   });
+
+  // --------------------------------------------------------------------------
+  // TEST 17 — Level 5 Feature: Scholarship Details Metadata & Retrieval
+  // --------------------------------------------------------------------------
+  it("TEST 17 — Level 5: Verify scholarship details structure, metadata integrity, and optional fields", () => {
+    const detailsContract = new ScholarshipEligibilityContract();
+
+    const createdGrant = detailsContract.createScholarship(
+      "Doctoral Research Fellowship in Cryptography",
+      "Specialized grant for PhD candidates researching zero-knowledge proofs and privacy ledger scaling.",
+      90n,
+      800000n,
+      ["Academic Marksheet", "Family Income Certificate", "Research Proposal PDF", "Advisor Recommendation"],
+      "Crypto Science Foundation",
+      "0xaddr_crypto_foundation"
+    );
+
+    // 1. Verify retrieval by ID
+    const retrieved = detailsContract.getScholarshipById(createdGrant.id);
+    expect(retrieved).toBeDefined();
+    expect(retrieved?.id).toBe(createdGrant.id);
+
+    // 2. Verify all detail fields are present and accurate
+    expect(retrieved?.name).toBe("Doctoral Research Fellowship in Cryptography");
+    expect(retrieved?.description).toContain("zero-knowledge proofs");
+    expect(retrieved?.minimumMarks).toBe(90n);
+    expect(retrieved?.maximumFamilyIncome).toBe(800000n);
+    expect(retrieved?.createdBy).toBe("Crypto Science Foundation");
+    expect(retrieved?.creatorAddress).toBe("0xaddr_crypto_foundation");
+    expect(retrieved?.createdAt).toBeDefined();
+
+    // 3. Verify required documents array structure
+    expect(retrieved?.requiredDocuments.length).toBe(4);
+    expect(retrieved?.requiredDocuments).toContain("Research Proposal PDF");
+    expect(retrieved?.requiredDocuments).toContain("Advisor Recommendation");
+
+    // 4. Verify student application links back to correct scholarship details
+    const studentAddr = "0xaddr_phd_student";
+    const app = detailsContract.submitApplication(createdGrant.id, studentAddr, "PhD Student Scholar");
+    expect(app.scholarshipId).toBe(createdGrant.id);
+    expect(app.scholarshipName).toBe(createdGrant.name);
+
+    const linkedScholarship = detailsContract.getScholarshipById(app.scholarshipId);
+    expect(linkedScholarship?.minimumMarks).toBe(90n);
+    expect(linkedScholarship?.maximumFamilyIncome).toBe(800000n);
+  });
 });
+
 
 
 
