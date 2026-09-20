@@ -12,6 +12,53 @@ This repository contains two independent privacy-preserving DApps built on the M
 | Live Demo | [Open HandMadeHub DApp](https://frontend-6fjx1e5ag-nikitabiradar300-1089s-projects.vercel.app/) | [Open Scholarship DApp](https://scholarship-eligibility.vercel.app) |
 | Documentation | [HandMadeHub README](./HandMadeHub/README.md) | [Scholarship README](./Scholarship-Eligibility/README.md) |
 
+## 📚 Project History
+
+This repository contains two independent projects in the same `main` branch.
+
+### Level 3 — HandMadeHub
+
+The existing repository history contains the development history of the
+HandMadeHub Level 3 project.
+
+The Level 3 project is now located at:
+
+`./HandMadeHub/`
+
+The original HandMadeHub Git history remains preserved in this repository.
+
+### Level 4 — Scholarship Eligibility
+
+The Level 4 Scholarship Eligibility project was added to this repository
+as a separate project under:
+
+`./Scholarship-Eligibility/`
+
+It was added as a clean project addition rather than merging its previous
+Git repository history into this repository.
+
+The addition/reorganization was completed in commit:
+
+`14051c6a1886761ae0ef88f0f12b3f3141333c60`
+
+Commit message:
+
+`feat: add Level 4 Scholarship project alongside HandMadeHub`
+
+### Important
+
+The GitHub commit counter represents the total commit history of this
+repository. It is therefore normal for GitHub to display one combined
+commit count.
+
+The projects remain separated by directory:
+
+- Level 3 → `./HandMadeHub/`
+- Level 4 → `./Scholarship-Eligibility/`
+
+Their source code, contracts, frontend, dependencies, tests, and
+configuration remain independent.
+
 ## Level 3 — HandMadeHub
 
 Privacy-preserving decentralized marketplace and authenticity NFT DApp.
