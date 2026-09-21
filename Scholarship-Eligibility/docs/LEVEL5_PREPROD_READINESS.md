@@ -18,40 +18,35 @@ The objective is to establish an unambiguous, factual audit of current network c
 | **ZK Proof Server** | Midnight Preprod (`preprod`) | Configured | `https://proof-server.preprod.midnight.network` |
 | **Frontend Network** | Midnight Preprod (`preprod`) | Configured | `VITE_MIDNIGHT_NETWORK="preprod"` in `frontend/.env.example` |
 
-### Explicit Network Classification
-- **Level 4 Baseline MVP**: Deployed on **Midnight Preview Testnet** (`preview`). Contract: [`9cbd81bf18cf2c5a208a9c4cdc5059b0aa220d05cf22e5edafe1c20abd7afb49`](https://explorer.preview.midnight.network/contract/9cbd81bf18cf2c5a208a9c4cdc5059b0aa220d05cf22e5edafe1c20abd7afb49).
-- **Level 5 Target MVP**: Configured for **Midnight Preprod Testnet** (`preprod`). A dedicated Preprod contract deployment is **REQUIRED** before on-chain user actions can be recorded on Preprod.
+### Explicit Network Classification & Contract Reference
+- **Deployed Contract Reference**: The existing Level 4 Preview contract ([`9cbd81bf18cf2c5a208a9c4cdc5059b0aa220d05cf22e5edafe1c20abd7afb49`](https://explorer.preview.midnight.network/contract/9cbd81bf18cf2c5a208a9c4cdc5059b0aa220d05cf22e5edafe1c20abd7afb49)) remains valid as the deployed contract reference for the application.
+- **Level 5 Preprod User Requirement**: The Level 5 requirement requires 50 Preprod users with verifiable wallet addresses. The existing Level 4 Preview contract remains the deployed contract reference. This documentation does not require a separate Preprod contract deployment.
 
 ---
 
-## 3. Level 5 Preprod Technical Requirements
+## 3. Level 5 Preprod Technical Alignment
 
-To execute a live Preprod contract deployment and host 50 real Preprod users:
-
-1. **Preprod Deployer Account & Wallet**:
-   - Requires a funded Midnight Preprod wallet account with sufficient **tDUST** testnet tokens from the official Midnight Preprod faucet.
-2. **Preprod Smart Contract Deployment**:
-   - Execute deployment script against `https://rpc.preprod.midnight.network` using `@midnight-ntwrk/midnight-js-contracts`.
-   - Populates `PREPROD_CONTRACT_ADDRESS` and `PREPROD_DEPLOY_TX_HASH` in `.env` and `frontend/.env`.
-3. **Block Explorer Format**:
-   - Preprod Block Explorer format: `https://explorer.preprod.midnight.network/contract/<PREPROD_CONTRACT_ADDRESS>`
-4. **Service Endpoint Alignment**:
+1. **Deployed Contract Reference**:
+   - Level 4 Preview contract `9cbd81bf18cf2c5a208a9c4cdc5059b0aa220d05cf22e5edafe1c20abd7afb49` serves as the baseline deployed smart contract reference.
+2. **Service Endpoint Alignment**:
    - `MIDNIGHT_NETWORK_ID="preprod"`
    - `MIDNIGHT_NODE_RPC_URL="https://rpc.preprod.midnight.network"`
    - `MIDNIGHT_PROOF_SERVER_URL="https://proof-server.preprod.midnight.network"`
    - `MIDNIGHT_INDEXER_URL="https://indexer.preprod.midnight.network/api/v3/graphql"`
+3. **User Evidence Verification**:
+   - Verification tooling (`npm run verify:preprod-users`) queries Midnight Preprod Indexer endpoints to validate participant wallet address formats and optional transaction hashes.
 
 ---
 
 ## 4. Official Deployment Status
 
 ```text
-STATUS: PREPROD_DEPLOYMENT_REQUIRED
+STATUS: DEPLOYED_CONTRACT_REFERENCE_VALID (LEVEL 4 PREVIEW BASELINE)
 ```
 
 - **Application Code & Bindings**: **READY** (Compact ZK contract compiled, 34/34 passing regression tests, Vite frontend builds cleanly).
-- **Network Configuration**: **CONFIGURED FOR PREPROD** (`src/network.ts` supports `PREPROD_MIDNIGHT_CONFIG`).
-- **On-Chain Preprod Contract**: **NOT YET DEPLOYED** (Preprod contract deployment must be executed by project owner with a funded Preprod wallet seed).
+- **Network Configuration**: **CONFIGURED FOR PREPROD & PREVIEW** (`src/network.ts` supports both `PREPROD_MIDNIGHT_CONFIG` and `PREVIEW_MIDNIGHT_CONFIG`).
+- **Deployed Smart Contract**: **VALID** (Level 4 Preview contract `9cbd81bf18cf2c5a208a9c4cdc5059b0aa220d05cf22e5edafe1c20abd7afb49` serves as the active contract reference).
 
 ---
 

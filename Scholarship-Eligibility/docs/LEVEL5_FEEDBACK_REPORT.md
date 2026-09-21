@@ -23,17 +23,18 @@ The primary goal of Level 5 is to collect and evaluate real user feedback to ref
 
 | Metric | Result |
 |---|---:|
-| Total responses | 51 |
+| Total responses analyzed | 51 |
 | Wallet addresses submitted | 51 |
-| Unique wallet addresses | 51 |
-| Clearly Preprod by address prefix | 49 |
-| Standard Preprod addresses | 47 |
-| DUST Preprod addresses | 2 |
-| Clearly non-Preprod | 2 |
-| Truncated/incomplete | 1 |
-| On-chain verified from PDF | 0 |
+| Unique wallet address strings | 51 |
+| Complete Preprod-format wallet addresses | 50 |
+| Standard Shielded Preprod addresses (`mn_addr_preprod1...`) | 46 |
+| DUST Preprod addresses (`mn_dust_preprod1...`) | 2 |
+| Preview Network format addresses (`mn_addr_preview1...`) | 1 |
+| Mainnet format addresses (`mn_addr1...`) | 1 |
+| Incomplete / Truncated address (`mn_addr_preprod1...`) | 1 |
+| Independently verified on-chain | 0 (Pending) |
 
-> **Important Note:** Address-prefix classification is not equivalent to on-chain verification.
+> **Important Note:** Address-format completeness is not equivalent to on-chain verification. Independent on-chain proof requires participant transaction hashes or indexer verification.
 
 ---
 

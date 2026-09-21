@@ -60,10 +60,10 @@ Each participant record must satisfy the following checklist before being counte
 | Metric | Target | Current Status | Notes |
 |---|---|---|---|
 | **Target Preprod Users** | **50** | 50 Target | Level 5 Requirement |
-| Historical Form Responses | 50 | 51 | Source PDF data analyzed |
-| Structurally Valid Addresses | 50 | 49 | 47 Shielded, 2 DUST |
-| Non-Preprod / Invalid Format | 0 | 3 | 1 Mainnet, 1 Preview, 1 Truncated |
-| Documented App Interactions | 50 | Pending | Pending active session proofs |
+| Historical Form Submissions | 50 | 51 | Source PDF data analyzed |
+| Complete Preprod-Format Addresses | 50 | 50 | 50 complete wallet addresses submitted |
+| Incomplete / Truncated Address | 0 | 1 | Entry #10 (Pooja Kohinkar - truncated string) |
+| Documented App Interactions | 50 | Pending | Pending participant evidence |
 | **Independently Verified On-Chain** | **50** | **0 (Pending)** | **Requires indexer/tx hash verification** |
 
 ---

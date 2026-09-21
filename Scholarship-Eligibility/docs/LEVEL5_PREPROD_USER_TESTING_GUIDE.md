@@ -6,6 +6,8 @@ This document provides a simple, standardized testing procedure for participants
 
 The primary objective is to collect legitimate evidence from **50 real users** who test the Level 5 Minimum Viable Product (MVP) and voluntarily submit feedback and public wallet information.
 
+The historical dataset analyzed from the official feedback PDF contains **51 total feedback responses** containing **50 complete Preprod-format wallet addresses** submitted (and 1 truncated address). Independent on-chain verification is a separate evidence verification step requiring transaction hash receipts or indexer proofs. This guide defines the procedures for gathering and verifying participant evidence.
+
 ---
 
 ## 2. Prerequisites

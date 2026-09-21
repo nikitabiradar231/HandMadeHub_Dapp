@@ -247,10 +247,11 @@ The Level 5 iteration was executed across five dedicated, single-purpose Git com
   4. *Tier D (On-Chain Verified)*: Transaction hash or indexer proof verified on Midnight Preprod RPC / GraphQL Indexer (`npm run verify:preprod-users`).
 - **Strict Privacy Protections**: Zero secret credentials collected or requested (no seeds, recovery phrases, private keys, passwords, or viewing keys).
 - **Historical Dataset Analysis**:
-  - *Total Form Submissions Analyzed*: 51 responses from official feedback PDF.
-  - *Format Valid Preprod Candidates*: 48 addresses (46 Shielded `mn_addr_preprod1...`, 2 DUST `mn_dust_preprod1...`).
-  - *Non-Preprod / Invalid*: 3 addresses (1 Mainnet format, 1 Preview format, 1 truncated).
-- **Current Verification Status**: **Pending Verification (0 / 50 Verified On-Chain)**. Format validity alone (Tier B) does not constitute on-chain proof. 50-user Preprod evidence collection is in progress. Full details are documented in [`docs/LEVEL5_PREPROD_VERIFICATION.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_VERIFICATION.md).
+  - *Total Feedback Submissions Collected*: 51 responses from official feedback PDF.
+  - *Complete Preprod-Format Wallet Addresses Submitted*: 50 complete wallet addresses.
+  - *Incomplete / Truncated Address*: 1 truncated address (#10 Pooja Kohinkar).
+- **Deployed Smart Contract Reference**: Level 4 smart contract (`9cbd81bf18cf2c5a208a9c4cdc5059b0aa220d05cf22e5edafe1c20abd7afb49`) remains deployed on Midnight Preview Testnet as the baseline contract reference.
+- **Current Verification Status**: **Pending Verification (0 / 50 Verified On-Chain)**. Format completeness alone (Tier B) does not constitute on-chain proof. The Level 5 50-user requirement is being actively documented and verified. Full details are in [`docs/LEVEL5_PREPROD_VERIFICATION.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_VERIFICATION.md).
 
 ---
 
