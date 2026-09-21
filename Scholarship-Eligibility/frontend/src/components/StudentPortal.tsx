@@ -24,7 +24,11 @@ import {
   Calendar,
   ShieldCheck,
   Hash,
-  Info
+  Info,
+  Lightbulb,
+  Compass,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 
 interface StudentPortalProps {
@@ -53,6 +57,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
   const [activeTab, setActiveTab] = useState<"browse" | "my_applications">("browse");
   const [selectedScholarship, setSelectedScholarship] = useState<ScholarshipItem | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showGuidancePanel, setShowGuidancePanel] = useState(true);
 
   // Application / Verification modal states
   const [marksheetName, setMarksheetName] = useState("");
@@ -240,9 +245,70 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
         </div>
       </div>
 
+      {/* Step-by-Step Workflow Guidance Banner */}
+      <div className="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2 text-indigo-300 font-bold text-xs">
+            <Compass className="w-4 h-4 text-indigo-400" />
+            <span>Student Application Workflow Guidance</span>
+          </div>
+          <button
+            onClick={() => setShowGuidancePanel(!showGuidancePanel)}
+            className="text-[11px] font-mono text-indigo-400 hover:text-indigo-200 flex items-center space-x-1"
+          >
+            <span>{showGuidancePanel ? "Hide Guidance" : "Show Guidance"}</span>
+            {showGuidancePanel ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          </button>
+        </div>
+
+        {showGuidancePanel && (
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 pt-1 text-xs">
+            <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+              <div className="font-bold text-indigo-300 text-[11px] flex items-center space-x-1">
+                <span className="w-4 h-4 rounded-full bg-indigo-900 text-indigo-200 text-[10px] flex items-center justify-center">1</span>
+                <span>Connect Wallet</span>
+              </div>
+              <p className="text-[10px] text-slate-400 leading-tight">Connect Midnight Preprod wallet to access protected features.</p>
+            </div>
+
+            <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+              <div className="font-bold text-indigo-300 text-[11px] flex items-center space-x-1">
+                <span className="w-4 h-4 rounded-full bg-indigo-900 text-indigo-200 text-[10px] flex items-center justify-center">2</span>
+                <span>Search & Apply</span>
+              </div>
+              <p className="text-[10px] text-slate-400 leading-tight">Filter scholarships, review criteria, and upload PDF credentials.</p>
+            </div>
+
+            <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+              <div className="font-bold text-indigo-300 text-[11px] flex items-center space-x-1">
+                <span className="w-4 h-4 rounded-full bg-indigo-900 text-indigo-200 text-[10px] flex items-center justify-center">3</span>
+                <span>Credential Review</span>
+              </div>
+              <p className="text-[10px] text-slate-400 leading-tight">Provider checks submitted documents and sets status to Verified.</p>
+            </div>
+
+            <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+              <div className="font-bold text-indigo-300 text-[11px] flex items-center space-x-1">
+                <span className="w-4 h-4 rounded-full bg-indigo-900 text-indigo-200 text-[10px] flex items-center justify-center">4</span>
+                <span>ZK Eligibility Check</span>
+              </div>
+              <p className="text-[10px] text-slate-400 leading-tight">Execute Midnight Zero-Knowledge proof to verify eligibility privately.</p>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* TAB 1: AVAILABLE SCHOLARSHIPS */}
       {activeTab === "browse" && (
         <div className="space-y-4">
+          {/* Browsing Guidance Helper */}
+          <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300 flex items-center space-x-2">
+            <Lightbulb className="w-4 h-4 text-amber-400 shrink-0" />
+            <span>
+              <strong>Browsing Guidance:</strong> Search for scholarships by title or keyword. Click <strong>"View Details & Apply"</strong> on any scholarship card to review eligibility criteria and submit required PDF documents.
+            </span>
+          </div>
+
           {/* Search Input Bar */}
           {scholarships.length > 0 && (
             <div className="relative">
@@ -391,6 +457,16 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
       {/* TAB 2: MY APPLICATIONS & STATUS TRACKER */}
       {activeTab === "my_applications" && (
         <div className="space-y-6">
+          {/* Status Tracking Guidance Helper */}
+          {applications.length > 0 && (
+            <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300 flex items-center space-x-2">
+              <Lightbulb className="w-4 h-4 text-indigo-400 shrink-0" />
+              <span>
+                <strong>Status Tracking Guidance:</strong> Follow your application progress across the 4-stage stepper. Once status reaches <strong>"Verified"</strong>, enter your marks and income to execute Midnight Zero-Knowledge proof generation.
+              </span>
+            </div>
+          )}
+
           {applications.length === 0 ? (
             <div className="glass-card rounded-3xl p-12 text-center space-y-4 border border-slate-800">
               <FileText className="w-12 h-12 text-slate-600 mx-auto" />
@@ -651,6 +727,13 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
 
             {/* Section 5: Application Form Upload */}
             <form onSubmit={handleApply} className="space-y-4 pt-2 border-t border-slate-800">
+              <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-500/30 text-xs text-amber-200 flex items-center space-x-2">
+                <Lightbulb className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>
+                  <strong>Application Guidance:</strong> Ensure your Academic Marksheet and Income Certificate files are selected in PDF format before clicking "Submit Application".
+                </span>
+              </div>
+
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Upload Academic Marksheet (PDF)

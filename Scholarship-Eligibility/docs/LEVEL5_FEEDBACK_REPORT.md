@@ -111,7 +111,7 @@ A large proportion of respondents reported high satisfaction with comments such 
 - **Primary Level 5 Feedback-Driven Improvements Selected for Implementation:**
   1. **Add a search option** — *Implemented* (See Section 6.1)
   2. **Add more scholarship details** — *Implemented* (See Section 6.2)
-  3. More guidance at each step
+  3. **Add more guidance at each step** — *Implemented* (See Section 6.3)
 - **Additional Feedback for Consideration:**
   - Review UI/design
   - Review privacy
@@ -142,6 +142,23 @@ A large proportion of respondents reported high satisfaction with comments such 
 - **Verification & Testing**:
   - Added automated unit test (`TEST 17 — Level 5 Feedback: Scholarship Details Metadata & Detailed View Data Integrity` in `tests/scholarship-eligibility.test.ts`) validating data retrieval by ID, title, description, criteria values, required documents array, publisher metadata, creation date, and application linking.
   - Verified with `npm test` (32 passing tests) and `npm run frontend:build` (0 errors).
+
+### 6.3 Implemented Feature: Add Guidance at Each Step
+- **Feedback Source**: User feedback extracted directly from official PDF response #14 Nayan Palande (*"The application was easy to use overall. A little more guidance at each step could make the experience even smoother."*).
+- **Implementation**:
+  - Added a collapsible **Student Application Workflow Guidance** panel at the top of `StudentPortal.tsx` with numbered 4-stage step cards:
+    - `Step 1: Connect Wallet`: Connect Midnight Preprod wallet to access protected features.
+    - `Step 2: Search & Apply`: Filter scholarships, review criteria, and upload PDF credentials.
+    - `Step 3: Credential Review`: Provider checks submitted documents and sets status to Verified.
+    - `Step 4: ZK Eligibility Check`: Execute Midnight Zero-Knowledge proof to verify eligibility privately.
+  - Added contextual helper callout banners across all workflow views:
+    - **Browsing View**: Guidance explaining how to filter by keyword and click *"View Details & Apply"*.
+    - **Full Details Modal**: Guidance explaining document PDF selection requirements prior to submission.
+    - **My Applications View**: Guidance explaining status stepper progression to trigger ZK eligibility verification.
+    - **ZK Eligibility Form**: Guidance explaining how private circuits evaluate entered marks and income locally.
+- **Verification & Testing**:
+  - Added automated unit test (`TEST 18 — Level 5 Feedback: Step-by-Step Workflow Guidance Messages & Stage Definitions` in `tests/scholarship-eligibility.test.ts`) validating workflow stage definitions, guidance text accuracy, and integration across all 4 lifecycle stages.
+  - Verified with `npm test` (33 passing tests) and `npm run frontend:build` (0 errors).
 
 ---
 

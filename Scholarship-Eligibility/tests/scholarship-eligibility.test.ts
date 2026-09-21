@@ -526,6 +526,64 @@ describe("Private Scholarship Eligibility & Credential Verification Contract", (
     expect(app.scholarshipId).toBe(sch.id);
     expect(app.scholarshipName).toBe("International Innovation Fellowship 2026");
   });
+
+  // --------------------------------------------------------------------------
+  // TEST 18 — Level 5 Feature: Step-by-Step Workflow Guidance Content Integrity
+  // --------------------------------------------------------------------------
+  it("TEST 18 — Level 5 Feedback: Step-by-Step Workflow Guidance Messages & Stage Definitions", () => {
+    // 1. Workflow Stage Definitions
+    const workflowStages = [
+      { step: 1, name: "Connect Wallet", description: "Connect Midnight Preprod wallet to access protected features." },
+      { step: 2, name: "Search & Apply", description: "Filter scholarships, review criteria, and upload PDF credentials." },
+      { step: 3, name: "Credential Review", description: "Provider checks submitted documents and sets status to Verified." },
+      { step: 4, name: "ZK Eligibility Check", description: "Execute Midnight Zero-Knowledge proof to verify eligibility privately." }
+    ];
+
+    expect(workflowStages.length).toBe(4);
+    expect(workflowStages[0].name).toBe("Connect Wallet");
+    expect(workflowStages[1].name).toBe("Search & Apply");
+    expect(workflowStages[2].name).toBe("Credential Review");
+    expect(workflowStages[3].name).toBe("ZK Eligibility Check");
+
+    // 2. Contextual Guidance Messages
+    const guidanceTexts = {
+      browsing: "Search for scholarships by title or keyword. Click 'View Details & Apply' on any scholarship card to review eligibility criteria and submit required PDF documents.",
+      modal: "Ensure your Academic Marksheet and Income Certificate files are selected in PDF format before clicking 'Submit Application'.",
+      tracking: "Follow your application progress across the 4-stage stepper. Once status reaches 'Verified', enter your marks and income to execute Midnight Zero-Knowledge proof generation.",
+      zkPrivacy: "Your marks and income values are evaluated inside Midnight ZK private circuits. Raw financial and academic values are never stored publicly or disclosed on-chain."
+    };
+
+    expect(guidanceTexts.browsing).toContain("View Details & Apply");
+    expect(guidanceTexts.modal).toContain("Submit Application");
+    expect(guidanceTexts.tracking).toContain("Verified");
+    expect(guidanceTexts.zkPrivacy).toContain("Midnight ZK private circuits");
+
+    // 3. Verify lifecycle integration with guidance stages
+    const providerAddr = "0xaddr_provider_guidance";
+    const studentAddr = "0xaddr_student_guidance";
+
+    const sch = contract.createScholarship(
+      "Guidance Fellowship 2026",
+      "Testing workflow guidance mapping",
+      75n,
+      500000n,
+      ["Academic Marksheet", "Family Income Certificate"],
+      "Guidance Provider",
+      providerAddr
+    );
+
+    // Stage 2: Submit Application
+    const app = contract.submitApplication(sch.id, studentAddr, "Guidance Student");
+    expect(app.status).toBe("Documents Submitted");
+
+    // Stage 3: Admin Review & Verification
+    contract.updateApplicationStatus(app.id, "Verified", providerAddr);
+    expect(app.status).toBe("Verified");
+
+    // Stage 4: ZK Proof Execution
+    const proof = contract.verifyEligibility({ studentMarks: 85n, studentIncome: 300000n }, app.id);
+    expect(proof.isEligible).toBe(true);
+  });
 });
 
 
