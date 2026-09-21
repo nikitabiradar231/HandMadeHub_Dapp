@@ -477,6 +477,55 @@ describe("Private Scholarship Eligibility & Credential Verification Contract", (
     const clearedResults = contract.searchScholarships("");
     expect(clearedResults.length).toBe(3);
   });
+
+  // --------------------------------------------------------------------------
+  // TEST 17 — Level 5 Feature: Scholarship Details Metadata & Retrieval
+  // --------------------------------------------------------------------------
+  it("TEST 17 — Level 5 Feedback: Scholarship Details Metadata & Detailed View Data Integrity", () => {
+    const providerAddr = "mn_addr1_provider_alpha_details_test";
+    const providerName = "Global Education Trust";
+
+    const sch = contract.createScholarship(
+      "International Innovation Fellowship 2026",
+      "Comprehensive research fellowship supporting STEM and digital privacy innovation.",
+      88n,
+      750000n,
+      ["Academic Marksheet", "Family Income Certificate", "Recommendation Letter"],
+      providerName,
+      providerAddr
+    );
+
+    // Retrieve scholarship by ID
+    const details = contract.getScholarshipById(sch.id);
+    expect(details).toBeDefined();
+
+    // Verify Title & Description
+    expect(details?.name).toBe("International Innovation Fellowship 2026");
+    expect(details?.description).toBe("Comprehensive research fellowship supporting STEM and digital privacy innovation.");
+
+    // Verify Eligibility Criteria
+    expect(details?.minimumMarks).toBe(88n);
+    expect(details?.maximumFamilyIncome).toBe(750000n);
+
+    // Verify Required Documents List
+    expect(details?.requiredDocuments).toEqual([
+      "Academic Marksheet",
+      "Family Income Certificate",
+      "Recommendation Letter"
+    ]);
+
+    // Verify Publisher & Creation Metadata
+    expect(details?.createdBy).toBe(providerName);
+    expect(details?.creatorAddress).toBe(providerAddr);
+    expect(details?.createdAt).toBeDefined();
+    expect(typeof details?.createdAt).toBe("string");
+
+    // Verify student application links correctly to scholarship details
+    const studentAddr = "mn_addr1_student_alex_details_test";
+    const app = contract.submitApplication(sch.id, studentAddr, "Alex Vance");
+    expect(app.scholarshipId).toBe(sch.id);
+    expect(app.scholarshipName).toBe("International Innovation Fellowship 2026");
+  });
 });
 
 
