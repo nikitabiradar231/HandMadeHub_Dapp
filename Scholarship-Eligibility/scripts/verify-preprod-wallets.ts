@@ -87,23 +87,147 @@ export function shortenAddress(addr: string): string {
   return `${addr.slice(0, 16)}...${addr.slice(-6)}`;
 }
 
-export function classifyFormat(addr: string): { format: string; preprodCheck: string; isPreprodComplete: boolean; isIncomplete: boolean } {
-  if (!addr || addr.length < 50) {
-    return { format: "Truncated/Incomplete", preprodCheck: "Failed (Incomplete string)", isPreprodComplete: false, isIncomplete: true };
+export interface AddressValidationResult {
+  isValid: boolean;
+  prefix: string;
+  format: string;
+  isPreprodPrefix: boolean;
+  isCompleteLength: boolean;
+  diagnosticMessage: string;
+}
+
+export interface TxHashValidationResult {
+  isProvided: boolean;
+  isValidFormat: boolean;
+  diagnosticMessage: string;
+}
+
+export function validatePreprodAddress(addr: string): AddressValidationResult {
+  if (!addr || typeof addr !== 'string' || addr.trim().length === 0) {
+    return {
+      isValid: false,
+      prefix: '',
+      format: 'Empty',
+      isPreprodPrefix: false,
+      isCompleteLength: false,
+      diagnosticMessage: 'Address string is empty or missing'
+    };
   }
-  if (addr.startsWith("mn_addr_preprod1")) {
-    return { format: "Shielded Preprod", preprodCheck: "Structurally Preprod", isPreprodComplete: true, isIncomplete: false };
+
+  const trimmed = addr.trim();
+  const isCompleteLength = trimmed.length >= 50;
+
+  if (trimmed.startsWith('mn_addr_preprod1')) {
+    return {
+      isValid: isCompleteLength,
+      prefix: 'mn_addr_preprod1',
+      format: 'Shielded Preprod',
+      isPreprodPrefix: true,
+      isCompleteLength,
+      diagnosticMessage: isCompleteLength
+        ? 'Valid Midnight Preprod Shielded Bech32 address format'
+        : `Truncated address string (${trimmed.length} chars, expected >= 50 chars)`
+    };
   }
-  if (addr.startsWith("mn_dust_preprod1")) {
-    return { format: "DUST Preprod", preprodCheck: "Structurally Preprod", isPreprodComplete: true, isIncomplete: false };
+
+  if (trimmed.startsWith('mn_dust_preprod1')) {
+    return {
+      isValid: isCompleteLength,
+      prefix: 'mn_dust_preprod1',
+      format: 'DUST Preprod',
+      isPreprodPrefix: true,
+      isCompleteLength,
+      diagnosticMessage: isCompleteLength
+        ? 'Valid Midnight Preprod DUST Bech32 address format'
+        : `Truncated address string (${trimmed.length} chars, expected >= 50 chars)`
+    };
   }
-  if (addr.startsWith("mn_addr_preview1")) {
-    return { format: "Preview Network", preprodCheck: "Complete Address (Preview prefix)", isPreprodComplete: true, isIncomplete: false };
+
+  if (trimmed.startsWith('mn_addr_preview1')) {
+    return {
+      isValid: false,
+      prefix: 'mn_addr_preview1',
+      format: 'Preview Network',
+      isPreprodPrefix: false,
+      isCompleteLength,
+      diagnosticMessage: "Address prefix 'mn_addr_preview1' belongs to Preview Network, not Midnight Preprod"
+    };
   }
-  if (addr.startsWith("mn_addr1")) {
-    return { format: "Mainnet / Unspecified", preprodCheck: "Complete Address (Mainnet prefix)", isPreprodComplete: true, isIncomplete: false };
+
+  if (trimmed.startsWith('mn_addr1')) {
+    return {
+      isValid: false,
+      prefix: 'mn_addr1',
+      format: 'Mainnet / Unspecified',
+      isPreprodPrefix: false,
+      isCompleteLength,
+      diagnosticMessage: "Address prefix 'mn_addr1' belongs to Mainnet/unspecified format, not Midnight Preprod"
+    };
   }
-  return { format: "Unknown Format", preprodCheck: "Complete Address (Unknown prefix)", isPreprodComplete: true, isIncomplete: false };
+
+  const prefixMatch = trimmed.match(/^([a-z0-9_]+1)/);
+  const prefix = prefixMatch ? prefixMatch[1] : 'unknown';
+
+  return {
+    isValid: false,
+    prefix,
+    format: 'Unknown Format',
+    isPreprodPrefix: false,
+    isCompleteLength,
+    diagnosticMessage: isCompleteLength
+      ? `Unrecognized Bech32 prefix '${prefix}'`
+      : `Truncated address string (${trimmed.length} chars, expected >= 50 chars)`
+  };
+}
+
+export function validateTransactionHashFormat(txHash?: string): TxHashValidationResult {
+  if (!txHash || typeof txHash !== 'string' || !txHash.trim()) {
+    return {
+      isProvided: false,
+      isValidFormat: false,
+      diagnosticMessage: 'No transaction hash provided (optional evidence field)'
+    };
+  }
+
+  const cleanHash = txHash.trim();
+  const hexPattern = /^(0x)?[0-9a-fA-F]{64}$/;
+  const prefixedPattern = /^(tx_|zk_proof_)[0-9a-fA-F]{16,64}$/;
+
+  if (hexPattern.test(cleanHash) || prefixedPattern.test(cleanHash)) {
+    return {
+      isProvided: true,
+      isValidFormat: true,
+      diagnosticMessage: 'Valid hexadecimal transaction hash format'
+    };
+  }
+
+  return {
+    isProvided: true,
+    isValidFormat: false,
+    diagnosticMessage: `Malformed transaction hash string '${cleanHash.slice(0, 16)}...' (expected 64-character hex string)`
+  };
+}
+
+export function classifyFormat(addr: string): { format: string; preprodCheck: string; isPreprodComplete: boolean; isIncomplete: boolean; diagnosticMessage: string } {
+  const validation = validatePreprodAddress(addr);
+
+  if (!validation.isCompleteLength) {
+    return {
+      format: 'Truncated/Incomplete',
+      preprodCheck: 'Failed (Incomplete string)',
+      isPreprodComplete: false,
+      isIncomplete: true,
+      diagnosticMessage: validation.diagnosticMessage
+    };
+  }
+
+  return {
+    format: validation.format,
+    preprodCheck: validation.isPreprodPrefix ? 'Structurally Preprod' : `Failed (${validation.format})`,
+    isPreprodComplete: validation.isPreprodPrefix,
+    isIncomplete: false,
+    diagnosticMessage: validation.diagnosticMessage
+  };
 }
 
 /**
