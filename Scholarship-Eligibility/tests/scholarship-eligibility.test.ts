@@ -2,6 +2,13 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { ScholarshipEligibilityContract } from "../src/contract.js";
 import { MidnightWalletAdapter } from "../src/wallet.js";
 import { MidnightIndexerService } from "../src/indexer.js";
+import {
+  validatePreprodAddress,
+  validateTransactionHashFormat,
+  classifyFormat,
+  runVerification,
+  USER_ENTRIES
+} from "../scripts/verify-preprod-wallets.js";
 
 describe("Private Scholarship Eligibility & Credential Verification Contract", () => {
   let contract: ScholarshipEligibilityContract;
@@ -669,6 +676,92 @@ describe("Private Scholarship Eligibility & Credential Verification Contract", (
     const resetResults = contract.searchScholarships("");
     expect(resetResults.length).toBe(2);
   });
+
+  // --------------------------------------------------------------------------
+  // TEST 20 — Level 5 Feature: Preprod Evidence & Address Validation Tooling
+  // --------------------------------------------------------------------------
+  it("TEST 20 — Level 5 Preprod Validation Tooling: Address Format, TxHash Validation & Status Classification", async () => {
+    // 1. Valid Preprod Shielded Address
+    const shielded = validatePreprodAddress("mn_addr_preprod1lwzdqj0g37jlgd5dxt8feq890fl3fp9uxnzzx8j0q95x09k5yrcsm3p9we");
+    expect(shielded.isValid).toBe(true);
+    expect(shielded.prefix).toBe("mn_addr_preprod1");
+    expect(shielded.format).toBe("Shielded Preprod");
+    expect(shielded.isPreprodPrefix).toBe(true);
+    expect(shielded.isCompleteLength).toBe(true);
+    expect(shielded.diagnosticMessage).toContain("Valid Midnight Preprod Shielded Bech32 address format");
+
+    // 2. Valid Preprod DUST Address
+    const dust = validatePreprodAddress("mn_dust_preprod1wdlard9k90z4p3khjweyv3ngu4lh7kujknmknzqsc7pa769t937r6vcxfsd");
+    expect(dust.isValid).toBe(true);
+    expect(dust.prefix).toBe("mn_dust_preprod1");
+    expect(dust.format).toBe("DUST Preprod");
+    expect(dust.isPreprodPrefix).toBe(true);
+    expect(dust.isCompleteLength).toBe(true);
+    expect(dust.diagnosticMessage).toContain("Valid Midnight Preprod DUST Bech32 address format");
+
+    // 3. Preview Address Rejection
+    const preview = validatePreprodAddress("mn_addr_preview19ekd8mrdu033qn6hveju9f2k9vt6an5nrgnr74rvxw589avc3xwstujjxl");
+    expect(preview.isValid).toBe(false);
+    expect(preview.isPreprodPrefix).toBe(false);
+    expect(preview.format).toBe("Preview Network");
+    expect(preview.diagnosticMessage).toContain("belongs to Preview Network");
+
+    // 4. Mainnet / Network Mismatch Rejection
+    const mainnet = validatePreprodAddress("mn_addr1seyst82p5kqzt7k2pe2lv09d9e75lwsmltvf7eea8xwypn0j5ynqgkqgst");
+    expect(mainnet.isValid).toBe(false);
+    expect(mainnet.isPreprodPrefix).toBe(false);
+    expect(mainnet.format).toBe("Mainnet / Unspecified");
+    expect(mainnet.diagnosticMessage).toContain("belongs to Mainnet");
+
+    // 5. Truncated / Incomplete Address
+    const truncated = validatePreprodAddress("mn_addr_preprod183323eryp4yajzrqmc7uagn");
+    expect(truncated.isValid).toBe(false);
+    expect(truncated.isCompleteLength).toBe(false);
+    expect(truncated.diagnosticMessage).toContain("Truncated address string");
+
+    // 6. Empty or Malformed Address
+    const empty = validatePreprodAddress("");
+    expect(empty.isValid).toBe(false);
+    expect(empty.diagnosticMessage).toContain("empty or missing");
+
+    // 7. Optional Transaction Hash Validation
+    const validTxHash = "0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b";
+    const validTxVal = validateTransactionHashFormat(validTxHash);
+    expect(validTxVal.isProvided).toBe(true);
+    expect(validTxVal.isValidFormat).toBe(true);
+    expect(validTxVal.diagnosticMessage).toContain("Valid hexadecimal transaction hash format");
+
+    const malformedTxHash = "invalid_tx_hash_string";
+    const malformedTxVal = validateTransactionHashFormat(malformedTxHash);
+    expect(malformedTxVal.isProvided).toBe(true);
+    expect(malformedTxVal.isValidFormat).toBe(false);
+    expect(malformedTxVal.diagnosticMessage).toContain("Malformed transaction hash string");
+
+    const missingTxVal = validateTransactionHashFormat(undefined);
+    expect(missingTxVal.isProvided).toBe(false);
+    expect(missingTxVal.isValidFormat).toBe(false);
+    expect(missingTxVal.diagnosticMessage).toContain("No transaction hash provided");
+
+    // 8. Classification & Verification Invariants on Full User Dataset
+    const sampleResults = await runVerification([
+      { id: 1, name: "Niki Biradar", address: "mn_addr_preprod1lwzdqj0g37jlgd5dxt8feq890fl3fp9uxnzzx8j0q95x09k5yrcsm3p9we" },
+      { id: 10, name: "Pooja Kohinkar", address: "mn_addr_preprod183323eryp4yajzrqmc7uagn" }
+    ]);
+    expect(sampleResults.length).toBe(2);
+    expect(sampleResults[0].statusCode).toBe("PENDING_ONCHAIN_PROOF");
+    expect(sampleResults[1].statusCode).toBe("INCOMPLETE");
+
+    // Synchronous classification across all 51 user entries
+    let completeCount = 0;
+    let incompleteCount = 0;
+    for (const entry of USER_ENTRIES) {
+      const cls = classifyFormat(entry.address);
+      if (cls.isIncomplete) incompleteCount++;
+      else if (cls.isPreprodComplete) completeCount++;
+    }
+    expect(completeCount).toBe(50);
+    expect(incompleteCount).toBe(1);
+  }, 10000);
 });
 
 
