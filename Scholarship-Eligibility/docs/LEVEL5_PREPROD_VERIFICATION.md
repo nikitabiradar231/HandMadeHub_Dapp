@@ -96,8 +96,11 @@ To prevent false assertions, the verification tool evaluates submitted addresses
 - **Total Submitted Responses Analyzed**: 51
 - **Complete Preprod-Format Wallet Addresses**: 50 (48 Shielded `mn_addr_preprod1...`, 2 DUST `mn_dust_preprod1...`)
 - **Incomplete / Truncated Address String**: 1 (#10 Pooja Kohinkar - 40-character truncated string)
+- **Transaction Hashes Supplied**: 0 (Pending participant hash collection)
+- **Transactions Confirmed by Indexer**: 0
+- **Independently Verified On-Chain**: 0 (0 / 50 confirmed on-chain)
 - **Pending On-Chain Proof**: 50 complete addresses
-- **Independently Verified On-Chain**: 0 (Pending indexer tx hash verification)
+- **Invalid / Unconfirmed Hashes**: 0
 
 **STATUS**: **50 complete Preprod-format wallet addresses submitted (0 / 50 independently verified on-chain).**
 

@@ -63,6 +63,8 @@ Each participant record must satisfy the following checklist before being counte
 | Historical Form Submissions | 50 | 51 | Source PDF data analyzed |
 | Complete Preprod-Format Addresses | 50 | 50 | 50 complete wallet addresses submitted |
 | Incomplete / Truncated Address | 0 | 1 | Entry #10 (Pooja Kohinkar - truncated string) |
+| Transaction Hashes Supplied | 50 | 0 | Pending participant hash submission |
+| Indexer Confirmed Transactions | 50 | 0 | 0 confirmed on indexer |
 | Documented App Interactions | 50 | Pending | Pending participant evidence |
 | **Independently Verified On-Chain** | **50** | **0 (Pending)** | **Requires indexer/tx hash verification** |
 
