@@ -24,7 +24,7 @@ npm -v
 
 1. **Navigate to the workspace directory**:
    ```bash
-   cd private-scholarship-eligibility
+   cd HandMadeHub_Dapp/Scholarship-Eligibility
    ```
 
 2. **Install root dependencies**:

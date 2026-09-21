@@ -7,7 +7,7 @@ This document tracks the final submission requirements for the **Private Scholar
 ## 📋 Submission Checklist
 
 ### Repository & Documentation
-- [x] Repository is set to public on GitHub (`https://github.com/nikitabiradar231/Scholarship-Eligibility`)
+- [x] Repository is set to public on GitHub (`https://github.com/nikitabiradar231/HandMadeHub_Dapp` — project in `Scholarship-Eligibility/`)
 - [x] `README.md` complete with problem statement, ZK solution, technology stack, and architecture
 - [x] Installation and environment setup instructions documented (`SETUP.md` / `README.md`)
 - [x] Comprehensive usage guide documented for Provider and Student workflows (`USAGE.md` / `README.md`)
@@ -35,7 +35,7 @@ This document tracks the final submission requirements for the **Private Scholar
 - [x] Product X profile link added to `README.md`
 
 ### Submission Artifacts
-- [x] GitHub repository link ready: `https://github.com/nikitabiradar231/Scholarship-Eligibility`
+- [x] GitHub repository link ready: `https://github.com/nikitabiradar231/HandMadeHub_Dapp` (located in `Scholarship-Eligibility/`)
 - [x] Live demo link ready: `https://scholarship-eligibility.vercel.app`
 - [x] Midnight Preview deployment commands and preflight verification ready
 - [x] Level 4 readiness audit & implementation pass complete

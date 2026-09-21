@@ -2,7 +2,7 @@
 
 > **Privacy-Preserving Zero-Knowledge Smart Contract DApp built on the Midnight Network (Preview Testnet)**
 
-[![CI/CD](https://github.com/nikitabiradar231/Scholarship-Eligibility/actions/workflows/ci.yml/badge.svg)](https://github.com/nikitabiradar231/Scholarship-Eligibility/actions/workflows/ci.yml)
+[![CI/CD](https://github.com/nikitabiradar231/HandMadeHub_Dapp/actions/workflows/ci.yml/badge.svg)](https://github.com/nikitabiradar231/HandMadeHub_Dapp/actions/workflows/ci.yml)
 [![Midnight Network](https://img.shields.io/badge/Midnight-Compact%20ZK-indigo?style=flat-square)](#technology-stack)
 [![Preview Testnet](https://img.shields.io/badge/Midnight-Preview-purple?style=flat-square)](#network-information)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
@@ -11,7 +11,7 @@
 
 ## 🔗 Quick Links & Product Links
 
-- **GitHub Repository**: [https://github.com/nikitabiradar231/Scholarship-Eligibility](https://github.com/nikitabiradar231/Scholarship-Eligibility)
+- **Official Level 5 Submission Repository**: [https://github.com/nikitabiradar231/HandMadeHub_Dapp](https://github.com/nikitabiradar231/HandMadeHub_Dapp) (located in `Scholarship-Eligibility/` directory)
 - **Live DApp Deployment**: [https://scholarship-eligibility.vercel.app](https://scholarship-eligibility.vercel.app)
 - **Product X (Twitter) Profile**: [@ScholarshipZK](https://x.com/ScholarshipZK)
 - **Demo Video Guide**: [Watch Video Demonstration](https://drive.google.com/file/d/11B1n7HpT8hWQvCwUFXCiICrCSkZo8RUN/view?usp=drivesdk)
@@ -79,8 +79,8 @@ User Device (Browser)
 ### 1. Clone & Install Dependencies
 
 ```bash
-git clone https://github.com/nikitabiradar231/Scholarship-Eligibility.git
-cd Scholarship-Eligibility
+git clone https://github.com/nikitabiradar231/HandMadeHub_Dapp.git
+cd HandMadeHub_Dapp/Scholarship-Eligibility
 
 # Install root contract dependencies
 npm install
