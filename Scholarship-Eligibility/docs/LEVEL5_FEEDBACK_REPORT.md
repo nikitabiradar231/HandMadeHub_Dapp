@@ -156,9 +156,17 @@ A large proportion of respondents reported high satisfaction with comments such 
     - **Full Details Modal**: Guidance explaining document PDF selection requirements prior to submission.
     - **My Applications View**: Guidance explaining status stepper progression to trigger ZK eligibility verification.
     - **ZK Eligibility Form**: Guidance explaining how private circuits evaluate entered marks and income locally.
-- **Verification & Testing**:
-  - Added automated unit test (`TEST 18 — Level 5 Feedback: Step-by-Step Workflow Guidance Messages & Stage Definitions` in `tests/scholarship-eligibility.test.ts`) validating workflow stage definitions, guidance text accuracy, and integration across all 4 lifecycle stages.
-  - Verified with `npm test` (33 passing tests) and `npm run frontend:build` (0 errors).
+### 6.4 Level 5 Regression Test Coverage
+- **Coverage Goal**: Comprehensive regression protection across all three feedback-driven Level 5 features to prevent future changes from breaking search, details, or workflow guidance functionality.
+- **Regression Suite Structure**:
+  - **Scholarship Search (`TEST 16`)**: Verifies title matching, description matching, case-insensitivity, no-results state, empty query behavior, and filter resetting.
+  - **Scholarship Details (`TEST 17`)**: Verifies title, description, minimum marks, maximum family income, required documents array, publisher metadata, creation date, and application link integrity.
+  - **Workflow Guidance (`TEST 18`)**: Verifies workflow stage definitions (Steps 1–4) and contextual guidance messages across browsing, modal, tracking, and ZK privacy views.
+  - **Cross-Feature Integration (`TEST 19`)**: Proves end-to-end integration: executing a keyword search (`"Quantum"`) -> retrieving detailed item view for filtered result -> progressing student through 4-stage guided workflow (`Connect` -> `Apply` -> `Review` -> `ZK Proof`) -> asserting Zero-Knowledge privacy invariants (`marksDisclosed === false`, `incomeDisclosed === false`) -> resetting search without state corruption.
+- **Verification Results**:
+  - `npm test`: **34 / 34 tests passing** (0 failures).
+  - `npm run build`: Contract TypeScript build **0 errors**.
+  - `npm run frontend:build`: Vite production build **0 errors**.
 
 ---
 

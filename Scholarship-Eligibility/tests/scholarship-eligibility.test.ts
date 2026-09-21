@@ -584,6 +584,91 @@ describe("Private Scholarship Eligibility & Credential Verification Contract", (
     const proof = contract.verifyEligibility({ studentMarks: 85n, studentIncome: 300000n }, app.id);
     expect(proof.isEligible).toBe(true);
   });
+
+  // --------------------------------------------------------------------------
+  // TEST 19 — Level 5 Cross-Feature Regression: Search, Details, Guidance & ZK Proof
+  // --------------------------------------------------------------------------
+  it("TEST 19 — Level 5 Cross-Feature Integration: Search -> Detailed Item View -> 4-Step Guidance -> ZK Verification", () => {
+    const providerAddr = "mn_addr1_provider_integration_test";
+    const providerName = "Quantum & Privacy Institute";
+
+    // 1. Setup multiple scholarships
+    const sch1 = contract.createScholarship(
+      "Quantum Cryptography & ZK Research Grant 2026",
+      "Advanced grant for students working on zero-knowledge proof algorithms and privacy.",
+      85n,
+      600000n,
+      ["Academic Marksheet", "Family Income Certificate", "Research Proposal"],
+      providerName,
+      providerAddr
+    );
+
+    const sch2 = contract.createScholarship(
+      "Cybersecurity Undergraduate Scholarship",
+      "Financial assistance for students pursuing network security and cryptography.",
+      75n,
+      400000n,
+      ["Academic Marksheet", "Family Income Certificate"],
+      "Cyber Shield Org",
+      "mn_addr1_provider_cybershield"
+    );
+
+    // 2. Perform Search Filtering (Step 4 Feature)
+    const searchResults = contract.searchScholarships("Quantum");
+    expect(searchResults.length).toBe(1);
+    expect(searchResults[0].id).toBe(sch1.id);
+    expect(searchResults[0].name).toBe("Quantum Cryptography & ZK Research Grant 2026");
+
+    // 3. Inspect Enriched Details for Filtered Search Item (Step 5 Feature)
+    const details = contract.getScholarshipById(searchResults[0].id);
+    expect(details).toBeDefined();
+    expect(details?.name).toBe("Quantum Cryptography & ZK Research Grant 2026");
+    expect(details?.minimumMarks).toBe(85n);
+    expect(details?.maximumFamilyIncome).toBe(600000n);
+    expect(details?.requiredDocuments.length).toBe(3);
+    expect(details?.createdBy).toBe(providerName);
+    expect(details?.creatorAddress).toBe(providerAddr);
+    expect(details?.createdAt).toBeDefined();
+
+    // 4. Execute Full 4-Step Student Workflow Guidance Lifecycle (Step 6 Feature)
+    const studentAddr = "mn_addr1_student_integration_user";
+    
+    // Step 1: Connect & Register Student Role
+    contract.registerRole(studentAddr, "student");
+    expect(contract.getUserRole(studentAddr)).toBe("student");
+
+    // Step 2: Search, Select & Submit Application
+    const app = contract.submitApplication(
+      searchResults[0].id,
+      studentAddr,
+      "Quantum Scholar",
+      "Quantum_Marksheet.pdf",
+      "Income_Cert.pdf"
+    );
+    expect(app.status).toBe("Documents Submitted");
+    expect(app.scholarshipName).toBe("Quantum Cryptography & ZK Research Grant 2026");
+
+    // Step 3: Provider Credential Review
+    contract.updateApplicationStatus(app.id, "Verified", providerAddr);
+    expect(app.status).toBe("Verified");
+
+    // Step 4: Midnight ZK Eligibility Verification
+    const proof = contract.verifyEligibility(
+      { studentMarks: 92n, studentIncome: 350000n }, // 92 >= 85 AND 350k <= 600k
+      app.id
+    );
+
+    expect(proof.isEligible).toBe(true);
+    expect(proof.publicState.verificationsCount).toBe(1n);
+    expect(proof.publicState.latestVerificationResult).toBe(true);
+    expect(proof.privacySummary.marksDisclosed).toBe(false);
+    expect(proof.privacySummary.incomeDisclosed).toBe(false);
+    expect(proof.privacySummary.resultDisclosed).toBe(true);
+
+    // 5. Reset Search and Verify System State Integrity
+    const resetResults = contract.searchScholarships("");
+    expect(resetResults.length).toBe(2);
+  });
 });
 
 
