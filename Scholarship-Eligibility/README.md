@@ -149,16 +149,113 @@ Follow these steps to deploy the Compact contract to Midnight Preview testnet:
 
 ---
 
+## 🔄 Level 5 — User Feedback & Iteration
+
+Level 5 of the project focuses on executing a closed-loop user feedback cycle: collecting real user feedback on the Level 4 Minimum Viable Product (MVP), identifying key user requests, implementing feedback-driven feature improvements, adding comprehensive regression test suites, and documenting Preprod user wallet evidence.
+
+### 🔁 The Feedback Loop Process
+
+```text
+User Feedback Collection (51 Responses Analyzed)
+                 │
+                 ▼
+Quantitative & Qualitative Analysis (Theme Extraction)
+                 │
+                 ▼
+Three Core Feature Improvements Selected
+                 │
+                 ▼
+Feature Implementation (Search, Details, Guidance)
+                 │
+                 ▼
+Automated Regression Testing (34/34 Passing Tests)
+                 │
+                 ▼
+Final Documentation & Evidence Report
+```
+
+---
+
+### 💡 Implemented Level 5 Feedback Features
+
+#### 1. 🔍 Scholarship Search & Filtering
+- **User Feedback**: Multiple users requested search functionality to easily locate relevant scholarships (*"Add a search option"* — Niki Biradar, Suraj, Vivek Bedre).
+- **Implementation**:
+  - Real-time search input component in the Student Portal (`StudentPortal.tsx`).
+  - Filters by **scholarship title/name** and **description** in a case-insensitive manner.
+  - Interactive clear button (`X`), live query results counter (`Showing X of Y scholarships`), and dedicated empty state when no matches are found.
+  - Contract service layer method `searchScholarships(query: string)` in `ScholarshipEligibilityContract`.
+
+#### 2. 📋 Enhanced Scholarship Details & Metadata
+- **User Feedback**: Users requested deeper scholarship detail views (*"Add more scholarship details"* — Shridevi; *"Make the result page more detailed"* — Kirti).
+- **Implementation**:
+  - Enriched card badges displaying provider organization string (`createdBy`), unique scholarship ID (`#id`), required document tags, ZK privacy indicators, and formatted creation timestamps.
+  - Multi-section detailed view modal with structured sections: Overview, Eligibility Criteria Grid, Required Documents, Zero-Knowledge Privacy Guarantee breakdown, and PDF submission area.
+
+#### 3. 🧭 Step-by-Step Workflow Guidance
+- **User Feedback**: Users requested step-by-step guidance to simplify the application process (*"A little more guidance at each step could make the experience even smoother"* — Nayan Palande).
+- **Implementation**:
+  - Numbered 4-stage workflow progress banner at the top of the Student Portal:
+    - **Step 1: Connect Wallet** (Midnight Preprod wallet detection)
+    - **Step 2: Search & Apply** (Filter scholarships & upload document PDFs)
+    - **Step 3: Credential Review** (Provider review & verification approval)
+    - **Step 4: ZK Eligibility Check** (Execute private zero-knowledge circuit)
+  - Contextual helper callout cards integrated into search/browsing views, application modals, status tracking tables, and ZK eligibility forms.
+
+---
+
+### 🧪 Level 5 Automated Regression Testing
+
+To guarantee that future codebase updates cannot accidentally break feedback features, a comprehensive regression test suite was built into `tests/scholarship-eligibility.test.ts`.
+
+- **Total Test Count**: **34 / 34 passing tests** across 2 test files.
+- **Search Regression (`TEST 16`)**: Verifies title matching, description matching, case-insensitivity, no-results state, empty query behavior, and query resetting.
+- **Details Regression (`TEST 17`)**: Verifies criteria parameters, document tags, publisher metadata, creation timestamps, and data integrity.
+- **Guidance Regression (`TEST 18`)**: Verifies 4-stage workflow card definitions and contextual helper messages across all UI states.
+- **Cross-Feature Integration (`TEST 19`)**: End-to-end integration test demonstrating: searching for a scholarship (`"Tech STEM"`) → loading enriched details → processing applicant through 4-stage guided workflow → executing Midnight ZK circuit (`marksDisclosed === false`, `incomeDisclosed === false`) → clearing search filter state safely.
+- **Build Verification**:
+  - Smart Contract Build: `npm run build` (`tsc`) passed with **0 errors**.
+  - Frontend Production Build: `npm run frontend:build` (`tsc && vite build`) passed with **0 errors**.
+
+---
+
+### 📜 Level 5 Git Commit History
+
+The Level 5 iteration was executed across five dedicated, single-purpose Git commits:
+
+1. `feat(l5): add scholarship search based on user feedback` (`6c1bbee4b57d04499ef431d3f7ed46d0d3cee5fa`)
+2. `feat(l5): improve scholarship details based on user feedback` (`55a4478fbf2d6070320bc246eeddcfbe2b423347`)
+3. `feat(l5): add guidance throughout scholarship workflow` (`cb15f797c2b131de7f855ec1cdf24e5881ab6023`)
+4. `test(l5): add regression coverage for feedback features` (`c66ed2901141db3307674a9d1a4958a82b6576d4`)
+5. `docs(l5): finalize level 5 documentation and feedback loop` *(Current commit)*
+
+---
+
+### 📊 Preprod User Evidence & Verification Status
+
+- **Feedback Source Document**: Official 50-User Feedback PDF ([`docs/LEVEL5_FEEDBACK_REPORT.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_FEEDBACK_REPORT.md)).
+- **Total Form Responses Analyzed**: 51 submissions.
+- **Unique Wallet Address Strings**: 51 unique wallet strings.
+- **Structural Classification**:
+  - **49 Candidate Preprod Addresses**: 47 Shielded (`mn_addr_preprod1...`), 2 DUST (`mn_dust_preprod1...`).
+  - **2 Non-Preprod Addresses**: 1 Mainnet format (`mn_addr1...`), 1 Preview format (`mn_addr_preview1...`).
+  - **1 Truncated Address**: 1 truncated 40-character address string.
+- **On-Chain Verification Distinction**:
+  - *Structural Validity vs On-Chain Evidence*: Structurally valid Bech32 address prefixes do not constitute on-chain proof.
+  - *Current On-Chain Status*: Pending independent on-chain verification. Because Midnight shielded addresses do not expose public ledger histories without private viewing keys, and no transaction hashes were collected in the feedback form, on-chain activity remains unconfirmed on public indexers. Full details are documented in [`docs/LEVEL5_PREPROD_VERIFICATION.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_VERIFICATION.md).
+
+---
+
 ## 🧪 Testing
 
-### 1. Offline Unit Tests (15/15 Passing)
-Run core contract logic & circuit validation tests offline:
+### 1. Offline Unit & Regression Test Suite (34/34 Passing)
+Run core contract logic, circuit validation, and Level 5 regression tests offline:
 
 ```bash
 npm test
 ```
 
-The test suite (15/15 passing) verifies:
+The test suite (34/34 passing across 2 test files) verifies:
 1. Fresh state initialization with zero default demo data.
 2. Permanent Student → Provider role binding protection.
 3. Permanent Provider → Student role binding protection.
@@ -174,6 +271,10 @@ The test suite (15/15 passing) verifies:
 13. Indexer public data service response parsing.
 14. Privacy invariants ensuring raw student marks and income are never disclosed in public ledger state.
 15. Circuit safety assertions rejecting ZK proof generation for unverified student credentials.
+16. **[L5 Search]** Scholarship search & title/description filtering, case-insensitivity, no-results state, empty query handling, and query reset.
+17. **[L5 Details]** Scholarship detail metadata integrity, criteria parameters, document tags, publisher information, creation date, and application linking.
+18. **[L5 Guidance]** 4-step workflow card definitions (Connect Wallet, Search & Apply, Credential Review, ZK Verification) and contextual helper messages across UI views.
+19. **[L5 Cross-Feature]** End-to-end multi-feature integration: keyword search → detailed modal → guided 4-step applicant flow → Zero-Knowledge circuit execution → query reset.
 
 ### 2. Live Midnight Preview Integration Test (Read-Only)
 Run safe, read-only live Midnight Preview RPC & Indexer connectivity tests:

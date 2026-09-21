@@ -27,7 +27,7 @@ This document tracks the final submission requirements for the **Private Scholar
 
 ### CI/CD Pipeline
 - [x] GitHub Actions workflow configured (`.github/workflows/ci.yml`)
-- [x] Unit, circuit & privacy invariant test suite passing cleanly (`npm test` — 15/15 tests passed)
+- [x] Unit, circuit & privacy invariant test suite passing cleanly (`npm test` — 34/34 tests passed)
 - [x] CI pipeline configured with GitHub Secrets (`MIDNIGHT_WALLET_SEED`, `MIDNIGHT_NETWORK`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`)
 
 ### Product Presence
@@ -63,7 +63,7 @@ This document tracks the final submission requirements for the **Private Scholar
 
 - **Smart Contract Logic**: Compact ZK circuit evaluates `studentMarks >= minimumMarks` and `studentIncome <= maximumFamilyIncome` without exposing raw values.
 - **Authorization Security**: Permanent role locking (`student` / `provider`) and creator ownership enforced.
-- **Automated Tests**: 15/15 Vitest unit, circuit, and privacy invariant tests passing locally.
+- **Automated Tests**: 34/34 Vitest unit, circuit, privacy invariant, search, details, guidance, and cross-feature integration tests passing locally.
 - **Frontend Build**: React 18 + Vite production bundle builds cleanly.
 - **Zero Mock Policy**: Genuine Midnight Network contract bindings and DApp Connector APIs integrated across full stack.
 
