@@ -240,18 +240,19 @@ The Level 5 iteration was executed across five dedicated, single-purpose Git com
   3. **User Evidence Template**: [`docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md) (Standardized 50-user tracking roster)
   4. **User Testing Guide**: [`docs/LEVEL5_PREPROD_USER_TESTING_GUIDE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_USER_TESTING_GUIDE.md) (6-step participant flow & administrator verification checklist)
   5. **Preprod Readiness Audit**: [`docs/LEVEL5_PREPROD_READINESS.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_READINESS.md) (Network configuration, contract status & safety protocols)
+  6. **TxHash Collection Guide**: [`docs/LEVEL5_TX_HASH_COLLECTION_GUIDE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_TX_HASH_COLLECTION_GUIDE.md) (Participant guide for locating & submitting public transaction hashes)
 - **Four-Tier Verification Framework**:
   1. *Tier A (Submitted Address)*: Address string submitted via feedback form (`mn_addr_preprod1...`).
   2. *Tier B (Format Validated)*: Valid Bech32 Preprod prefix (`mn_addr_preprod1...` / `mn_dust_preprod1...`) and character length (~77 chars).
   3. *Tier C (App Interaction Evidence)*: Documented testing of Level 5 features (Search, Details View, 4-Step Guidance, ZK Action).
-  4. *Tier D (On-Chain Verified)*: Transaction hash or indexer proof verified on Midnight Preprod RPC / GraphQL Indexer (`npm run verify:preprod-users`).
-- **Strict Privacy Protections**: Zero secret credentials collected or requested (no seeds, recovery phrases, private keys, passwords, or viewing keys).
+  4. *Tier D (On-Chain Verified)*: Transaction hash (`txHash`) verified on Midnight Preprod GraphQL Indexer (`npm run verify:preprod-users`).
+- **Strict Privacy Protections**: Zero secret credentials collected or requested (no seeds, recovery phrases, private keys, passwords, or viewing keys). Participants provide only public wallet addresses and public transaction hashes.
 - **Historical Dataset Analysis**:
   - *Total Feedback Submissions Collected*: 51 responses from official feedback PDF.
   - *Complete Preprod-Format Wallet Addresses Submitted*: 50 complete wallet addresses.
   - *Incomplete / Truncated Address*: 1 truncated address (#10 Pooja Kohinkar).
 - **Deployed Smart Contract Reference**: Level 4 smart contract (`9cbd81bf18cf2c5a208a9c4cdc5059b0aa220d05cf22e5edafe1c20abd7afb49`) remains deployed on Midnight Preview Testnet as the baseline contract reference.
-- **Current Verification Status**: **Pending Verification (0 / 50 Verified On-Chain)**. Format completeness alone (Tier B) does not constitute on-chain proof. The Level 5 50-user requirement is being actively documented and verified. Full details are in [`docs/LEVEL5_PREPROD_VERIFICATION.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_VERIFICATION.md).
+- **Current Verification Status**: **Pending Verification (0 / 50 Verified On-Chain)**. 50 complete Preprod wallet addresses have been collected. On-chain verification is pending transaction-hash evidence. Full details are in [`docs/LEVEL5_PREPROD_VERIFICATION.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_VERIFICATION.md) and [`docs/LEVEL5_TX_HASH_COLLECTION_GUIDE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_TX_HASH_COLLECTION_GUIDE.md).
 
 ---
 

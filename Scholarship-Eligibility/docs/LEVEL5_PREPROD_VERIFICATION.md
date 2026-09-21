@@ -124,7 +124,7 @@ When transaction hashes or signed receipts are provided for these wallets, they 
 
 ## 7. Evidence Collection Framework & Four-Tier Progression
 
-To guide future participant onboarding and establish verifiable proof toward the 50-user requirement, the application adopts a standardized evidence template ([`docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md)).
+To guide participant onboarding and establish verifiable proof toward the 50-user requirement, the application provides a standardized transaction hash collection guide ([`docs/LEVEL5_TX_HASH_COLLECTION_GUIDE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_TX_HASH_COLLECTION_GUIDE.md)) and evidence template ([`docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md)).
 
 ### Four-Tier Verification Pipeline
 
@@ -138,13 +138,18 @@ To guide future participant onboarding and establish verifiable proof toward the
 [Tier C: Documented App Feature Interaction]
               │
               ▼
-[Tier D: Independent On-Chain Indexer Proof]
+[Tier D: Independent On-Chain Indexer Proof (Public txHash)]
 ```
 
 ### Strict Key Distinctions
-- **Tier A vs Tier B**: Address string submission (Tier A) becomes format-valid (Tier B) when it passes Bech32 prefix checks (`mn_addr_preprod1...` / `mn_dust_preprod1...`).
-- **Tier B vs Tier C**: Format validity (Tier B) proves address syntax only. Tier C requires documented session interaction testing Level 5 MVP features (Search, Details, Guidance, ZK Circuit).
-- **Tier C vs Tier D**: App interaction (Tier C) records client testing. Tier D requires an independent transaction hash receipt verified on the Midnight Preprod RPC / Indexer.
+- **Tier A — Address Submitted**: Public wallet address string submitted via feedback form.
+- **Tier B — Preprod Format Validated**: Address string passes Bech32 prefix validation (`mn_addr_preprod1...` or `mn_dust_preprod1...`) and length check (~77 chars).
+- **Tier C — Application Testing Evidence**: Documented session interaction testing Level 5 MVP features (Search, Details, Guidance, ZK Circuit).
+- **Tier D — Public TxHash Verified On-Chain**: Independent transaction hash (`txHash`) receipt verified on the Midnight Preprod GraphQL Indexer (`https://indexer.preprod.midnight.network/api/v3/graphql`).
+
+### Current Verified Baseline
+- **Complete Preprod-Format Addresses**: **50**
+- **Independently Verified On-Chain (Tier D)**: **0 / 50** *(Pending participant transaction hash collection)*
 
 ### Privacy Safeguards
-- **Zero Secrets Rule**: Participant onboarding NEVER requests or exposes wallet seeds, 12/24-word recovery phrases, private keys, wallet passwords, or secret viewing keys. Public wallet addresses and voluntary transaction hashes are the only identifiers collected.
+- **Zero Secrets Rule**: Participant onboarding NEVER requests, collects, or exposes wallet seeds, 12/24-word recovery phrases, private keys, wallet passwords, or secret viewing keys. Public wallet addresses and public transaction hashes (`txHash`) are the only data collected.
