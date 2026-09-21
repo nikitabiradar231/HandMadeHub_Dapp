@@ -217,6 +217,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
         {/* Tab Controls */}
         <div className="flex items-center space-x-2 bg-slate-900 p-1 rounded-xl border border-slate-800">
           <button
+            type="button"
             onClick={() => setActiveTab("browse")}
             className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${
               activeTab === "browse"
@@ -228,6 +229,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
           </button>
 
           <button
+            type="button"
             onClick={() => setActiveTab("my_applications")}
             className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center space-x-1.5 ${
               activeTab === "my_applications"
@@ -253,8 +255,12 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
             <span>Student Application Workflow Guidance</span>
           </div>
           <button
+            type="button"
             onClick={() => setShowGuidancePanel(!showGuidancePanel)}
-            className="text-[11px] font-mono text-indigo-400 hover:text-indigo-200 flex items-center space-x-1"
+            aria-expanded={showGuidancePanel}
+            aria-controls="workflow-guidance-panel"
+            aria-label="Toggle student application workflow guidance panel"
+            className="text-[11px] font-mono text-indigo-400 hover:text-indigo-200 flex items-center space-x-1 focus:outline-none focus:ring-1 focus:ring-indigo-500 rounded px-1"
           >
             <span>{showGuidancePanel ? "Hide Guidance" : "Show Guidance"}</span>
             {showGuidancePanel ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -262,7 +268,12 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
         </div>
 
         {showGuidancePanel && (
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 pt-1 text-xs">
+          <div
+            id="workflow-guidance-panel"
+            role="region"
+            aria-label="Student Application Workflow Guidance Steps"
+            className="grid grid-cols-1 sm:grid-cols-4 gap-2 pt-1 text-xs"
+          >
             <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
               <div className="font-bold text-indigo-300 text-[11px] flex items-center space-x-1">
                 <span className="w-4 h-4 rounded-full bg-indigo-900 text-indigo-200 text-[10px] flex items-center justify-center">1</span>
@@ -319,14 +330,15 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search scholarships by name or description..."
-                  aria-label="Search scholarships"
+                  aria-label="Search scholarships by title or description"
                   className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-indigo-500 transition-all"
                 />
                 {searchQuery && (
                   <button
+                    type="button"
                     onClick={() => setSearchQuery("")}
-                    aria-label="Clear search"
-                    className="absolute right-3 p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+                    aria-label="Clear scholarship search query"
+                    className="absolute right-3 p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -336,8 +348,10 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                 <div className="text-[11px] text-slate-400 mt-1.5 font-mono flex items-center justify-between px-1">
                   <span>Showing {filteredScholarships.length} of {scholarships.length} scholarships</span>
                   <button
+                    type="button"
                     onClick={() => setSearchQuery("")}
-                    className="text-indigo-400 hover:underline text-[11px]"
+                    aria-label="Reset scholarship search filter"
+                    className="text-indigo-400 hover:underline text-[11px] focus:outline-none focus:ring-1 focus:ring-indigo-500 rounded px-1"
                   >
                     Reset filter
                   </button>
@@ -362,7 +376,9 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                 No scholarships matched your search query "{searchQuery}". Try searching with different keywords.
               </p>
               <button
+                type="button"
                 onClick={() => setSearchQuery("")}
+                aria-label="Clear scholarship search query"
                 className="px-4 py-2 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-md shadow-indigo-600/30 hover:bg-indigo-500 transition-all"
               >
                 Clear Search
@@ -438,7 +454,9 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                         <span>{s.createdAt ? new Date(s.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Active Program"}</span>
                       </div>
                       <button
+                        type="button"
                         onClick={() => setSelectedScholarship(s)}
+                        aria-label={`View details and apply for ${s.name}`}
                         className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md shadow-indigo-600/30 flex items-center space-x-1 transition-all"
                       >
                         <span>View Details & Apply</span>
@@ -475,6 +493,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                 You have not applied for any scholarships yet. Click Available Scholarships to get started.
               </p>
               <button
+                type="button"
                 onClick={() => setActiveTab("browse")}
                 className="px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-lg shadow-indigo-600/30"
               >
@@ -605,6 +624,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                     </div>
 
                     <button
+                      type="button"
                       onClick={onOpenPrivacyModal}
                       className="text-xs text-indigo-300 hover:text-white underline shrink-0 font-mono"
                     >
@@ -621,7 +641,12 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
 
       {/* SCHOLARSHIP DETAILS & APPLICATION MODAL */}
       {selectedScholarship && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-scholarship-title"
+          className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
+        >
           <div className="glass-card rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-indigo-500/40 space-y-6 shadow-2xl relative my-8">
             
             {/* Modal Header */}
@@ -636,10 +661,12 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                     #{selectedScholarship.id}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold text-white tracking-tight">{selectedScholarship.name}</h3>
+                <h3 id="modal-scholarship-title" className="text-xl font-bold text-white tracking-tight">{selectedScholarship.name}</h3>
               </div>
               <button
+                type="button"
                 onClick={() => setSelectedScholarship(null)}
+                aria-label="Close scholarship details modal"
                 className="p-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-all border border-slate-800"
               >
                 <X className="w-5 h-5" />
