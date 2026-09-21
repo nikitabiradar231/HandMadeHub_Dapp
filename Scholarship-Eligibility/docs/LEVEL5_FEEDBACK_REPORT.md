@@ -27,10 +27,10 @@ The primary goal of Level 5 is to collect and evaluate real user feedback to ref
 | Wallet addresses submitted | 51 |
 | Unique wallet address strings | 51 |
 | Complete Preprod-format wallet addresses | 50 |
-| Standard Shielded Preprod addresses (`mn_addr_preprod1...`) | 46 |
+| Standard Shielded Preprod addresses (`mn_addr_preprod1...`) | 48 |
 | DUST Preprod addresses (`mn_dust_preprod1...`) | 2 |
-| Preview Network format addresses (`mn_addr_preview1...`) | 1 |
-| Mainnet format addresses (`mn_addr1...`) | 1 |
+| Preview Network format addresses (`mn_addr_preview1...`) | 0 |
+| Mainnet format addresses (`mn_addr1...`) | 0 |
 | Incomplete / Truncated address (`mn_addr_preprod1...`) | 1 |
 | Independently verified on-chain | 0 (Pending) |
 
@@ -40,17 +40,15 @@ The primary goal of Level 5 is to collect and evaluate real user feedback to ref
 
 ## 4. Network/Evidence Classification
 
-Based on prefix inspection of the user-submitted wallet strings, entries fall into three structural categories:
+Based on prefix inspection of the user-submitted wallet strings, entries fall into two structural categories:
 
-### Appears Preprod (49 Addresses)
+### Appears Preprod (50 Addresses)
 Addresses beginning with standard Midnight Preprod prefixes:
-- `mn_addr_preprod1...` (47 addresses)
+- `mn_addr_preprod1...` (48 addresses)
 - `mn_dust_preprod1...` (2 DUST wallet addresses)
 
-### Not Preprod (2 Addresses)
-Addresses with prefixes belonging to other network configurations:
-- `mn_addr1...` — Entry #14 (Nayan Palande): Mainnet or unspecified network format.
-- `mn_addr_preview1...` — Entry #42 (Amir Saudagar): Preview network address format.
+### Not Preprod (0 Addresses)
+None. All 50 complete, non-truncated addresses submitted use valid Midnight Preprod prefixes (`mn_addr_preprod1...` or `mn_dust_preprod1...`).
 
 ### Incomplete / Truncated (1 Address)
 - Entry #10 (Pooja Kohinkar): Address string `mn_addr_preprod183323eryp4yajzrqmc7uagn` is truncated to 40 characters (standard length is ~77 characters).

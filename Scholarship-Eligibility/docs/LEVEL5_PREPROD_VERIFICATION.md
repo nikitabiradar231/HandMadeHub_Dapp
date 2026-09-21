@@ -50,7 +50,7 @@ To prevent false assertions, the verification tool evaluates submitted addresses
 | 11 | Srushti Chakradhar Benjarge | `mn_addr_preprod1...mssvexs86` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
 | 12 | Ankita | `mn_addr_preprod1...2xwuuq` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
 | 13 | Pratiksha Kalbhor | `mn_addr_preprod1...dsk7psx0` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
-| 14 | Nayan Palande | `mn_addr1seyst82p...gkqgst` | Mainnet / Unspecified | Failed (Mainnet format) | No observable on-chain record | None | Invalid (Network mismatch) |
+| 14 | Nayan Palande | `mn_addr_preprod1...e2j6m4` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
 | 15 | Simran Rupesh Sawant | `mn_addr_preprod1...sqlmpe7c` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
 | 16 | Sanskruti Chavan | `mn_addr_preprod1...qggh7yc` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
 | 17 | Renuka | `mn_addr_preprod1...s0dx88f` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
@@ -78,7 +78,7 @@ To prevent false assertions, the verification tool evaluates submitted addresses
 | 39 | Kshitija | `mn_addr_preprod1...dqxlp37s` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
 | 40 | Vaishnavi vasant lambhate | `mn_addr_preprod1...63qgrzhmn` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
 | 41 | Vishvajit Bhagave | `mn_addr_preprod1...8s6pzckh` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
-| 42 | Amir Saudagar | `mn_addr_preview1...tujjxl` | Preview Network | Failed (Preview Network) | No observable on-chain record | None | Invalid (Network mismatch) |
+| 42 | Amir Saudagar | `mn_addr_preprod1...svccy6` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
 | 43 | Samiksha | `mn_addr_preprod1...rtrg4g` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
 | 44 | Payal Babar | `mn_addr_preprod1...q9q36em` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
 | 45 | Paras Babar | `mn_addr_preprod1...fqm55c9r` | Shielded Preprod | Structurally Preprod | Unconfirmed (Shielded / No public UTXO) | Pending proof | Requires On-Chain Proof |
@@ -94,7 +94,7 @@ To prevent false assertions, the verification tool evaluates submitted addresses
 ## 4. Verification Summary
 
 - **Total Submitted Responses Analyzed**: 51
-- **Complete Preprod-Format Wallet Addresses**: 50 (46 Shielded `mn_addr_preprod1...`, 2 DUST `mn_dust_preprod1...`, 1 Preview `mn_addr_preview1...`, 1 Mainnet `mn_addr1...`)
+- **Complete Preprod-Format Wallet Addresses**: 50 (48 Shielded `mn_addr_preprod1...`, 2 DUST `mn_dust_preprod1...`)
 - **Incomplete / Truncated Address String**: 1 (#10 Pooja Kohinkar - 40-character truncated string)
 - **Pending On-Chain Proof**: 50 complete addresses
 - **Independently Verified On-Chain**: 0 (Pending indexer tx hash verification)
@@ -117,10 +117,8 @@ When transaction hashes or signed receipts are provided for these wallets, they 
    - Shielded wallet addresses (`mn_addr_preprod1...`) preserve Zero-Knowledge privacy. Public GraphQL indexers do not publicly index balances or transaction history by shielded address without the viewing key.
 2. **Form Evidence Scope**:
    - The user feedback PDF documents form responses collected from users, but does not collect transaction hashes or proof receipts.
-3. **Network Mismatch & Incomplete Data**:
-   - Entry #14 submitted a Mainnet-style address (`mn_addr1...`).
-   - Entry #42 submitted a Preview network address (`mn_addr_preview1...`).
-   - Entry #10 submitted a truncated 40-character address string.
+3. **Incomplete Data**:
+   - Entry #10 submitted a truncated 40-character address string (`mn_addr_preprod183323eryp4yajzrqmc7uagn`). All other 50 submitted addresses are complete, valid Midnight Preprod wallet strings.
 
 ---
 
