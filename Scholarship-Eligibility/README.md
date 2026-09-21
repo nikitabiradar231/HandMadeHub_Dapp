@@ -233,19 +233,23 @@ The Level 5 iteration was executed across five dedicated, single-purpose Git com
 
 ### 📊 Preprod User Evidence & Verification Status
 
-- **Target Goal**: 50 Real Preprod users with verifiable wallet addresses and documented application interaction evidence.
-- **Evidence Collection Template**: [`docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md)
+- **Target Goal**: 50 Real Preprod users with verifiable wallet addresses and documented application interaction evidence (**Collection Status: In Progress / Pending**).
+- **Official Level 5 Documentation Package**:
+  1. **User Feedback Report**: [`docs/LEVEL5_FEEDBACK_REPORT.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_FEEDBACK_REPORT.md) (Feedback collection, analysis & 3 selected features)
+  2. **Preprod Verification Report**: [`docs/LEVEL5_PREPROD_VERIFICATION.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_VERIFICATION.md) (Tooling logic, status codes & indexer verification rules)
+  3. **User Evidence Template**: [`docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md) (Standardized 50-user tracking roster)
+  4. **User Testing Guide**: [`docs/LEVEL5_PREPROD_USER_TESTING_GUIDE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_USER_TESTING_GUIDE.md) (6-step participant flow & administrator verification checklist)
 - **Four-Tier Verification Framework**:
-  1. *Tier A (Submitted Address)*: Address string submitted via feedback form.
+  1. *Tier A (Submitted Address)*: Address string submitted via feedback form (`mn_addr_preprod1...`).
   2. *Tier B (Format Validated)*: Valid Bech32 Preprod prefix (`mn_addr_preprod1...` / `mn_dust_preprod1...`) and character length (~77 chars).
   3. *Tier C (App Interaction Evidence)*: Documented testing of Level 5 features (Search, Details View, 4-Step Guidance, ZK Action).
-  4. *Tier D (On-Chain Verified)*: Transaction hash or indexer proof verified on Midnight Preprod RPC / GraphQL Indexer.
+  4. *Tier D (On-Chain Verified)*: Transaction hash or indexer proof verified on Midnight Preprod RPC / GraphQL Indexer (`npm run verify:preprod-users`).
 - **Strict Privacy Protections**: Zero secret credentials collected or requested (no seeds, recovery phrases, private keys, passwords, or viewing keys).
 - **Historical Dataset Analysis**:
   - *Total Form Submissions Analyzed*: 51 responses from official feedback PDF.
-  - *Format Valid Preprod Candidates*: 49 addresses (47 Shielded `mn_addr_preprod1...`, 2 DUST `mn_dust_preprod1...`).
+  - *Format Valid Preprod Candidates*: 48 addresses (46 Shielded `mn_addr_preprod1...`, 2 DUST `mn_dust_preprod1...`).
   - *Non-Preprod / Invalid*: 3 addresses (1 Mainnet format, 1 Preview format, 1 truncated).
-- **Current Verification Status**: **Pending Verification (0 / 50 Verified On-Chain)**. Format validity alone (Tier B) does not constitute on-chain proof. Independent indexer verification is pending participant transaction hashes or viewing key proofs. Full details are documented in [`docs/LEVEL5_PREPROD_VERIFICATION.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_VERIFICATION.md).
+- **Current Verification Status**: **Pending Verification (0 / 50 Verified On-Chain)**. Format validity alone (Tier B) does not constitute on-chain proof. 50-user Preprod evidence collection is in progress. Full details are documented in [`docs/LEVEL5_PREPROD_VERIFICATION.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_VERIFICATION.md).
 
 ---
 
