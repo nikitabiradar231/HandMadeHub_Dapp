@@ -233,16 +233,19 @@ The Level 5 iteration was executed across five dedicated, single-purpose Git com
 
 ### 📊 Preprod User Evidence & Verification Status
 
-- **Feedback Source Document**: Official 50-User Feedback PDF ([`docs/LEVEL5_FEEDBACK_REPORT.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_FEEDBACK_REPORT.md)).
-- **Total Form Responses Analyzed**: 51 submissions.
-- **Unique Wallet Address Strings**: 51 unique wallet strings.
-- **Structural Classification**:
-  - **49 Candidate Preprod Addresses**: 47 Shielded (`mn_addr_preprod1...`), 2 DUST (`mn_dust_preprod1...`).
-  - **2 Non-Preprod Addresses**: 1 Mainnet format (`mn_addr1...`), 1 Preview format (`mn_addr_preview1...`).
-  - **1 Truncated Address**: 1 truncated 40-character address string.
-- **On-Chain Verification Distinction**:
-  - *Structural Validity vs On-Chain Evidence*: Structurally valid Bech32 address prefixes do not constitute on-chain proof.
-  - *Current On-Chain Status*: Pending independent on-chain verification. Because Midnight shielded addresses do not expose public ledger histories without private viewing keys, and no transaction hashes were collected in the feedback form, on-chain activity remains unconfirmed on public indexers. Full details are documented in [`docs/LEVEL5_PREPROD_VERIFICATION.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_VERIFICATION.md).
+- **Target Goal**: 50 Real Preprod users with verifiable wallet addresses and documented application interaction evidence.
+- **Evidence Collection Template**: [`docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md)
+- **Four-Tier Verification Framework**:
+  1. *Tier A (Submitted Address)*: Address string submitted via feedback form.
+  2. *Tier B (Format Validated)*: Valid Bech32 Preprod prefix (`mn_addr_preprod1...` / `mn_dust_preprod1...`) and character length (~77 chars).
+  3. *Tier C (App Interaction Evidence)*: Documented testing of Level 5 features (Search, Details View, 4-Step Guidance, ZK Action).
+  4. *Tier D (On-Chain Verified)*: Transaction hash or indexer proof verified on Midnight Preprod RPC / GraphQL Indexer.
+- **Strict Privacy Protections**: Zero secret credentials collected or requested (no seeds, recovery phrases, private keys, passwords, or viewing keys).
+- **Historical Dataset Analysis**:
+  - *Total Form Submissions Analyzed*: 51 responses from official feedback PDF.
+  - *Format Valid Preprod Candidates*: 49 addresses (47 Shielded `mn_addr_preprod1...`, 2 DUST `mn_dust_preprod1...`).
+  - *Non-Preprod / Invalid*: 3 addresses (1 Mainnet format, 1 Preview format, 1 truncated).
+- **Current Verification Status**: **Pending Verification (0 / 50 Verified On-Chain)**. Format validity alone (Tier B) does not constitute on-chain proof. Independent indexer verification is pending participant transaction hashes or viewing key proofs. Full details are documented in [`docs/LEVEL5_PREPROD_VERIFICATION.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_VERIFICATION.md).
 
 ---
 

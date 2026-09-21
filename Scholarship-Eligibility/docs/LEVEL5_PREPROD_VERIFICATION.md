@@ -122,3 +122,32 @@ When transaction hashes or signed receipts are provided for these wallets, they 
    - Entry #14 submitted a Mainnet-style address (`mn_addr1...`).
    - Entry #42 submitted a Preview network address (`mn_addr_preview1...`).
    - Entry #10 submitted a truncated 40-character address string.
+
+---
+
+## 7. Evidence Collection Framework & Four-Tier Progression
+
+To guide future participant onboarding and establish verifiable proof toward the 50-user requirement, the application adopts a standardized evidence template ([`docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md)).
+
+### Four-Tier Verification Pipeline
+
+```text
+[Tier A: Form Address Submission]
+              │
+              ▼
+[Tier B: Bech32 Preprod Format Validation]
+              │
+              ▼
+[Tier C: Documented App Feature Interaction]
+              │
+              ▼
+[Tier D: Independent On-Chain Indexer Proof]
+```
+
+### Strict Key Distinctions
+- **Tier A vs Tier B**: Address string submission (Tier A) becomes format-valid (Tier B) when it passes Bech32 prefix checks (`mn_addr_preprod1...` / `mn_dust_preprod1...`).
+- **Tier B vs Tier C**: Format validity (Tier B) proves address syntax only. Tier C requires documented session interaction testing Level 5 MVP features (Search, Details, Guidance, ZK Circuit).
+- **Tier C vs Tier D**: App interaction (Tier C) records client testing. Tier D requires an independent transaction hash receipt verified on the Midnight Preprod RPC / Indexer.
+
+### Privacy Safeguards
+- **Zero Secrets Rule**: Participant onboarding NEVER requests or exposes wallet seeds, 12/24-word recovery phrases, private keys, wallet passwords, or secret viewing keys. Public wallet addresses and voluntary transaction hashes are the only identifiers collected.
