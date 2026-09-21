@@ -4,6 +4,8 @@ export interface UserEntry {
   id: number;
   name: string;
   address: string;
+  txHash?: string;
+  featureTested?: string;
 }
 
 export const USER_ENTRIES: UserEntry[] = [
@@ -60,6 +62,13 @@ export const USER_ENTRIES: UserEntry[] = [
   { id: 51, name: "Mukta", address: "mn_addr_preprod1v7tdfw7zq6mnqekjz2rdxyryug4j7j5zwv8pgqnqyrle2g4ttvvshfpptw" }
 ];
 
+export type VerificationStatusCode =
+  | 'FORMAT_VALIDATED'
+  | 'NON_PREPROD'
+  | 'INCOMPLETE'
+  | 'PENDING_ONCHAIN_PROOF'
+  | 'VERIFIED_ONCHAIN';
+
 export interface VerificationResult {
   id: number;
   name: string;
@@ -69,7 +78,8 @@ export interface VerificationResult {
   preprodCheck: string;
   onChainEvidence: string;
   contractEvidence: string;
-  status: string;
+  statusCode: VerificationStatusCode;
+  statusLabel: string;
 }
 
 export function shortenAddress(addr: string): string {
@@ -77,69 +87,128 @@ export function shortenAddress(addr: string): string {
   return `${addr.slice(0, 16)}...${addr.slice(-6)}`;
 }
 
-export function classifyFormat(addr: string): { format: string; preprodCheck: string } {
-  if (addr.length < 50) {
-    return { format: "Truncated/Incomplete", preprodCheck: "Failed (Incomplete string)" };
+export function classifyFormat(addr: string): { format: string; preprodCheck: string; isPreprod: boolean; isIncomplete: boolean } {
+  if (!addr || addr.length < 50) {
+    return { format: "Truncated/Incomplete", preprodCheck: "Failed (Incomplete string)", isPreprod: false, isIncomplete: true };
   }
   if (addr.startsWith("mn_addr_preprod1")) {
-    return { format: "Shielded Preprod", preprodCheck: "Structurally Preprod" };
+    return { format: "Shielded Preprod", preprodCheck: "Structurally Preprod", isPreprod: true, isIncomplete: false };
   }
   if (addr.startsWith("mn_dust_preprod1")) {
-    return { format: "DUST Preprod", preprodCheck: "Structurally Preprod" };
+    return { format: "DUST Preprod", preprodCheck: "Structurally Preprod", isPreprod: true, isIncomplete: false };
   }
   if (addr.startsWith("mn_addr_preview1")) {
-    return { format: "Preview Network", preprodCheck: "Failed (Preview Network)" };
+    return { format: "Preview Network", preprodCheck: "Failed (Preview Network prefix)", isPreprod: false, isIncomplete: false };
   }
   if (addr.startsWith("mn_addr1")) {
-    return { format: "Mainnet / Unspecified", preprodCheck: "Failed (Mainnet format)" };
+    return { format: "Mainnet / Unspecified", preprodCheck: "Failed (Mainnet network prefix)", isPreprod: false, isIncomplete: false };
   }
-  return { format: "Unknown Format", preprodCheck: "Failed (Unknown format)" };
+  return { format: "Unknown Format", preprodCheck: "Failed (Unknown network prefix)", isPreprod: false, isIncomplete: false };
 }
 
-async function queryIndexerForOutputs(indexerUrl: string, ownerAddress: string): Promise<any> {
-  const query = `
-    query QueryUnshieldedOutputs($owner: HexEncoded!) {
-      unshieldedOutputs(owner: $owner) {
-        owner
-        tokenType
-        value
+/**
+ * Safe, read-only GraphQL query to Midnight Preprod Indexer to check for confirmed transaction hashes or unshielded output records.
+ */
+async function queryIndexerForTx(indexerUrl: string, txHash?: string, ownerAddress?: string): Promise<{ isVerified: boolean; details: string }> {
+  if (txHash) {
+    const query = `
+      query QueryTx($hash: String!) {
+        transaction(hash: $hash) {
+          hash
+          blockHeight
+        }
       }
+    `;
+    try {
+      const response = await fetch(indexerUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables: { hash: txHash } }),
+      });
+      if (response.ok) {
+        const data: any = await response.json();
+        if (data?.data?.transaction?.hash) {
+          return {
+            isVerified: true,
+            details: `Confirmed Tx (${txHash.slice(0, 10)}... Block #${data.data.transaction.blockHeight})`
+          };
+        }
+      }
+    } catch {
+      // Indexer unreachable or tx missing
     }
-  `;
-  try {
-    const response = await fetch(indexerUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, variables: { owner: ownerAddress } }),
-    });
-    if (!response.ok) return null;
-    return await response.json();
-  } catch (err) {
-    return null;
   }
+
+  if (ownerAddress) {
+    const query = `
+      query QueryUnshieldedOutputs($owner: String!) {
+        unshieldedOutputs(owner: $owner) {
+          owner
+          value
+        }
+      }
+    `;
+    try {
+      const response = await fetch(indexerUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables: { owner: ownerAddress } }),
+      });
+      if (response.ok) {
+        const data: any = await response.json();
+        if (data?.data?.unshieldedOutputs?.length > 0) {
+          return {
+            isVerified: true,
+            details: `Confirmed (${data.data.unshieldedOutputs.length} public outputs)`
+          };
+        }
+      }
+    } catch {
+      // Ignore query errors
+    }
+  }
+
+  return {
+    isVerified: false,
+    details: "Unconfirmed (Shielded / No public transaction receipt on indexer)"
+  };
 }
 
-export async function runVerification(): Promise<VerificationResult[]> {
+export async function runVerification(entries: UserEntry[] = USER_ENTRIES): Promise<VerificationResult[]> {
   const indexerUrl = process.env.MIDNIGHT_INDEXER_URL || "https://indexer.preprod.midnight.network/api/v3/graphql";
   const results: VerificationResult[] = [];
 
-  for (const entry of USER_ENTRIES) {
-    const { format, preprodCheck } = classifyFormat(entry.address);
-    let onChainEvidence = "No observable on-chain record";
-    let contractEvidence = "No contract interaction record";
-    let status = "Pending Verification";
+  for (const entry of entries) {
+    const { format, preprodCheck, isPreprod, isIncomplete } = classifyFormat(entry.address);
 
-    if (preprodCheck !== "Structurally Preprod") {
-      status = preprodCheck.includes("Incomplete") ? "Invalid (Truncated)" : "Invalid (Network mismatch)";
+    let statusCode: VerificationStatusCode = 'PENDING_ONCHAIN_PROOF';
+    let statusLabel = 'Requires On-Chain Proof';
+    let onChainEvidence = 'Unconfirmed (Shielded / No public transaction receipt)';
+    let contractEvidence = 'No contract transaction hash attached';
+
+    if (isIncomplete) {
+      statusCode = 'INCOMPLETE';
+      statusLabel = 'Invalid (Truncated string)';
+      onChainEvidence = 'Failed (Incomplete address string)';
+    } else if (!isPreprod) {
+      statusCode = 'NON_PREPROD';
+      statusLabel = 'Invalid (Network mismatch)';
+      onChainEvidence = 'Failed (Non-Preprod network prefix)';
     } else {
-      // Query indexer if valid structure
-      const queryRes = await queryIndexerForOutputs(indexerUrl, entry.address);
-      if (queryRes?.data?.unshieldedOutputs?.length > 0) {
-        onChainEvidence = `Confirmed (${queryRes.data.unshieldedOutputs.length} outputs)`;
-        status = "On-Chain Verified";
+      // Format valid Preprod address
+      statusCode = 'FORMAT_VALIDATED';
+      statusLabel = 'Format Validated (Preprod Prefix)';
+
+      const txResult = await queryIndexerForTx(indexerUrl, entry.txHash, entry.address);
+      if (txResult.isVerified) {
+        statusCode = 'VERIFIED_ONCHAIN';
+        statusLabel = 'Verified On-Chain';
+        onChainEvidence = txResult.details;
+        contractEvidence = entry.txHash ? `Confirmed Tx ${entry.txHash.slice(0, 12)}...` : 'Confirmed on indexer';
       } else {
-        onChainEvidence = "Unconfirmed (Shielded / No public UTXO record on indexer)";
-        status = "Requires On-Chain Proof";
+        statusCode = 'PENDING_ONCHAIN_PROOF';
+        statusLabel = 'Pending On-Chain Proof';
+        onChainEvidence = txResult.details;
       }
     }
 
@@ -152,7 +221,8 @@ export async function runVerification(): Promise<VerificationResult[]> {
       preprodCheck,
       onChainEvidence,
       contractEvidence,
-      status
+      statusCode,
+      statusLabel
     });
   }
 
@@ -161,36 +231,40 @@ export async function runVerification(): Promise<VerificationResult[]> {
 
 async function main() {
   console.log("==================================================");
-  console.log("MIDNIGHT PREPROD WALLET VERIFICATION UTILITY");
+  console.log("MIDNIGHT PREPROD WALLET & USER EVIDENCE VERIFICATION");
   console.log("==================================================\n");
 
   const results = await runVerification();
   
-  console.log("| # | Identifier | Wallet Address | Format | Preprod Check | On-chain Evidence | Status |");
+  console.log("| # | Identifier | Wallet Address | Format | Preprod Check | Status Code | Verification Status |");
   console.log("|---|---|---|---|---|---|---|");
   for (const r of results) {
-    console.log(`| ${r.id} | ${r.name} | \`${r.shortenedAddress}\` | ${r.format} | ${r.preprodCheck} | ${r.onChainEvidence} | ${r.status} |`);
+    console.log(`| ${r.id} | ${r.name} | \`${r.shortenedAddress}\` | ${r.format} | ${r.preprodCheck} | \`${r.statusCode}\` | ${r.statusLabel} |`);
   }
 
-  const preprodCount = results.filter(r => r.preprodCheck === "Structurally Preprod").length;
-  const verifiedCount = results.filter(r => r.status === "On-Chain Verified").length;
-  const nonPreprodCount = results.filter(r => r.format.includes("Mainnet") || r.format.includes("Preview")).length;
-  const truncatedCount = results.filter(r => r.format.includes("Truncated")).length;
+  const formatValidCount = results.filter(r => r.statusCode === 'FORMAT_VALIDATED' || r.statusCode === 'PENDING_ONCHAIN_PROOF' || r.statusCode === 'VERIFIED_ONCHAIN').length;
+  const verifiedOnChainCount = results.filter(r => r.statusCode === 'VERIFIED_ONCHAIN').length;
+  const pendingOnChainCount = results.filter(r => r.statusCode === 'PENDING_ONCHAIN_PROOF').length;
+  const nonPreprodCount = results.filter(r => r.statusCode === 'NON_PREPROD').length;
+  const incompleteCount = results.filter(r => r.statusCode === 'INCOMPLETE').length;
 
   console.log("\n==================================================");
-  console.log("VERIFICATION SUMMARY");
+  console.log("VERIFICATION TOOLING SUMMARY");
   console.log("==================================================");
-  console.log(`Total Responses Analyzed        : ${results.length}`);
-  console.log(`Structurally Preprod Candidates : ${preprodCount}`);
-  console.log(`On-Chain Verified               : ${verifiedCount}`);
-  console.log(`Non-Preprod Addresses           : ${nonPreprodCount}`);
-  console.log(`Truncated/Incomplete            : ${truncatedCount}`);
+  console.log(`Total Submitted Responses Analyzed    : ${results.length}`);
+  console.log(`Structurally Format Validated (Bch32) : ${formatValidCount}`);
+  console.log(`Non-Preprod Network Mismatch          : ${nonPreprodCount}`);
+  console.log(`Incomplete / Truncated Strings       : ${incompleteCount}`);
+  console.log(`Pending On-Chain Proof (Unconfirmed)  : ${pendingOnChainCount}`);
+  console.log(`Independently Verified On-Chain       : ${verifiedOnChainCount}`);
   console.log("--------------------------------------------------");
-  if (verifiedCount < 50) {
-    console.log("STATUS: 50-user requirement is NOT yet verified.");
+  if (verifiedOnChainCount < 50) {
+    console.log(`STATUS: 50-user requirement is PENDING verification (${verifiedOnChainCount} / 50 verified on-chain).`);
   } else {
-    console.log("STATUS: 50-user requirement IS verified.");
+    console.log(`STATUS: 50-user requirement IS VERIFIED (${verifiedOnChainCount} / 50 verified on-chain).`);
   }
 }
 
-main().catch(console.error);
+if (process.argv[1]?.includes('verify-preprod-wallets')) {
+  main().catch(console.error);
+}

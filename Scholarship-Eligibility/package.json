@@ -13,7 +13,9 @@
     "test:watch": "vitest",
     "test:integration": "vitest run tests/preview-integration.test.ts",
     "frontend:dev": "npm --prefix frontend run dev",
-    "frontend:build": "npm --prefix frontend run build"
+    "frontend:build": "npm --prefix frontend run build",
+    "verify:preprod": "npx tsx scripts/verify-preprod-wallets.ts",
+    "verify:preprod-users": "npx tsx scripts/verify-preprod-wallets.ts"
   },
   "keywords": [
     "midnight-network",

@@ -12,22 +12,24 @@ The objective is to establish verifiable evidence toward the Level 5 requirement
 
 ### Network & Infrastructure
 - **Network**: Midnight Preprod Testnet (`preprod`)
+### Network & Infrastructure
+- **Target Network**: Midnight Preprod Testnet (`preprod`)
 - **Node RPC Endpoint**: `https://rpc.preprod.midnight.network`
 - **Indexer GraphQL Endpoint**: `https://indexer.preprod.midnight.network/api/v3/graphql`
-- **Verification Utility**: `scripts/verify-preprod-wallets.ts`
+- **Verification Command**: `npm run verify:preprod-users` (executes `scripts/verify-preprod-wallets.ts`)
 
-### Verification Logic & Criteria
-To prevent false assertions, the verification process strictly distinguishes structural address validity from on-chain proof:
+### Verification Tooling & Explicit Status Codes
+To prevent false assertions, the verification tool evaluates submitted addresses against five explicit status codes:
 
-1. **Format & Network Prefix Check**:
-   - Valid Preprod Shielded Address: Begins with `mn_addr_preprod1` and has standard length (~77 chars).
-   - Valid Preprod DUST Address: Begins with `mn_dust_preprod1` and has standard length (~77 chars).
-   - Non-Preprod / Mismatch: Begins with `mn_addr_preview1` (Preview) or `mn_addr1` (Mainnet / unspecified).
-   - Truncated / Incomplete: Length < 50 characters.
+| Status Code | Status Label | Verification Criteria & Meaning |
+|---|---|---|
+| `FORMAT_VALIDATED` | Format Validated | Structurally valid Bech32 address with standard Preprod prefix (`mn_addr_preprod1...` or `mn_dust_preprod1...`) and length (~77 chars). |
+| `NON_PREPROD` | Invalid (Network Mismatch) | Address uses non-Preprod prefix (`mn_addr1...` Mainnet format or `mn_addr_preview1...` Preview format). |
+| `INCOMPLETE` | Invalid (Truncated String) | String length is incomplete (< 50 chars), indicating truncated form entry. |
+| `PENDING_ONCHAIN_PROOF` | Pending On-Chain Proof | Valid Preprod address format, but no optional transaction hash or indexer proof receipt attached. |
+| `VERIFIED_ONCHAIN` | Verified On-Chain | Independent query on Midnight Preprod GraphQL Indexer returns verified transaction receipt or block output matching participant's transaction hash. |
 
-2. **On-Chain Evidence Criteria**:
-   - **Counts as Verified**: A wallet address that has observable, verified transaction hashes, unshielded outputs, or contract call receipts returned by the Midnight Preprod Indexer / RPC node.
-   - **Does NOT Count as Verified**: User form submissions, `mn_addr_preprod1` string prefix alone, Bech32 syntax validity alone, or unverified claims.
+> **Crucial Rule**: `FORMAT_VALIDATED` proves address syntax only. Only entries with confirmed indexer proofs receive `VERIFIED_ONCHAIN`.
 
 ---
 
