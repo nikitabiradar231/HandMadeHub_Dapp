@@ -239,6 +239,7 @@ The Level 5 iteration was executed across five dedicated, single-purpose Git com
   2. **Preprod Verification Report**: [`docs/LEVEL5_PREPROD_VERIFICATION.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_VERIFICATION.md) (Tooling logic, status codes & indexer verification rules)
   3. **User Evidence Template**: [`docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_USER_EVIDENCE_TEMPLATE.md) (Standardized 50-user tracking roster)
   4. **User Testing Guide**: [`docs/LEVEL5_PREPROD_USER_TESTING_GUIDE.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_USER_TESTING_GUIDE.md) (6-step participant flow & administrator verification checklist)
+  5. **Preprod Readiness Audit**: [`docs/LEVEL5_PREPROD_READINESS.md`](file:///c:/Users/nikita/Downloads/Scholarship-Eligibility-main/Scholarship-Eligibility-main/docs/LEVEL5_PREPROD_READINESS.md) (Network configuration, contract status & safety protocols)
 - **Four-Tier Verification Framework**:
   1. *Tier A (Submitted Address)*: Address string submitted via feedback form (`mn_addr_preprod1...`).
   2. *Tier B (Format Validated)*: Valid Bech32 Preprod prefix (`mn_addr_preprod1...` / `mn_dust_preprod1...`) and character length (~77 chars).
