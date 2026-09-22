@@ -103,6 +103,14 @@ Demo:
 
 [Watch Scholarship Demo](https://drive.google.com/file/d/11B1n7HpT8hWQvCwUFXCiICrCSkZo8RUN/view?usp=drivesdk)
 
+## Level 5 — Scholarship Eligibility Verification
+
+Level 5 continues the Scholarship Eligibility project with user feedback iteration, feature enhancements, automated regression testing, accessible UI controls, and Level 5 documentation/evidence.
+
+### User Feedback & Preprod Wallet Evidence
+
+[Level 5 User Feedback & Preprod Wallet Evidence](https://docs.google.com/spreadsheets/d/1CAVYo2t7pYFW7U_2woeIm2WFUvzHiIH4m_eEZZnFa4U/edit?resourcekey=&gid=588540934#gid=588540934)
+
 ## Repository Structure
 
 ```text
