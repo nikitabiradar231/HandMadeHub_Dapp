@@ -116,7 +116,7 @@ The repository includes a comprehensive set of technical documentation files in 
 - **Official Submission Repository**: [https://github.com/nikitabiradar231/HandMadeHub_Dapp](https://github.com/nikitabiradar231/HandMadeHub_Dapp) (Directory: `Scholarship-Eligibility/`)
 - **Live Demo URL**: [https://scholarship-eligibility.vercel.app](https://scholarship-eligibility.vercel.app)
 - **Demo Video Link**: [Watch Video Demonstration](https://drive.google.com/file/d/11B1n7HpT8hWQvCwUFXCiICrCSkZo8RUN/view?usp=drivesdk)
-- **Product Profile**: [@ScholarshipZK](https://x.com/ScholarshipZK)
+- **Product Profile**: [@ScholarShieldZ](https://x.com/ScholarShieldZ)
 - **Deployed Contract Reference (Preview)**: [`9cbd81bf18cf2c5a208a9c4cdc5059b0aa220d05cf22e5edafe1c20abd7afb49`](https://explorer.preview.midnight.network/contract/9cbd81bf18cf2c5a208a9c4cdc5059b0aa220d05cf22e5edafe1c20abd7afb49)
 
 ---

@@ -87,6 +87,10 @@ Project:
 
 [Open Scholarship-Eligibility](./Scholarship-Eligibility)
 
+Product X (Twitter) Profile:
+
+[@ScholarShieldZ](https://x.com/ScholarShieldZ)
+
 Contract Explorer:
 
 [View Scholarship Contract](https://explorer.preview.midnight.network/contract/9cbd81bf18cf2c5a208a9c4cdc5059b0aa220d05cf22e5edafe1c20abd7afb49)

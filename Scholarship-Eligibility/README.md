@@ -13,7 +13,7 @@
 
 - **Official Level 5 Submission Repository**: [https://github.com/nikitabiradar231/HandMadeHub_Dapp](https://github.com/nikitabiradar231/HandMadeHub_Dapp) (located in `Scholarship-Eligibility/` directory)
 - **Live DApp Deployment**: [https://scholarship-eligibility.vercel.app](https://scholarship-eligibility.vercel.app)
-- **Product X (Twitter) Profile**: [@ScholarshipZK](https://x.com/ScholarshipZK)
+- **Product X (Twitter) Profile**: [@ScholarShieldZ](https://x.com/ScholarShieldZ)
 - **Demo Video Guide**: [Watch Video Demonstration](https://drive.google.com/file/d/11B1n7HpT8hWQvCwUFXCiICrCSkZo8RUN/view?usp=drivesdk)
 
 ---

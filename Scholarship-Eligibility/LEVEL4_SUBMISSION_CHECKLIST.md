@@ -31,7 +31,7 @@ This document tracks the final submission requirements for the **Private Scholar
 - [x] CI pipeline configured with GitHub Secrets (`MIDNIGHT_WALLET_SEED`, `MIDNIGHT_NETWORK`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`)
 
 ### Product Presence
-- [x] Product X (Twitter) profile created (`@ScholarshipZK`)
+- [x] Product X (Twitter) profile created (`@ScholarShieldZ` — [https://x.com/ScholarShieldZ](https://x.com/ScholarShieldZ))
 - [x] Product X profile link added to `README.md`
 
 ### Submission Artifacts
